@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  tomcat:
+    image: tomcat:9.0-jdk17
+    container_name: dev-tomcat
+    ports:
+      - "8080:8080"
+    volumes:
+      # 크로스 플랫폼 호환을 위한 상대경로 사용
+      - ./webapps:/usr/local/tomcat/webapps
+      - ./logs:/usr/local/tomcat/logs
+    environment:
+      # 메모리 설정 (개발용 - 최소 256MB, 최대 512MB)
+      - CATALINA_OPTS=-Xms256m -Xmx512m
+      # 한글 인코딩 설정
+      - JAVA_OPTS=-Dfile.encoding=UTF-8
+    restart: unless-stopped
