@@ -41,3 +41,9 @@ Thumbs.db
 # 기타
 *.swp
 *.swo
+
+# properties 파일 (필요시 제외)
+/src/main/resources/*.properties
+
+# target 디렉터리 제외 (필요시 포함)
+/target/
