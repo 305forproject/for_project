@@ -122,7 +122,7 @@ public class SignupController extends HttpServlet {
             boolean success = userService.signup(
                 signupForm.getLoginId(),
                 signupForm.getPassword(),
-                signupForm.getLoginId()  // name을 loginId와 동일하게 설정
+                signupForm.getName()
             );
 
             if (success) {
@@ -152,7 +152,7 @@ public class SignupController extends HttpServlet {
         form.setLoginId(request.getParameter("loginId"));
         form.setPassword(request.getParameter("password"));
         form.setPasswordConfirm(request.getParameter("passwordConfirm"));
-        form.setName(request.getParameter("loginId")); // name을 loginId와 동일하게 설정
+        form.setName(request.getParameter("name"));
         return form;
     }
 
@@ -172,7 +172,8 @@ public class SignupController extends HttpServlet {
                             String error, SignupForm signupForm)
             throws ServletException, IOException {
         request.setAttribute("error", error);
-        request.setAttribute("loginId", signupForm.getLoginId());  // 입력값 유지
+        request.setAttribute("loginId", signupForm.getLoginId());
+        request.setAttribute("name", signupForm.getName()); // name 값도 유지
         request.getRequestDispatcher("/WEB-INF/views/signup.jsp").forward(request, response);
     }
 }

@@ -115,6 +115,16 @@
 
         <form action="${pageContext.request.contextPath}/signup" method="post" onsubmit="return validateForm()">
             <div class="form-group">
+                <label for="name">이름</label>
+                <input type="text"
+                       id="name"
+                       name="name"
+                       value="${name != null ? name : ''}"
+                       placeholder="이름을 입력하세요"
+                       required>
+            </div>
+
+            <div class="form-group">
                 <label for="loginId">아이디</label>
                 <input type="text"
                        id="loginId"
@@ -161,4 +171,3 @@
     </script>
 </body>
 </html>
-
