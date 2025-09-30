@@ -1,16 +1,18 @@
-# Compiled class file
+# Java & IntelliJ IDEA 프로젝트에 최적화된 .gitignore
+
+# 컴파일된 클래스 파일
 *.class
 
-# Log file
+# 로그 파일
 *.log
 
-# BlueJ files
+# BlueJ 파일
 *.ctxt
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
+# 패키지 파일
 *.jar
 *.war
 *.nar
@@ -19,6 +21,23 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# 가상머신 크래시 로그
 hs_err_pid*
 replay_pid*
+
+# IntelliJ IDEA 관련
+.idea/
+*.iml
+out/
+
+# 빌드 도구별(Gradle/Maven) 디렉터리
+/build/
+/target/
+
+# OS별 임시 파일
+.DS_Store
+Thumbs.db
+
+# 기타
+*.swp
+*.swo
