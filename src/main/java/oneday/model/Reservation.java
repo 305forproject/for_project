@@ -1,6 +1,5 @@
 package oneday.model;
 
-
 public class Reservation {
 	private int reservationId;
 	private int classId;
@@ -38,6 +37,5 @@ public class Reservation {
 	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
 	}
-
 
 }

@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
@@ -22,7 +23,9 @@ public class ReservationController extends HttpServlet {
 
 	//예약 생성
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
+		ServletException,
+		IOException {
 
 		// 1. DTO 객체 생성
 		ReservationRequestDto reservationDto = new ReservationRequestDto();
@@ -37,7 +40,7 @@ public class ReservationController extends HttpServlet {
 		}
 
 		// 3. 세션에서 사용자 ID 가져오기
-		int studentId = (Integer) request.getSession().getAttribute("userId");
+		int studentId = (Integer)request.getSession().getAttribute("userId");
 
 		try {
 			// 4. 서비스를 호출하여 예약 생성 (이후 로직은 동일)
@@ -45,7 +48,7 @@ public class ReservationController extends HttpServlet {
 
 			// 5. 성공 시 응답 (단순 성공 메시지 또는 페이지 리디렉션)
 			response.setStatus(HttpServletResponse.SC_CREATED);
-			response.getWriter().write(createdReservation.getReservationId() + "예약 완료 " );
+			response.getWriter().write(createdReservation.getReservationId() + "예약 완료 ");
 
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
@@ -54,7 +57,9 @@ public class ReservationController extends HttpServlet {
 
 	//예약 상세 확인
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+		ServletException,
+		IOException {
 		String pathInfo = request.getPathInfo();
 
 		// URL 뒷부분이 있는지 확인
@@ -64,7 +69,7 @@ public class ReservationController extends HttpServlet {
 				int reservationId = Integer.parseInt(pathInfo.substring(1));
 
 				// 2. 세션에서 현재 로그인한 사용자 ID 가져오기 (보안 검사용)
-				int studentId = (Integer) request.getSession().getAttribute("userId");
+				int studentId = (Integer)request.getSession().getAttribute("userId");
 
 				// 3. 서비스를 호출하여 예약 상세 정보 조회
 				ReservationDetailDto detail = reservationService.findMyReservationDetails(reservationId, studentId);

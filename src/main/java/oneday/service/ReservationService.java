@@ -67,9 +67,9 @@ public class ReservationService {
 	}
 
 	//예약 상세정보 조회
-	public ReservationDetailDto  findMyReservationDetails(int reservationId, int studentId) throws SQLException {
+	public ReservationDetailDto findMyReservationDetails(int reservationId, int studentId) throws SQLException {
 		try {
-			return reservationDAO.findReservationDetailsById(reservationId,  studentId);
+			return reservationDAO.findReservationDetailsById(reservationId, studentId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
