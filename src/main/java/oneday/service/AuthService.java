@@ -69,7 +69,7 @@ public class AuthService {
 	}
 
 	/**
-	 * 사용자에게 선생님 롤을 생성합니다.
+	 * 사용자에게 선생님 롤을 부여합니다.
 	 * @param userId 사용자 ID
 	 * @return 롤 생성 성공 여부
 	 */

@@ -48,9 +48,9 @@ public class TeacherPageController extends HttpServlet {
 		Boolean isTeacher = (Boolean)session.getAttribute("isTeacher");
 
 		try {
-			// 2. 선생님 롤 체크 및 생성
+			// 2. 선생님 롤 체크 및 부여
 			if (isTeacher == null || !isTeacher) {
-				// 선생님 롤 생성
+				// 선생님 롤 부여
 				boolean roleCreated = authService.createTeacherRole(userId);
 
 				if (!roleCreated) {
