@@ -23,16 +23,25 @@
 hs_err_pid*
 replay_pid*
 
-# IDE #
+# IntelliJ IDEA 관련
 .idea/
 *.iml
-.project
-.classpath
-.settings/
+out/
 
-# Build #
-/target/
+# 빌드 도구별(Gradle/Maven) 디렉터리
 /build/
+/target/
 
-# Local Server #
-.smarttomcat/
+# OS별 임시 파일
+.DS_Store
+Thumbs.db
+
+# 기타
+*.swp
+*.swo
+
+# properties 파일 (필요시 제외)
+src/main/resources/*.properties
+
+# target 디렉터리 제외 (필요시 포함)
+/target/
