@@ -1,0 +1,8 @@
+# Database Configuration Template for Oneday Project
+# 이 파일을 복사하여 database.properties로 만들고 실제 값을 입력하세요
+
+# 필수 설정
+db.driver=com.mysql.cj.jdbc.Driver
+db.url=jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=UTF-8
+db.username=${DB_USERNAME}
+db.password=${DB_PASSWORD}
