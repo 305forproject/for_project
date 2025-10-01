@@ -1,9 +1,13 @@
 package oneday.service;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import oneday.model.User;
 import oneday.repository.UserDAO;
+import oneday.util.DatabaseTransactionUtil;
 
 /**
  * 사용자 인증 및 사용자 정보 관리 서비스 클래스
@@ -61,6 +65,53 @@ public class AuthService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	/**
+	 * 사용자에게 선생님 롤을 생성합니다.
+	 * @param userId 사용자 ID
+	 * @return 롤 생성 성공 여부
+	 */
+	public boolean createTeacherRole(int userId) {
+		return DatabaseTransactionUtil.executeTransactionForBoolean(conn -> {
+			// 이미 선생님 롤이 있는지 확인
+			if (hasTeacherRole(conn, userId)) {
+				return true; // 이미 존재함
+			}
+
+			// 선생님 롤 생성
+			return insertTeacherRole(conn, userId);
+		});
+	}
+
+	/**
+	 * 사용자가 선생님 롤을 가지고 있는지 확인합니다.
+	 */
+	private boolean hasTeacherRole(Connection conn, int userId) {
+		String sql = "SELECT COUNT(*) FROM USER_ROLE WHERE USER_ID = ? AND ROLE_ID = (SELECT ROLE_ID FROM ROLES WHERE ROLE_NAME = 'TEACHER')";
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setInt(1, userId);
+			try (ResultSet rs = stmt.executeQuery()) {
+				return rs.next() && rs.getInt(1) > 0;
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("선생님 롤 확인 중 오류가 발생했습니다.", e);
+		}
+	}
+
+	/**
+	 * 사용자에게 선생님 롤을 삽입합니다.
+	 */
+	private boolean insertTeacherRole(Connection conn, int userId) {
+		String sql = "INSERT INTO USER_ROLE (USER_ID, ROLE_ID) VALUES (?, (SELECT ROLE_ID FROM ROLES WHERE ROLE_NAME = 'TEACHER'))";
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setInt(1, userId);
+			return stmt.executeUpdate() > 0;
+		} catch (SQLException e) {
+			throw new RuntimeException("선생님 롤 생성 중 오류가 발생했습니다.", e);
 		}
 	}
 }
