@@ -71,7 +71,7 @@ public class ReservationController extends HttpServlet {
 
 				// 4. 조회된 데이터를 request에 담아 JSP로 포워딩
 				request.setAttribute("reservationDetail", detail);
-				request.getRequestDispatcher("/WEB-INF/view/reservationDetail.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/views/reservationDetail.jsp").forward(request, response);
 
 			} catch (NumberFormatException e) {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 예약 ID 형식입니다.");
