@@ -48,5 +48,5 @@ src/main/resources/*.properties
 # target 디렉터리 제외 (필요시 포함)
 /target/
 
-# server 제외
+#server 제외
 .smarttomcat/
