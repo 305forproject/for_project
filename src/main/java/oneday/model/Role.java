@@ -111,7 +111,7 @@ public enum Role {
      */
     public static Role findByRoleName(String roleName) {
         for (Role role : values()) {
-            if (role.getRoleName().equalsIgnoreCase(roleName)) {
+            if (role.getRoleName().equals(roleName)) {
                 return role;
             }
         }
