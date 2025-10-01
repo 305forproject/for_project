@@ -1,6 +1,6 @@
 package oneday.model;
 
-public class Reservationstatuses {
+public class ReservationStatus {
 	private int statusCode;
 	private String statusName;
 
