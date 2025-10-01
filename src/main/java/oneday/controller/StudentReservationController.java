@@ -31,7 +31,7 @@ public class StudentReservationController extends HttpServlet {
 			List<ReservationCalendarDto> calendarEvents = reservationService.findMyReservationTimesByMonth(studentId, year, month);
 
 			request.setAttribute("calendarEvents", calendarEvents);
-			request.getRequestDispatcher("/WEB-INF/view/myPage.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/myPage.jsp").forward(request, response);
 
 
 		} else {
