@@ -1,6 +1,6 @@
 package oneday.service;
 
-import oneday.dao.UserDAO;
+import oneday.repository.UserDAO;
 import oneday.model.User;
 import oneday.model.Role;
 import java.sql.SQLException;

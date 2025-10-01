@@ -1,4 +1,4 @@
-package oneday.dao;
+package oneday.repository;
 
 import oneday.config.DatabaseConfig;
 import oneday.model.User;
