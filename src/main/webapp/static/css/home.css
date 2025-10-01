@@ -1,0 +1,459 @@
+/* header */
+.header {
+    box-sizing: border-box; display: flex; flex-direction: row; justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    height: 80px;
+    background: #E0A7DD;
+    position: relative;
+}
+
+/* 모바일 메뉴 */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+}
+
+.mobile-menu-toggle span {
+    width: 100%;
+    height: 4px;
+    background-color: #ffffff
+;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* logo div */
+.logo {
+    width: 168px;
+    height: 60px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* logo-img */
+.logo-img {
+    width: 80px;
+    height: 60px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* logo-img 내부 img 태그 */
+.logo-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+/* logo text */
+.logo-text {
+    margin-left: 12px;
+    font-family: 'Imprima', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1.15;
+    color: #000000;
+    white-space: nowrap;
+}
+
+/* mypageicon */
+.mypage-icon {
+    width: 156px;
+    height: 50px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+/* icons div */
+.icons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+/* mypageIcon-lecturer-img */
+.mypage-icon-lecturer-img {
+    width: 50px;
+    height: 50px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    position: relative;
+    border: 1px solid #F2F2F2;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* mypageIcon-lecturer-img 내부 img 태그 */
+.mypage-icon-lecturer-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+.mypage-icon-lecturer-img:hover {
+    transform: scale(1.05);
+}
+
+/* mypageIcon-student-img */
+.mypage-icon-student-img {
+    width: 50px;
+    height: 50px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    position: relative;
+    border: 1px solid #F2F2F2;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* mypageIcon-student-img 내부 img 태그 */
+.mypage-icon-student-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+.mypage-icon-student-img:hover {
+    transform: scale(1.05);
+}
+
+/* 반응형 디자인 */
+
+/* 대형 태블릿 (1024px ~ 1200px) */
+@media screen and (max-width: 1200px) {
+    .header {
+        padding: 12px 20px;
+        height: 80px;
+    }
+
+    .logo {
+        width: 120px;
+        height: 60px;
+    }
+
+    .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .logo-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .logo-text {
+        font-size: 36px;
+        margin-left: 8px;
+    }
+
+    .mypage-icon {
+        width: 112px;
+        height: 50px;
+    }
+
+    .icons {
+        gap: 16px;
+    }
+
+    .mypage-icon-lecturer-img,
+    .mypage-icon-student-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .mypage-icon-lecturer-img img,
+    .mypage-icon-student-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+}
+
+/* 태블릿 (768px ~ 1024px) */
+@media screen and (max-width: 1024px) {
+    .header {
+        padding: 10px 16px;
+        min-height: 80px;
+    }
+
+    .logo {
+        width: 104px;
+        height: 60px;
+    }
+
+    .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .logo-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .logo-text {
+        font-size: 36px;
+        margin-left: 8px;
+    }
+
+    .mypage-icon {
+        width: 96px;
+        height: 50px;
+    }
+
+    .icons {
+        gap: 14px;
+    }
+
+    .mypage-icon-lecturer-img,
+    .mypage-icon-student-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .mypage-icon-lecturer-img img,
+    .mypage-icon-student-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+}
+
+/* 모바일 (480px ~ 768px) */
+@media screen and (max-width: 768px) {
+    .header {
+        padding: 8px 14px;
+        height: 80px;
+    }
+
+    .logo {
+        width: 88px;
+        height: 60px;
+    }
+
+    .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .logo-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .logo-text {
+        font-size: 36px;
+        margin-left: 6px;
+    }
+
+    .mypage-icon {
+        width: 80px;
+        height: 50px;
+    }
+
+    .icons {
+        gap: 12px;
+    }
+
+    .mypage-icon-lecturer-img,
+    .mypage-icon-student-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .mypage-icon-lecturer-img img,
+    .mypage-icon-student-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .mypage-icon-lecturer-img::before,
+    .mypage-icon-student-img::before {
+        font-size: 20px;
+    }
+}
+
+/* 소형 모바일 (320px ~ 480px) */
+@media screen and (max-width: 480px) {
+    .header {
+        padding: 6px 12px;
+        min-height: 80px;
+    }
+
+    .logo {
+        width: 72px;
+        height: 60px;
+    }
+
+    .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .logo-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .logo-text {
+        font-size: 36px;
+        margin-left: 4px;
+    }
+
+    .mypage-icon {
+        width: 64px;
+        height: 50px;
+    }
+
+    .icons {
+        gap: 10px;
+    }
+
+    .mypage-icon-lecturer-img, .mypage-icon-student-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .mypage-icon-lecturer-img img, .mypage-icon-student-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .mypage-icon-lecturer-img::before, .mypage-icon-student-img::before {
+        font-size: 16px;
+    }
+}
+
+/* 매우 작은 화면 (320px 이하) */
+@media screen and (max-width: 320px) {
+    .header {
+        padding: 4px 10px;
+        height: 80px;
+    }
+
+    .logo {
+        width: 64px;
+        height: 60px;
+    }
+
+    .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .logo-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .logo-text {
+        font-size: 36px;
+        margin-left: 4px;
+    }
+
+    .mypage-icon {
+        width: 56px;
+        height: 50px;
+    }
+
+    .icons {
+        gap: 8px;
+    }
+
+    .mypage-icon-lecturer-img,
+    .mypage-icon-student-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .mypage-icon-lecturer-img img,
+    .mypage-icon-student-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .mypage-icon-lecturer-img::before,
+    .mypage-icon-student-img::before {
+        font-size: 14px;
+    }
+}
+
+/* 모바일에서 햄버거 메뉴 표시 */
+@media screen and (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
+    .mypage-icon {
+        display: none;
+    }
+}
+
+/* 터치 디바이스 최적화 */
+@media (hover: none) and (pointer: coarse) {
+    .mypage-icon-lecturer-img:hover,
+    .mypage-icon-student-img:hover {
+        transform: none;
+    }
+
+    .mypage-icon-lecturer-img:active,
+    .mypage-icon-student-img:active {
+        transform: scale(0.95);
+    }
+}
