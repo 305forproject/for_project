@@ -25,6 +25,7 @@ replay_pid*
 
 # IDE #
 .idea/
+*.iml
 .project
 .classpath
 .settings/
