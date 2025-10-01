@@ -24,7 +24,7 @@
             background: white;
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
         }
@@ -104,70 +104,70 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>회원가입</h2>
+<div class="container">
+    <h2>회원가입</h2>
 
-        <% if(request.getAttribute("error") != null) { %>
-            <div class="error-message">
-                <%= request.getAttribute("error") %>
-            </div>
-        <% } %>
-
-        <form action="${pageContext.request.contextPath}/signup" method="post" onsubmit="return validateForm()">
-            <div class="form-group">
-                <label for="name">이름</label>
-                <input type="text"
-                       id="name"
-                       name="name"
-                       value="${name != null ? name : ''}"
-                       placeholder="이름을 입력하세요"
-                       required>
-            </div>
-
-            <div class="form-group">
-                <label for="loginId">아이디</label>
-                <input type="text"
-                       id="loginId"
-                       name="loginId"
-                       value="${loginId != null ? loginId : ''}"
-                       placeholder="아이디를 입력하세요"
-                       required>
-            </div>
-
-            <div class="form-group">
-                <label for="password">비밀번호</label>
-                <input type="password"
-                       id="password"
-                       name="password"
-                       placeholder="비밀번호를 입력하세요"
-                       required>
-            </div>
-
-            <div class="form-group">
-                <label for="passwordConfirm">비밀번호 확인</label>
-                <input type="password"
-                       id="passwordConfirm"
-                       name="passwordConfirm"
-                       placeholder="비밀번호를 다시 입력하세요"
-                       required>
-            </div>
-
-            <button type="submit" class="submit-btn">회원가입</button>
-        </form>
+    <% if (request.getAttribute("error") != null) { %>
+    <div class="error-message">
+        <%= request.getAttribute("error") %>
     </div>
+    <% } %>
 
-    <script>
-        function validateForm() {
-            const password = document.getElementById('password').value;
-            const passwordConfirm = document.getElementById('passwordConfirm').value;
+    <form action="${pageContext.request.contextPath}/signup" method="post" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="name">이름</label>
+            <input type="text"
+                   id="name"
+                   name="name"
+                   value="${name != null ? name : ''}"
+                   placeholder="이름을 입력하세요"
+                   required>
+        </div>
 
-            if (password !== passwordConfirm) {
-                alert('비밀번호가 일치하지 않습니다.');
-                return false;
-            }
+        <div class="form-group">
+            <label for="loginId">아이디</label>
+            <input type="text"
+                   id="loginId"
+                   name="loginId"
+                   value="${loginId != null ? loginId : ''}"
+                   placeholder="아이디를 입력하세요"
+                   required>
+        </div>
 
-            return true;
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password"
+                   id="password"
+                   name="password"
+                   placeholder="비밀번호를 입력하세요"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="passwordConfirm">비밀번호 확인</label>
+            <input type="password"
+                   id="passwordConfirm"
+                   name="passwordConfirm"
+                   placeholder="비밀번호를 다시 입력하세요"
+                   required>
+        </div>
+
+        <button type="submit" class="submit-btn">회원가입</button>
+    </form>
+</div>
+
+<script>
+    function validateForm() {
+        const password = document.getElementById('password').value;
+        const passwordConfirm = document.getElementById('passwordConfirm').value;
+
+        if (password !== passwordConfirm) {
+            alert('비밀번호가 일치하지 않습니다.');
+            return false;
         }
-    </script>
+
+        return true;
+    }
+</script>
 </body>
 </html>
