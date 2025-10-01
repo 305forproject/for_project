@@ -4,6 +4,8 @@ import oneday.config.DatabaseConfig;
 import oneday.model.User;
 import oneday.model.Role;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 사용자 데이터 접근 객체 (Data Access Object)
@@ -245,5 +247,110 @@ public class UserDAO {
             }
         }
         return null;
+    }
+
+    /**
+     * 로그인 ID와 비밀번호로 사용자를 인증합니다.
+     *
+     * <p>USERS 테이블에서 주어진 로그인 ID와 비밀번호가 일치하는
+     * 사용자를 찾아 반환합니다. 일치하는 사용자가 없으면 null을 반환합니다.</p>
+     *
+     * @param loginId 사용자의 로그인 ID
+     * @param password 사용자의 비밀번호
+     * @return 인증된 사용자 객체, 인증 실패 시 null
+     * @throws SQLException 데이터베이스 접근 중 오류가 발생한 경우
+     */
+    public User findByLoginIdAndPassword(String loginId, String password) throws SQLException {
+        String sql = "SELECT USER_ID, LOGIN_ID, PASSWORD, NAME, ACCOUNT FROM USERS WHERE LOGIN_ID = ? AND PASSWORD = ?";
+
+        try (Connection conn = dbConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, loginId);
+            pstmt.setString(2, password);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setUserId(rs.getInt("USER_ID"));
+                    user.setLoginId(rs.getString("LOGIN_ID"));
+                    user.setPassword(rs.getString("PASSWORD"));
+                    user.setName(rs.getString("NAME"));
+                    user.setAccount(rs.getString("ACCOUNT"));
+                    return user;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 사용자 ID로 사용자 정보를 조회합니다.
+     *
+     * <p>주로 세션에 저장된 사용자 ID를 통해 사용자의 전체 정보를
+     * 다시 조회할 때 사용됩니다.</p>
+     *
+     * @param userId 조회할 사용자의 고유 ID
+     * @return 사용자 객체, 존재하지 않으면 null
+     * @throws SQLException 데이터베이스 접근 중 오류가 발생한 경우
+     */
+    public User findById(int userId) throws SQLException {
+        String sql = "SELECT USER_ID, LOGIN_ID, PASSWORD, NAME, ACCOUNT FROM USERS WHERE USER_ID = ?";
+
+        try (Connection conn = dbConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setUserId(rs.getInt("USER_ID"));
+                    user.setLoginId(rs.getString("LOGIN_ID"));
+                    user.setPassword(rs.getString("PASSWORD"));
+                    user.setName(rs.getString("NAME"));
+                    user.setAccount(rs.getString("ACCOUNT"));
+                    return user;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 주어진 사용자 ID에 할당된 모든 역할을 조회합니다.
+     *
+     * <p>USER_ROLE 테이블과 ROLES 테이블을 조인하여
+     * 사용자에게 할당된 모든 역할 정보를 가져옵니다.</p>
+     *
+     * <p>한 사용자가 여러 역할을 가질 수 있으므로 모든 역할을 리스트로 반환합니다.</p>
+     *
+     * @param userId 역할을 조회할 사용자 ID
+     * @return 사용자의 모든 역할 목록 (Role Enum), 역할이 없으면 빈 리스트
+     * @throws SQLException 데이터베이스 접근 중 오류가 발생한 경우
+     */
+    public List<Role> getUserRoles(int userId) throws SQLException {
+        String sql = "SELECT r.ROLE_ID, r.ROLE_NAME FROM USER_ROLE ur " +
+                     "JOIN ROLES r ON ur.ROLE_ID = r.ROLE_ID " +
+                     "WHERE ur.USER_ID = ?";
+
+        List<Role> roles = new ArrayList<>();
+
+        try (Connection conn = dbConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int roleId = rs.getInt("ROLE_ID");
+                    Role role = Role.findByRoleId(roleId);
+                    if (role != null) {
+                        roles.add(role);
+                    }
+                }
+            }
+        }
+        return roles;
     }
 }
