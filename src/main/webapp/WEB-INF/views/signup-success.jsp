@@ -24,7 +24,7 @@
             background: white;
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
             max-width: 400px;
         }
@@ -84,18 +84,18 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="success-icon">✓</div>
-        <h2>회원가입 완료</h2>
-        <p>
-            회원가입이 성공적으로 완료되었습니다.<br>
-            로그인 후 서비스를 이용해주세요.
-        </p>
-        <div class="button-group">
-            <a href="${pageContext.request.contextPath}/login">로그인</a>
-            <a href="${pageContext.request.contextPath}/" class="secondary">메인으로</a>
-        </div>
+<div class="container">
+    <div class="success-icon">✓</div>
+    <h2>회원가입 완료</h2>
+    <p>
+        회원가입이 성공적으로 완료되었습니다.<br>
+        로그인 후 서비스를 이용해주세요.
+    </p>
+    <div class="button-group">
+        <a href="${pageContext.request.contextPath}/login">로그인</a>
+        <a href="${pageContext.request.contextPath}/" class="secondary">메인으로</a>
     </div>
+</div>
 </body>
 </html>
 
