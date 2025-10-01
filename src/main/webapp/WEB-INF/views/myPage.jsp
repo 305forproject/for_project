@@ -46,7 +46,6 @@
         </tr>
         </thead>
         <tbody>
-        <tbody>
         <c:choose>
             <c:when test="${not empty calendarEvents}">
                 <c:forEach items="${calendarEvents}" var="event">
