@@ -20,7 +20,7 @@
     <h1>내 예약 달력</h1>
 
     <%-- 연/월 선택 폼 --%>
-    <form class="filter-form" action="{pageContext.request.contextPath}/api/users/myPage" method="GET">
+    <form class="filter-form" action="${pageContext.request.contextPath}/api/users/myPage" method="GET">
         <select name="year">
             <option value="2025">2025년</option>
             <option value="2024">2024년</option>
