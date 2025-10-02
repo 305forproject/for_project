@@ -1,98 +1,161 @@
-<%--
-  메인 페이지
-
-  로그인 성공 후 사용자에게 환영 메시지를 표시합니다.
-  사용자의 이름을 세션 정보를 통해 가져와 개인화된 인사말을 보여줍니다.
-
-  사용되는 속성:
-  - user: 현재 로그인한 사용자 객체 (User 모델)
-  - user.name: 사용자의 이름 (환영 메시지에 사용)
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>메인 페이지</title>
+    <meta charset="UTF-8">
+    <title>원데이 클래스 - 메인</title>
     <style>
-        .cookie-info {
-            border: 1px solid #007bff;
-            padding: 10px;
-            margin: 10px;
-            background: #e7f3ff;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
         }
 
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            padding: 5px 10px;
-            border: none;
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .class-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
             cursor: pointer;
+            transition: transform 0.2s;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .class-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .class-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .class-info {
+            padding: 15px;
+        }
+
+        .class-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .class-teacher {
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .class-price {
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .class-date {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .class-location {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .no-classes {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .no-image-placeholder {
+            display: flex;
+            height: 200px;
+            background-color: #f0f0f0;
+            align-items: center;
+            justify-content: center;
+            color: #666;
         }
     </style>
 </head>
 <body>
-<h1>메인 페이지</h1>
+<div class="container">
+    <h1>원데이 클래스</h1>
 
-<%
-    // 쿠키에서 필요한 정보만 읽기
-    String cookieUserId = null;
-    String cookieIsTeacher = null;
-    String cookieIsStudent = null;
+    <c:if test="${empty classList}">
+        <div class="no-classes">
+            <p>등록된 강의가 없습니다.</p>
+        </div>
+    </c:if>
 
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null) {
-        for (Cookie cookie : cookies) {
-            switch (cookie.getName()) {
-                case "userId":
-                    cookieUserId = cookie.getValue();
-                    break;
-                case "isTeacher":
-                    cookieIsTeacher = cookie.getValue();
-                    break;
-                case "isStudent":
-                    cookieIsStudent = cookie.getValue();
-                    break;
-            }
-        }
+    <c:if test="${not empty classList}">
+        <div class="class-grid">
+            <c:forEach var="clazz" items="${classList}">
+                <div class="class-card" onclick="goToClassDetail(${clazz.classId})">
+                    <c:choose>
+                        <c:when test="${not empty clazz.representativeImageUrl}">
+                            <img src="${pageContext.request.contextPath}${clazz.representativeImageUrl}"
+                                 alt="${clazz.className}"
+                                 class="class-image"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        </c:when>
+                        <c:otherwise>
+                            <div class="no-image-placeholder" style="display: flex;">
+                                <span>이미지 없음</span>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <div class="no-image-placeholder"
+                         style="display: none; height: 200px; background-color: #f0f0f0; align-items: center; justify-content: center; color: #666;">
+                        <span>이미지를 불러올 수 없습니다</span>
+                    </div>
+
+                    <div class="class-info">
+                        <div class="class-name">${clazz.className}</div>
+                        <div class="class-teacher">강사: ${clazz.teacherName}</div>
+                        <div class="class-price">
+                            <fmt:formatNumber value="${clazz.price}" pattern="#,###"/>원
+                        </div>
+                        <div class="class-date">일시: ${clazz.startAt}</div>
+                        <div class="class-location">장소: ${clazz.location}</div>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </c:if>
+</div>
+
+<script>
+    function goToClassDetail(classId) {
+        // 강의 상세 페이지로 이동 (실제 URL은 프로젝트에 맞게 수정)
+        window.location.href = '/class/detail?classId=' + classId;
     }
-%>
-
-<% if (cookieUserId != null) { %>
-<!-- 쿠키에서 읽은 사용자 정보 -->
-<div class="cookie-info">
-    <h3>🍪 쿠키 정보 (브라우저에서 확인 가능)</h3>
-    <p><strong>사용자 ID:</strong> <%= cookieUserId %>
-    </p>
-    <p><strong>교사 권한:</strong> <%= "true".equals(cookieIsTeacher) ? "있음" : "없음" %>
-    </p>
-    <p><strong>학생 권한:</strong> <%= "true".equals(cookieIsStudent) ? "있음" : "없음" %>
-    </p>
-</div>
-
-<!-- 역할별 메뉴 -->
-<div>
-    <h3>메뉴</h3>
-    <% if ("true".equals(cookieIsTeacher)) { %>
-    <a href="teacher/courses.jsp">교사 메뉴</a><br>
-    <% } %>
-    <% if ("true".equals(cookieIsStudent)) { %>
-    <a href="student/courses.jsp">학생 메뉴</a><br>
-    <% } %>
-    <a href="teacher-page">
-        <button type="button">선생님 전용페이지</button>
-    </a><br>
-</div>
-
-<!-- 로그아웃 버튼 -->
-<div style="margin-top: 20px;">
-    <form method="post" action="logout" style="display: inline;">
-        <button type="submit" class="logout-btn">로그아웃</button>
-    </form>
-</div>
-
-<% } else { %>
-<!-- 로그인되지 않은 경우 -->
-<p>로그인이 필요합니다.</p>
-<a href="login">로그인 페이지로 이동</a>
-<% } %>
+</script>
 </body>
 </html>
