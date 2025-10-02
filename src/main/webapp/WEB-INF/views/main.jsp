@@ -77,6 +77,9 @@
     <% if ("true".equals(cookieIsStudent)) { %>
     <a href="student/courses.jsp">학생 메뉴</a><br>
     <% } %>
+    <a href="teacher-page">
+        <button type="button">선생님 전용페이지</button>
+    </a><br>
 </div>
 
 <!-- 로그아웃 버튼 -->
