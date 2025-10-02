@@ -17,17 +17,17 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-});
-
-
-document.addEventListener('DOMContentLoaded', function () {
     // ...모바일 메뉴 토글 코드...
     const loginBtn = document.getElementById("loginBtn");
     const joinBtn = document.getElementById("joinBtn");
     const logoutBtn = document.getElementById("logoutBtn");
+    const mobileLoginBtn = document.getElementById("mobileLoginBtn");
+    const mobileJoinBtn = document.getElementById("mobileJoinBtn");
+    const mobileLogoutBtn = document.getElementById("mobileLogoutBtn");
     const loginModal = document.getElementById("loginModal");
     const joinModal = document.getElementById("joinModal");
     const messageModal = document.getElementById("messageModal");
+    const mobileMenuModal = document.getElementById("mobileMenuModal");
     const closeBtns = document.querySelectorAll(".close");
     const loginForm = document.getElementById("loginForm");
     const joinForm = document.getElementById("joinForm");
@@ -48,13 +48,23 @@ document.addEventListener('DOMContentLoaded', function () {
     // 로그인 상태에 따른 버튼 표시/숨김
     function updateButtonVisibility() {
         if (isLoggedIn) {
+            // 데스크톱 버튼
             loginBtn.style.display = "none";
             joinBtn.style.display = "none";
             logoutBtn.style.display = "inline-block";
+            // 모바일 버튼
+            mobileLoginBtn.style.display = "none";
+            mobileJoinBtn.style.display = "none";
+            mobileLogoutBtn.style.display = "block";
         } else {
+            // 데스크톱 버튼
             loginBtn.style.display = "inline-block";
             joinBtn.style.display = "inline-block";
             logoutBtn.style.display = "none";
+            // 모바일 버튼
+            mobileLoginBtn.style.display = "block";
+            mobileJoinBtn.style.display = "block";
+            mobileLogoutBtn.style.display = "none";
         }
     }
 
@@ -69,6 +79,26 @@ document.addEventListener('DOMContentLoaded', function () {
     // 회원가입 버튼 → 회원가입 모달 열기
     joinBtn.addEventListener("click", () => {
         joinModal.style.display = "flex";
+    });
+
+    // 모바일 로그인 버튼 → 로그인 모달 열기
+    mobileLoginBtn.addEventListener("click", () => {
+        mobileMenuModal.style.display = "none";
+        loginModal.style.display = "flex";
+    });
+
+    // 모바일 회원가입 버튼 → 회원가입 모달 열기
+    mobileJoinBtn.addEventListener("click", () => {
+        mobileMenuModal.style.display = "none";
+        joinModal.style.display = "flex";
+    });
+
+    // 모바일 로그아웃 버튼
+    mobileLogoutBtn.addEventListener("click", () => {
+        isLoggedIn = false;
+        updateButtonVisibility();
+        mobileMenuModal.style.display = "none";
+        showMessage("로그아웃", "로그아웃 되었습니다.");
     });
 
     // 로그인 모달 내 회원가입 버튼 → 회원가입 모달 열기

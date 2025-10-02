@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="../static/css/home.css">
-    <link href="https://fonts.googleapis.com/css2?family=Imprima&display=swap" rel="stylesheet">
-
     <script src="../static/script/script-home.js"></script>
 
     <title>Home</title>
@@ -43,21 +41,25 @@
 
             <!-- 모바일 메뉴 (선택사항) -->
             <button class="mobile-menu-toggle" aria-label="메뉴 열기" type="button">
-
                 <span></span>
                 <span></span>
                 <span></span>
-
             </button>
         </div>
-    </header>
     </header>
 
     <!-- 모바일 메뉴 모달 -->
     <div id="mobileMenuModal" class="mobile-menu-modal">
         <div class="mobile-menu-modal-content">
-            <h2>원데이클래스</h2>
-            <button id="closeMobileMenu" class="close-mobile-menu">></button>
+            <div class="mobile-menu-header">
+                <h2>원데이클래스</h2>
+                <button id="closeMobileMenu" class="close">></button>
+            </div>
+            <div id="mobileAuthButtons" class="mobile-auth-buttons">
+                <button id="mobileLoginBtn" class="mobile-auth-btn">로그인</button>
+                <button id="mobileJoinBtn" class="mobile-auth-btn">회원가입</button>
+                <button id="mobileLogoutBtn" class="mobile-auth-btn" style="display: none;">로그아웃</button>
+            </div>
             <ul>
                 <li><a href="#">강사 마이페이지</a></li>
                 <li><a href="#">학생 마이페이지</a></li>
@@ -69,47 +71,53 @@
     <div class="login-container">
         <button id="loginBtn" class="btn btn-login-main">로그인</button>
         <button id="joinBtn" class="btn btn-join-main">회원가입</button>
-        <button id="logoutBtn" class="btn btn-logout" style="display: none;">로그아웃</button>
+        <button id="logoutBtn" class="btn btn-logout" style="display: none;">로그아웃</button>    
+    </div>
 
-        <!-- 로그인 모달 -->
+    <!-- 로그인 모달 -->
         <div id="loginModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>로그인</h2>
+                <div class="mobile-menu-header">
+                    <h2>로그인</h2>
+                    <span class="close">&times;</span>
+                </div>
                 <form id="loginForm">
                     <input type="text" id="username" placeholder="아이디" required><br>
                     <input type="password" id="password" placeholder="비밀번호" required><br>
                     <button type="submit" class="btn btn-login-modal">로그인</button>
-                    <button type="submit" class="btn btn-join-modal">회원가입</button>
+                    <button type="button" class="btn btn-join-modal">회원가입</button>
                 </form>
             </div>
         </div>
 
-        <!-- 회원가입 모달 -->
-        <div id="joinModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
+    <!-- 회원가입 모달 -->
+    <div id="joinModal" class="modal">
+        <div class="modal-content">
+            <div class="mobile-menu-header">
                 <h2>회원가입</h2>
-                <form id="joinForm">
-                    <input type="text" id="joinName" placeholder="이름" required><br>
-                    <input type="text" id="joinUsername" placeholder="아이디" required><br>
-                    <input type="password" id="joinPassword" placeholder="비밀번호" required><br>
-                    영문, 숫자 포함 8~20자를 입력해 주세요<br>
-                    <input type="password" id="joinPasswordConfirm" placeholder="비밀번호 확인" required><br>
-                    영문, 숫자 포함 8~20자를 입력해 주세요<br>
-                    <button type="submit" class="btn btn-join-modal">회원가입</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- 성공/실패 메시지 모달 -->
-        <div id="messageModal" class="modal">
-            <div class="modal-content">
                 <span class="close">&times;</span>
-                <h2 id="messageTitle">알림</h2>
-                <p id="messageText">메시지가 여기에 표시됩니다.</p>
-                <button id="messageOkBtn" class="btn btn-check">확인</button>
             </div>
+            <form id="joinForm">
+                <input type="text" id="joinName" placeholder="이름" required><br>
+                <input type="text" id="joinUsername" placeholder="아이디" required><br>
+                <input type="password" id="joinPassword" placeholder="비밀번호" required><br>
+                영문, 숫자 포함 8~20자를 입력해 주세요<br>
+                <input type="password" id="joinPasswordConfirm" placeholder="비밀번호 확인" required><br>
+                영문, 숫자 포함 8~20자를 입력해 주세요<br>
+                <button type="submit" class="btn btn-join-modal">회원가입</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 성공/실패 메시지 모달 -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <div class="mobile-menu-header">
+                <h2 id="messageTitle">알림</h2>
+                <span class="close">&times;</span>
+            </div>
+            <p id="messageText">메시지가 여기에 표시됩니다.</p>
+            <button id="messageOkBtn" class="btn btn-check">확인</button>
         </div>
     </div>
 

@@ -83,17 +83,43 @@ img{
     color: #8D8D8D;
 }
 
+.mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
 
 .mobile-menu-modal-content h2 {
-    margin-top: 40px;
-    margin-bottom: 24px;
-    font-size: 1.5rem;
+    margin: 0;
+    font-size: 30px;
 }
-.mobile-menu-modal-content .close-mobile-menu {
-    background: none;
+
+.mobile-auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.mobile-auth-btn {
+    font-size: 16px;
     border: none;
-    font-size: 2rem;
+    border-radius: 5px;
     cursor: pointer;
+    transition: 0.3s;
+    background: #8D8D8D;
+    color: white;
+    width: 100%;
+    height: 30px;
+}
+
+.mobile-auth-btn:hover {
+    background: #E0A7DD;
 }
 
 .mobile-menu-modal-header {
@@ -105,43 +131,22 @@ img{
     position: sticky;
     top: 0;
     background: #fff;
-    z-index: 1;
-    padding-top: 0;
-    padding-bottom: 0;
+     font-size: 24px;
     margin-bottom: 24px;
+    font-size: 32px;
 }
 .mobile-menu-modal-header h2 {
     margin: 0;
-    font-size: 1.5rem;
-    padding-top: 24px;
-    padding-bottom: 24px;
+    font-size: 30px;
+    
 }
-.mobile-menu-modal-header .close-mobile-menu {
-    position: static;
-    font-size: 2rem;
-    margin-left: 16px;
-    top: auto;
-    right: auto;
-    align-self: flex-start;
-    padding-top: 24px;
-    padding-bottom: 24px;
-}
+
 @keyframes slideInMenu {
     from { right: -70vw; opacity: 0; }
     to { right: 0; opacity: 1; }
 }
-.close-mobile-menu {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-}
 
-.mobile-menu-modal-content h2 {
-    margin-top: 40px;
-    margin-bottom: 24px;
-    font-size: 1.5rem;
-}
+
 .mobile-menu-modal-content ul {
     list-style: none;
     padding: 0;
@@ -339,6 +344,7 @@ img{
 }
 
 /*로그인, 회원가입 모달 내용 */
+
 .modal-content {
     background: #fff;
     padding: 20px;
@@ -349,8 +355,22 @@ img{
     color: #afafaf;
 }
 
+.modal-content .mobile-menu-header {
+    margin: -20px -20px 20px -20px;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
 .modal-content h2 {
-    margin-bottom: 15px;
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.modal-content .mobile-menu-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
 }
 
 /*모달 로그인 버튼*/
@@ -389,11 +409,14 @@ input[type="text"], input[type="password"] {
 }
 
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 24px;
-    font-weight: bold;
+    background: none;
+    border: none;
+    font-size: 32px;
     cursor: pointer;
+    color: #aaa;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
 }
 
 .close:hover {
@@ -610,10 +633,11 @@ input[type="text"], input[type="password"] {
     }
 }
 /* 태블릿 (768px ~ 1024px) */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1024px) and (min-width: 769px) {
     .header-container {
         width: 100%;
         padding: 0 16px;
+        position: relative;
     }
 
     .login-container {
@@ -646,20 +670,20 @@ input[type="text"], input[type="password"] {
     .mypage-icon {
         width: 96px;
         height: 50px;
+        position: absolute;
+        right: 20px;
     }
 
     .icons {
         gap: 14px;
     }
 
-    .mypage-icon-lecturer-img,
-    .mypage-icon-student-img {
+    .mypage-icon-lecturer-img, .mypage-icon-student-img {
         width: 50px;
         height: 50px;
     }
 
-    .mypage-icon-lecturer-img img,
-    .mypage-icon-student-img img {
+    .mypage-icon-lecturer-img img, .mypage-icon-student-img img {
         width: 100%;
         height: 100%;
         object-fit: contain;
@@ -957,6 +981,10 @@ input[type="text"], input[type="password"] {
     }
 
     .mypage-icon {
+        display: none;
+    }
+
+    .login-container {
         display: none;
     }
 }
