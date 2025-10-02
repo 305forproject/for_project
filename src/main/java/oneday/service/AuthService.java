@@ -30,6 +30,9 @@ public class AuthService {
 	/** 사용자 데이터 접근을 위한 DAO 인스턴스 */
 	private UserDAO userDAO = new UserDAO();
 
+	/** 역할 ID 상수 */
+	private static final int TEACHER_ROLE_ID = 1;
+
 	/**
 	 * 사용자 로그인을 인증합니다.
 	 *
@@ -89,10 +92,11 @@ public class AuthService {
 	 * 사용자가 선생님 롤을 가지고 있는지 확인합니다.
 	 */
 	private boolean hasTeacherRole(Connection conn, int userId) {
-		String sql = "SELECT COUNT(*) FROM USER_ROLE WHERE USER_ID = ? AND ROLE_ID = (SELECT ROLE_ID FROM ROLES WHERE ROLE_NAME = 'TEACHER')";
+		String sql = "SELECT COUNT(*) FROM USER_ROLE WHERE USER_ID = ? AND ROLE_ID = ?";
 
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setInt(1, userId);
+			stmt.setInt(2, TEACHER_ROLE_ID);
 			try (ResultSet rs = stmt.executeQuery()) {
 				return rs.next() && rs.getInt(1) > 0;
 			}
@@ -105,10 +109,11 @@ public class AuthService {
 	 * 사용자에게 선생님 롤을 삽입합니다.
 	 */
 	private boolean insertTeacherRole(Connection conn, int userId) {
-		String sql = "INSERT INTO USER_ROLE (USER_ID, ROLE_ID) VALUES (?, (SELECT ROLE_ID FROM ROLES WHERE ROLE_NAME = 'TEACHER'))";
+		String sql = "INSERT INTO USER_ROLE (USER_ID, ROLE_ID) VALUES (?, ?)";
 
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setInt(1, userId);
+			stmt.setInt(2, TEACHER_ROLE_ID);
 			return stmt.executeUpdate() > 0;
 		} catch (SQLException e) {
 			throw new RuntimeException("선생님 롤 생성 중 오류가 발생했습니다.", e);
