@@ -1,4 +1,4 @@
-*{margin: 0;padding: 0; color: #252525;}
+*{margin: 0;padding: 0; color: #252525;box-sizing:border-box;}
 hr{
     border: none;
     height: 1px;
@@ -30,143 +30,6 @@ img{
     height: 100%;
     padding: 0 20px;
 }
-
-/* 모바일 메뉴 */
-.mobile-menu-toggle {
-    display: none;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 32px;
-    height: 32px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 10;
-}
-
-
-.mobile-menu-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.4);
-    z-index: 1000;
-}
-.mobile-menu-toggle span {
-    display: block;
-    width: 24px;
-    height: 3px;
-    margin: 5px 0;
-    background-color: #fff;
-    border-radius: 2px;
-    transition: all 0.3s;
-}
-
-.mobile-menu-modal-content {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 60vw;
-    height: 100vh;
-    background: #fff;
-    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
-    padding: 32px 24px 24px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    animation: slideInMenu 0.3s;
-    font-size: 16px;
-    color: #8D8D8D;
-}
-
-.mobile-menu-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 60px;
-    margin-bottom: 10px;
-}
-
-
-.mobile-menu-modal-content h2 {
-    margin: 0;
-    font-size: 30px;
-}
-
-.mobile-auth-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    margin-bottom: 24px;
-}
-
-.mobile-auth-btn {
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-    background: #8D8D8D;
-    color: white;
-    width: 100%;
-    height: 30px;
-}
-
-.mobile-auth-btn:hover {
-    background: #E0A7DD;
-}
-
-.mobile-menu-modal-header {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    width: 100%;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    background: #fff;
-     font-size: 24px;
-    margin-bottom: 24px;
-    font-size: 32px;
-}
-.mobile-menu-modal-header h2 {
-    margin: 0;
-    font-size: 30px;
-    
-}
-
-@keyframes slideInMenu {
-    from { right: -70vw; opacity: 0; }
-    to { right: 0; opacity: 1; }
-}
-
-
-.mobile-menu-modal-content ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-}
-.mobile-menu-modal-content li {
-    margin-bottom: 20px;
-}
-.mobile-menu-modal-content a {
-    font-size: 1.2rem;
-    color: #333;
-    text-decoration: none;
-    transition: color 0.2s;
-}
-.mobile-menu-modal-content a:hover {
-    color: #E0A7DD;
-}
-
-
 
 /* logo div */
 .logo {
@@ -284,6 +147,25 @@ img{
     transform: scale(1.05);
 }
 
+/* 모바일 메뉴 */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+}
+
+/* 메뉴 슬라이드 애니메이션 */
+@keyframes slideInMenu {
+    from { right: -70vw; opacity: 0; }
+    to { right: 0; opacity: 1; }
+}
 
 
 /* login */
@@ -331,104 +213,32 @@ img{
 }
 
 
-/*로그인, 회원가입 모달 배경 */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    align-items: center;
-    justify-content: center;
-}
+/* slider */
+.slider{position:relative;max-width:1100px;margin:40px auto;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,.12);background:#000}
+.slides{display:flex;transition:transform .6s cubic-bezier(.22,.9,.3,1);width:100%}
+.slide{min-width:100%;height:var(--slider-height);display:flex;align-items:center;justify-content:center;color:white;position:relative}
 
-/*로그인, 회원가입 모달 내용 */
 
-.modal-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    width: 300px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    font-size: 12px;
-    color: #afafaf;
-}
+.s1{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
+.s2{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%)}
+.s3{background:linear-gradient(135deg,#43cea2 0%,#185a9d 100%)}
+.s4{background:linear-gradient(135deg,#ff9a9e 0%,#fecfef 100%)}
+.s5{background:linear-gradient(135deg,#30cfd0 0%,#330867 100%)}
 
-.modal-content .mobile-menu-header {
-    margin: -20px -20px 20px -20px;
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-}
 
-.modal-content h2 {
-    margin: 0;
-    font-size: 24px;
-    color: #333;
-}
+.slide .content{padding:28px;max-width:900px;text-align:left}
+.slide h2{margin:0 0 8px;font-size:clamp(18px,4vw,34px);letter-spacing:-0.02em}
+.slide p{margin:0;font-size:clamp(13px,1.7vw,16px);opacity:.95}
 
-.modal-content .mobile-menu-header h2 {
-    margin: 0;
-    font-size: 24px;
-    color: #333;
-}
 
-/*모달 로그인 버튼*/
-.btn-login-modal {
-    background: #8D8D8D;
-    color: white;
-    width: 100%;
-    margin-top: 10px;
-    height: 50px;
-    
-}
-.btn-login-modal:hover {
-    background:  #E0A7DD;
-    color: white;
-}
+.controls{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 8px;pointer-events:none}
+.slide-btn{pointer-events:auto;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(4px);color:#fff;border-radius:999px;padding:10px;cursor:pointer}
+.slide-btn:focus{outline:2px solid rgba(255,255,255,.2)}
 
-/*모달 회원가입 버튼*/
-.btn-join-modal { 
-    background:none;
-    width: 100%;
-    margin: 10px auto;
-    height: 50px;
-    display: block;
-}
-.btn-join-modal:hover {
-    background: #8D8D8D;
-    color: white;
-}
 
-input[type="text"], input[type="password"] {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-}
-
-.close {
-    background: none;
-    border: none;
-    font-size: 32px;
-    cursor: pointer;
-    color: #aaa;
-    font-weight: bold;
-    padding: 0;
-    margin: 0;
-}
-
-.close:hover {
-    color: black;
-}
-
-.btn-check{
-    background: #8D8D8D;
-    width: 50px;
-    margin-top: 10px;
-    height: 40px;
-}
+.dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px}
+.dot{width:var(--dot-size);height:var(--dot-size);border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:transform .18s, background .18s}
+.dot[aria-current="true"]{background:#fff;transform:scale(1.15)}
 
 
 
@@ -540,8 +350,224 @@ input[type="text"], input[type="password"] {
 }
 
 
+/*모달페이지*/
+
+/*모마일 메뉴 모달*/
+.mobile-menu-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+    z-index: 1000;
+}
+.mobile-menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    margin: 5px 0;
+    background-color: #fff;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.mobile-menu-modal-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60vw;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    animation: slideInMenu 0.3s;
+    font-size: 16px;
+    color: #8D8D8D;
+}
+
+.mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
+}
 
 
+.mobile-menu-modal-content h2 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.mobile-auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.mobile-auth-btn {
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    background: #8D8D8D;
+    color: white;
+    width: 100%;
+    height: 30px;
+}
+
+.mobile-auth-btn:hover {
+    background: #E0A7DD;
+}
+
+.mobile-menu-modal-header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: #fff;
+     font-size: 24px;
+    margin-bottom: 24px;
+    font-size: 32px;
+}
+.mobile-menu-modal-header h2 {
+    margin: 0;
+    font-size: 30px;
+    
+}
+.mobile-menu-modal-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+.mobile-menu-modal-content li {
+    margin-bottom: 20px;
+}
+.mobile-menu-modal-content a {
+    font-size: 1.2rem;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.mobile-menu-modal-content a:hover {
+    color: #E0A7DD;
+}
+
+
+/*로그인, 회원가입 모달 배경 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+/*로그인, 회원가입 모달 내용 */
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-size: 12px;
+    color: #afafaf;
+}
+
+.modal-content-header {
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.modal-content{
+    font-size: 12px;
+    color: #afafaf;
+}
+
+.modal-content-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+/*모달 로그인 버튼*/
+.modal .btn-login-modal {
+    background: #afafaf;
+    width: 100%;
+    margin-top: 10px;
+    height: 50px;
+    
+}
+.modal .btn-login-modal:hover {
+    background:  #E0A7DD;
+    Font-weight: bold;
+}
+
+/*모달 회원가입 버튼*/
+.modal .btn-join-modal { 
+    background:none;
+    width: 100%;
+    margin: 10px auto;
+    height: 50px;
+    display: block;
+}
+.modal .btn-join-modal:hover {
+    background: #E0A7DD;
+    Font-weight: bold;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.btn-check{
+    background: #8D8D8D;
+    width: 50px;
+    margin-top: 10px;
+    height: 40px;
+}
+
+/*모달의 모든 닫기 버튼*/
+.close {
+    background: none;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    color: #aaa;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+
+.close:hover {
+    color: black;
+}
 
 /* 반응형 디자인 */
 
@@ -802,6 +828,10 @@ input[type="text"], input[type="password"] {
         margin-top: 5px;
     }
 }
+
+@media (max-width:720px){
+    :root{--slider-height:40vh} .slide .content{padding:18px}
+    }
 
 /* 소형 모바일 (320px ~ 480px) */
 @media screen and (max-width: 480px) {

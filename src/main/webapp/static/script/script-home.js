@@ -167,3 +167,88 @@ document.addEventListener('DOMContentLoaded', function () {
         showMessage("로그아웃", "로그아웃 되었습니다.");
     });
 });
+
+// 슬라이더 스크립트
+(function(){
+const slidesEl = document.getElementById('slides');
+const slides = Array.from(slidesEl.children);
+const dotsEl = document.getElementById('dots');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const slider = document.getElementById('slider');
+
+let index = 1; // clone 고려 시작 index
+const intervalMs = 3500;
+let timer = null;
+
+// 무한 루프용 클론 추가
+const firstClone = slides[0].cloneNode(true);
+const lastClone = slides[slides.length-1].cloneNode(true);
+slidesEl.appendChild(firstClone);
+slidesEl.insertBefore(lastClone, slidesEl.firstChild);
+const newSlides = Array.from(slidesEl.children);
+
+slidesEl.style.transform = `translateX(${-index*100}%)`;
+
+// dots 생성 (실제 슬라이드 기준)
+slides.forEach((s,i)=>{
+const btn = document.createElement('button');
+btn.className='dot';
+btn.addEventListener('click',()=>goTo(i+1));
+dotsEl.appendChild(btn);
+});
+const dots = Array.from(dotsEl.children);
+
+function update(){
+slidesEl.style.transition = 'transform .6s ease';
+slidesEl.style.transform = `translateX(${-index*100}%)`;
+// dots 표시 업데이트 (clone 제외)
+let realIndex = index-1;
+if(realIndex < 0) realIndex = slides.length-1;
+if(realIndex >= slides.length) realIndex = 0;
+dots.forEach((d,i)=>d.setAttribute('aria-current', i===realIndex));
+}
+
+
+function next(){ index++; update(); }
+function prev(){ index--; update(); }
+function goTo(i){ index=i; update(); }
+
+
+nextBtn.addEventListener('click', ()=>{ next(); resetTimer(); });
+prevBtn.addEventListener('click', ()=>{ prev(); resetTimer(); });
+
+
+slidesEl.addEventListener('transitionend', ()=>{
+if(newSlides[index].isSameNode(firstClone)){
+slidesEl.style.transition='none';
+index=1;
+slidesEl.style.transform=`translateX(${-index*100}%)`;
+}
+if(newSlides[index].isSameNode(lastClone)){
+slidesEl.style.transition='none';
+index=newSlides.length-2;
+slidesEl.style.transform=`translateX(${-index*100}%)`;
+}
+// dots 업데이트 재호출
+let realIndex = index-1;
+if(realIndex < 0) realIndex = slides.length-1;
+if(realIndex >= slides.length) realIndex = 0;
+dots.forEach((d,i)=>d.setAttribute('aria-current', i===realIndex));
+});
+
+
+function startTimer(){ if(timer) clearInterval(timer); timer=setInterval(next,intervalMs); }
+function stopTimer(){ if(timer){ clearInterval(timer); timer=null; } }
+function resetTimer(){ stopTimer(); startTimer(); }
+
+
+slider.addEventListener('mouseenter', stopTimer);
+slider.addEventListener('mouseleave', startTimer);
+
+
+update();
+startTimer();
+})();
+
+
