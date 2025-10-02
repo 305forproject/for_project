@@ -134,4 +134,14 @@ public class ReservationDAO {
 		return dto;
 	}
 
+	//예약 상태 변경
+	public int updateStatusCode(Connection conn, int reservationId, int statusCode) throws SQLException {
+		String sql = "UPDATE RESERVATIONS SET STATUS_CODE = ? WHERE RESERVATION_ID = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, statusCode);
+			pstmt.setInt(2, reservationId);
+			return pstmt.executeUpdate();
+		}
+	}
+
 }

@@ -54,7 +54,7 @@ public class TeacherClassController extends HttpServlet {
 
 			List<TeacherCalendarDto> events = classService.findMyCalendarEvents(teacherId, year, month);
 			request.setAttribute("calendarEvents", events);
-			request.getRequestDispatcher("/WEB-INF/view/teacherCalendar.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/teacherCalendar.jsp").forward(request, response);
 		} else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "year와 month 가 필요합니다.");
 		}
@@ -67,7 +67,7 @@ public class TeacherClassController extends HttpServlet {
 
 			TeacherClassDetailDto detail = classService.findMyClassDetail(classId, teacherId);
 			request.setAttribute("classDetail", detail);
-			request.getRequestDispatcher("/WEB-INF/view/teacherClassDetail.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/teacherClassDetail.jsp").forward(request, response);
 
 		} catch (NumberFormatException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 강의 ID 형식입니다.");
