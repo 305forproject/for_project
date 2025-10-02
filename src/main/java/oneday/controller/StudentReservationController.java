@@ -19,7 +19,7 @@ public class StudentReservationController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 		IOException {
-		int studentId = (Integer) request.getSession().getAttribute("userId");
+		int studentId = (Integer)request.getSession().getAttribute("userId");
 		String yearParam = request.getParameter("year");
 		String monthParam = request.getParameter("month");
 
@@ -28,11 +28,11 @@ public class StudentReservationController extends HttpServlet {
 			int month = Integer.parseInt(monthParam);
 
 			// 서비스 호출하여 달력 조회
-			List<ReservationCalendarDto> calendarEvents = reservationService.findMyReservationTimesByMonth(studentId, year, month);
+			List<ReservationCalendarDto> calendarEvents = reservationService.findMyReservationTimesByMonth(studentId,
+				year, month);
 
 			request.setAttribute("calendarEvents", calendarEvents);
-			request.getRequestDispatcher("/WEB-INF/views/myPage.jsp").forward(request, response);
-
+			request.getRequestDispatcher("/WEB-INF/views/mypage.jsp").forward(request, response);
 
 		} else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "year와 month 파라미터가 필요합니다.");

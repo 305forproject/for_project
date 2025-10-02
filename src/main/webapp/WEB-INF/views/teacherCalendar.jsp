@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>내 예약 달력</title>
+    <title>내 강의 관리</title>
     <style>
         body { font-family: sans-serif; }
         .container { width: 800px; margin: 20px auto; }
@@ -17,10 +17,10 @@
 <body>
 
 <div class="container">
-    <h1>내 예약 달력</h1>
+    <h1>내 강의 관리</h1>
 
     <%-- 연/월 선택 폼 --%>
-    <form class="filter-form" action="${pageContext.request.contextPath}/api/users/myPage" method="GET">
+    <form class="filter-form" action="${pageContext.request.contextPath}/teachers/classes" method="GET">
         <select name="year">
             <option value="2025">2025년</option>
             <option value="2024">2024년</option>
@@ -39,10 +39,10 @@
     <table>
         <thead>
         <tr>
-            <th>예약 ID</th>
-            <th>카테고리</th>
+            <th>강의 ID (상세보기)</th>
             <th>수업 시작 시간</th>
             <th>수업 종료 시간</th>
+            <th>예약 현황 (현재/최대)</th>
         </tr>
         </thead>
         <tbody>
@@ -51,20 +51,20 @@
                 <c:forEach items="${calendarEvents}" var="event">
                     <tr>
                         <td>
-                            <a href="${pageContext.request.contextPath}/api/reservations/${event.reservationId}">
-                                    ${event.reservationId}
+                                <%-- 클릭하면 상세 정보 페이지로 이동하는 링크 --%>
+                            <a href="${pageContext.request.contextPath}/teachers/classes/${event.classId}">
+                                    ${event.classId}
                             </a>
                         </td>
-                        <td>${event.category}</td>
-                            <%-- 빠져있던 날짜 표시 부분을 다시 추가하고, 변환 메소드를 사용합니다. --%>
                         <td><fmt:formatDate value="${event.startAtAsDate}" pattern="yyyy-MM-dd HH:mm"/></td>
                         <td><fmt:formatDate value="${event.endAtAsDate}" pattern="yyyy-MM-dd HH:mm"/></td>
+                        <td>${event.currentReservationCount} / ${event.maxCapacity}</td>
                     </tr>
                 </c:forEach>
             </c:when>
             <c:otherwise>
                 <tr>
-                    <td colspan="4" class="no-result">해당 월에 예약이 없습니다.</td>
+                    <td colspan="4" class="no-result">해당 월에 등록된 강의가 없습니다.</td>
                 </tr>
             </c:otherwise>
         </c:choose>

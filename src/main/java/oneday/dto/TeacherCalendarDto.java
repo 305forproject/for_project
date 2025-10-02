@@ -4,30 +4,19 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-public class ReservationDetailDto {
-	private int reservationId;
-	private String className;
+public class TeacherCalendarDto {
+	private int classId;
 	private LocalDateTime startAt;
 	private LocalDateTime endAt;
-	private String location;
+	private int currentReservationCount;
+	private int maxCapacity;
 
-	public ReservationDetailDto() {
+	public int getClassId() {
+		return classId;
 	}
 
-	public int getReservationId() {
-		return reservationId;
-	}
-
-	public void setReservationId(int reservationId) {
-		this.reservationId = reservationId;
-	}
-
-	public String getClassName() {
-		return className;
-	}
-
-	public void setClassName(String className) {
-		this.className = className;
+	public void setClassId(int classId) {
+		this.classId = classId;
 	}
 
 	public LocalDateTime getStartAt() {
@@ -46,12 +35,20 @@ public class ReservationDetailDto {
 		this.endAt = endAt;
 	}
 
-	public String getLocation() {
-		return location;
+	public int getCurrentReservationCount() {
+		return currentReservationCount;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setCurrentReservationCount(int currentReservationCount) {
+		this.currentReservationCount = currentReservationCount;
+	}
+
+	public int getMaxCapacity() {
+		return maxCapacity;
+	}
+
+	public void setMaxCapacity(int maxCapacity) {
+		this.maxCapacity = maxCapacity;
 	}
 
 	// jsp 출력은  위한 메소드

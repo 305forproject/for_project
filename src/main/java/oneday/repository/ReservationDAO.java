@@ -6,10 +6,8 @@ import oneday.dto.ReservationDetailDto;
 import oneday.model.Reservation;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class ReservationDAO {
 
@@ -79,7 +77,8 @@ public class ReservationDAO {
 	}
 
 	//학생, 년, 월 별 예약 조회
-	public List<ReservationCalendarDto> findCalendarEventsByStudentIdAndMonth(int studentId, int year, int month) throws SQLException {
+	public List<ReservationCalendarDto> findCalendarEventsByStudentIdAndMonth(int studentId, int year, int month) throws
+		SQLException {
 		List<ReservationCalendarDto> calendarEvents = new ArrayList<>();
 		String sql = "SELECT r.RESERVATION_ID, c.START_AT, c.END_AT, cat.CATEGORY " +
 			"FROM RESERVATIONS r " +
@@ -108,6 +107,7 @@ public class ReservationDAO {
 		return calendarEvents;
 	}
 
+	//예약 상세 조회
 	public ReservationDetailDto findReservationDetailsById(int reservationId, int studentId) throws SQLException {
 		ReservationDetailDto dto = null;
 		String sql = "SELECT c.CLASS_NAME, c.START_AT, c.END_AT, c.LOCATION " +
