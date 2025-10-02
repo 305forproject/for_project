@@ -20,10 +20,10 @@
                 <span>강의명:</span> ${reservationDetail.className}
             </div>
             <div class="detail-item">
-                <span>수업 시작:</span> <fmt:formatDate value="${reservationDetail.startAt}" pattern="yyyy년 MM월 dd일 HH:mm"/>
+                <span>수업 시작:</span> <fmt:formatDate value="${reservationDetail.startAtAsDate}" pattern="yyyy년 MM월 dd일 HH:mm"/>
             </div>
             <div class="detail-item">
-                <span>수업 종료:</span> <fmt:formatDate value="${reservationDetail.endAt}" pattern="yyyy년 MM월 dd일 HH:mm"/>
+                <span>수업 종료:</span> <fmt:formatDate value="${reservationDetail.endAtAsDate}" pattern="yyyy년 MM월 dd일 HH:mm"/>
             </div>
             <div class="detail-item">
                 <span>장소:</span> ${reservationDetail.location}

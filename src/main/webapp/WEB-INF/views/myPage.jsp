@@ -51,14 +51,14 @@
                 <c:forEach items="${calendarEvents}" var="event">
                     <tr>
                         <td>
-                                <%-- 예약 ID를 클릭 가능한 링크로 변경 --%>
                             <a href="${pageContext.request.contextPath}/api/reservations/${event.reservationId}">
                                     ${event.reservationId}
                             </a>
                         </td>
                         <td>${event.category}</td>
-                        <td><fmt:formatDate value="${event.startAt}" pattern="yyyy-MM-dd HH:mm"/></td>
-                        <td><fmt:formatDate value="${event.endAt}" pattern="yyyy-MM-dd HH:mm"/></td>
+                            <%-- 빠져있던 날짜 표시 부분을 다시 추가하고, 변환 메소드를 사용합니다. --%>
+                        <td><fmt:formatDate value="${event.startAtAsDate}" pattern="yyyy-MM-dd HH:mm"/></td>
+                        <td><fmt:formatDate value="${event.endAtAsDate}" pattern="yyyy-MM-dd HH:mm"/></td>
                     </tr>
                 </c:forEach>
             </c:when>

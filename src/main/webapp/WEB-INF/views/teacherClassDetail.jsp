@@ -20,10 +20,10 @@
                 <span>강의명:</span> ${classDetail.className}
             </div>
             <div class="detail-item">
-                <span>수업 시작:</span> <fmt:formatDate value="${classDetail.startAt}" pattern="yyyy년 MM월 dd일 HH:mm"/>
+                <span>수업 시작:</span> <fmt:formatDate value="${classDetail.startAtAsDate}" pattern="yyyy년 MM월 dd일 HH:mm"/>
             </div>
             <div class="detail-item">
-                <span>수업 종료:</span> <fmt:formatDate value="${classDetail.endAt}" pattern="yyyy년 MM월 dd일 HH:mm"/>
+                <span>수업 종료:</span> <fmt:formatDate value="${classDetail.endAtAsDate}" pattern="yyyy년 MM월 dd일 HH:mm"/>
             </div>
             <div class="detail-item">
                 <span>장소:</span> ${classDetail.location}

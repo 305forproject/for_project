@@ -32,7 +32,7 @@ public class StudentReservationController extends HttpServlet {
 				year, month);
 
 			request.setAttribute("calendarEvents", calendarEvents);
-			request.getRequestDispatcher("/WEB-INF/views/myPage.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/mypage.jsp").forward(request, response);
 
 		} else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "year와 month 파라미터가 필요합니다.");

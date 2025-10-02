@@ -20,7 +20,7 @@
     <h1>내 강의 관리</h1>
 
     <%-- 연/월 선택 폼 --%>
-    <form class="filter-form" action="${pageContext.request.contextPath}/api/teachers/me/classes" method="GET">
+    <form class="filter-form" action="${pageContext.request.contextPath}/teachers/classes" method="GET">
         <select name="year">
             <option value="2025">2025년</option>
             <option value="2024">2024년</option>
@@ -52,12 +52,12 @@
                     <tr>
                         <td>
                                 <%-- 클릭하면 상세 정보 페이지로 이동하는 링크 --%>
-                            <a href="${pageContext.request.contextPath}/api/teachers/me/classes/${event.classId}">
+                            <a href="${pageContext.request.contextPath}/teachers/classes/${event.classId}">
                                     ${event.classId}
                             </a>
                         </td>
-                        <td><fmt:formatDate value="${event.startAt}" pattern="yyyy-MM-dd HH:mm"/></td>
-                        <td><fmt:formatDate value="${event.endAt}" pattern="yyyy-MM-dd HH:mm"/></td>
+                        <td><fmt:formatDate value="${event.startAtAsDate}" pattern="yyyy-MM-dd HH:mm"/></td>
+                        <td><fmt:formatDate value="${event.endAtAsDate}" pattern="yyyy-MM-dd HH:mm"/></td>
                         <td>${event.currentReservationCount} / ${event.maxCapacity}</td>
                     </tr>
                 </c:forEach>
