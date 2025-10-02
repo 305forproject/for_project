@@ -1,27 +1,26 @@
 // 모바일 메뉴 토글 스크립트
-document.addEventListener('DOMContentLoaded', function() {
-        var menuBtn = document.querySelector('.mobile-menu-toggle');
-        var modal = document.getElementById('mobileMenuModal');
-        var closeBtn = document.getElementById('closeMobileMenu');
-        if(menuBtn && modal && closeBtn) {
-            menuBtn.addEventListener('click', function() {
-                modal.style.display = 'block';
-            });
-            closeBtn.addEventListener('click', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    var menuBtn = document.querySelector('.mobile-menu-toggle');
+    var modal = document.getElementById('mobileMenuModal');
+    var closeBtn = document.getElementById('closeMobileMenu');
+    if (menuBtn && modal && closeBtn) {
+        menuBtn.addEventListener('click', function () {
+            modal.style.display = 'block';
+        });
+        closeBtn.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+        // 바깥 클릭 시 닫기
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
                 modal.style.display = 'none';
-            });
-            // 바깥 클릭 시 닫기
-            modal.addEventListener('click', function(e) {
-                if(e.target === modal) {
-                    modal.style.display = 'none';
             }
         });
     }
 });
 
 
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // ...모바일 메뉴 토글 코드...
     const loginBtn = document.getElementById("loginBtn");
     const joinBtn = document.getElementById("joinBtn");
@@ -94,13 +93,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-
     // 로그인 처리
     loginForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
-        
+
         // 간단한 로그인 검증
         if (username && password) {
             isLoggedIn = true;
@@ -118,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const username = document.getElementById("joinUsername").value;
         const password = document.getElementById("joinPassword").value;
         const passwordConfirm = document.getElementById("joinPasswordConfirm").value;
-        
+
         // 간단한 회원가입 검증
         if (username && password && passwordConfirm) {
             if (password === passwordConfirm) {
