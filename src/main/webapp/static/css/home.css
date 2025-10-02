@@ -1,7 +1,14 @@
 *{margin: 0;padding: 0; color: #252525;}
-hr{border: none;
+hr{
+    border: none;
     height: 1px;
-    background-color: #333333}
+    background-color: #333333
+}
+
+img{
+    object-fit: contain;
+    object-position: center;
+}
 /* header */
 .header {
     width: 100%;
@@ -38,13 +45,123 @@ hr{border: none;
     z-index: 10;
 }
 
-.mobile-menu-toggle span {
-    width: 100%;
-    height: 4px;
-    background-color: #ffffff;
-    border-radius: 2px;
-    transition: all 0.3s ease;
+
+.mobile-menu-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+    z-index: 1000;
 }
+.mobile-menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    margin: 5px 0;
+    background-color: #fff;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.mobile-menu-modal-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60vw;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    padding: 32px 24px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    animation: slideInMenu 0.3s;
+    font-size: 16px;
+    color: #8D8D8D;
+}
+
+
+.mobile-menu-modal-content h2 {
+    margin-top: 40px;
+    margin-bottom: 24px;
+    font-size: 1.5rem;
+}
+.mobile-menu-modal-content .close-mobile-menu {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.mobile-menu-modal-header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 1;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 24px;
+}
+.mobile-menu-modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+.mobile-menu-modal-header .close-mobile-menu {
+    position: static;
+    font-size: 2rem;
+    margin-left: 16px;
+    top: auto;
+    right: auto;
+    align-self: flex-start;
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+@keyframes slideInMenu {
+    from { right: -70vw; opacity: 0; }
+    to { right: 0; opacity: 1; }
+}
+.close-mobile-menu {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.mobile-menu-modal-content h2 {
+    margin-top: 40px;
+    margin-bottom: 24px;
+    font-size: 1.5rem;
+}
+.mobile-menu-modal-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+.mobile-menu-modal-content li {
+    margin-bottom: 20px;
+}
+.mobile-menu-modal-content a {
+    font-size: 1.2rem;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.mobile-menu-modal-content a:hover {
+    color: #E0A7DD;
+}
+
+
 
 /* logo div */
 .logo {
@@ -73,8 +190,6 @@ hr{border: none;
 .logo-img img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: center;
 }
 
 /* logo text */
@@ -130,8 +245,6 @@ hr{border: none;
 .mypage-icon-lecturer-img img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: center;
 }
 
 .mypage-icon-lecturer-img:hover {
@@ -160,13 +273,142 @@ hr{border: none;
 .mypage-icon-student-img img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: center;
 }
 
 .mypage-icon-student-img:hover {
     transform: scale(1.05);
 }
+
+
+
+/* login */
+.login-container{
+    box-sizing: border-box; 
+    display: flex; 
+    flex-direction: row; 
+    justify-content: flex-end;
+    align-items: center;
+    width: 1280px;
+    height: 40px;
+    padding: 0 20px;
+    margin: 0 auto;
+    gap: 10px;
+}
+.btn {
+    padding: 5px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    min-width: 80px;
+    height: 36px;
+    white-space: nowrap;
+}
+.btn-login-main, .btn-join-main {
+    background: none;
+}
+
+.btn-login-main:hover, .btn-join-main:hover {
+    background: #8D8D8D;
+    color: white;
+}
+
+.btn-logout {
+    background: #D9D9D9;
+    border: 1px solid   #afafaf;
+    color: #333333;
+    
+}
+
+.btn-logout:hover {
+    background: #8D8D8D;
+}
+
+
+/*로그인, 회원가입 모달 배경 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+/*로그인, 회원가입 모달 내용 */
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-size: 12px;
+    color: #afafaf;
+}
+
+.modal-content h2 {
+    margin-bottom: 15px;
+}
+
+/*모달 로그인 버튼*/
+.btn-login-modal {
+    background: #8D8D8D;
+    color: white;
+    width: 100%;
+    margin-top: 10px;
+    height: 50px;
+    
+}
+.btn-login-modal:hover {
+    background:  #E0A7DD;
+    color: white;
+}
+
+/*모달 회원가입 버튼*/
+.btn-join-modal { 
+    background:none;
+    width: 100%;
+    margin: 10px auto;
+    height: 50px;
+    display: block;
+}
+.btn-join-modal:hover {
+    background: #8D8D8D;
+    color: white;
+}
+
+input[type="text"], input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+.btn-check{
+    background: #8D8D8D;
+    width: 50px;
+    margin-top: 10px;
+    height: 40px;
+}
+
+
+
 
 /* footer */
 .footer {
@@ -280,9 +522,24 @@ hr{border: none;
 
 /* 반응형 디자인 */
 
+/* 전체 화면에서 최대 너비 제한 */
+@media screen and (min-width: 1280px) {
+    .header-container,
+    .login-container,
+    .footer-container {
+        max-width: 1280px;
+        margin: 0 auto;
+    }
+}
+
 /* 대형 태블릿 (1024px ~ 1200px) */
 @media screen and (max-width: 1200px) {
     .header-container {
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .login-container {
         width: 100%;
         padding: 0 20px;
     }
@@ -359,6 +616,11 @@ hr{border: none;
         padding: 0 16px;
     }
 
+    .login-container {
+        width: 100%;
+        padding: 0 16px;
+    }
+
     .logo {
         width: 104px;
         height: 60px;
@@ -428,6 +690,11 @@ hr{border: none;
 /* 모바일 (480px ~ 768px) */
 @media screen and (max-width: 768px) {
     .header-container {
+        width: 100%;
+        padding: 0 14px;
+    }
+
+    .login-container {
         width: 100%;
         padding: 0 14px;
     }
@@ -519,6 +786,11 @@ hr{border: none;
         padding: 0 12px;
     }
 
+    .login-container {
+        width: 100%;
+        padding: 0 12px;
+    }
+
     .logo {
         width: 72px;
         height: 60px;
@@ -594,6 +866,11 @@ hr{border: none;
 /* 매우 작은 화면 (320px 이하) */
 @media screen and (max-width: 320px) {
     .header-container {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    .login-container {
         width: 100%;
         padding: 0 10px;
     }
