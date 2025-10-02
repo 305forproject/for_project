@@ -28,7 +28,7 @@ public class TeacherClassController extends HttpServlet {
 		Integer teacherId = (Integer)request.getSession().getAttribute("userId");
 
 		if (teacherId == null) {
-			response.sendRedirect("/WEB-INF/views/login.jsp");
+			request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
 			return;
 		}
 
