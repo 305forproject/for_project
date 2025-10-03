@@ -12,17 +12,26 @@ import java.util.List;
 @WebFilter("/*")
 public class AuthenticationFilter implements Filter {
 
-	// 인증이 필요 없는 경로 미리 리스트
+	// 인증이 필요 없는 경로
 	private List<String> whitelist;
+	// 선생 역할 필요 경로
+	private List<String> teacherOnlyPaths;
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		String contextPath = filterConfig.getServletContext().getContextPath();
+
+		// 공개 경로 설정
 		whitelist = Arrays.asList(
 			contextPath + "/login",
 			contextPath + "/signup",
 			contextPath + "/main",
 			contextPath + "/static/"
+		);
+
+		// 선생님 전용 경로 설정
+		teacherOnlyPaths = Arrays.asList(
+			contextPath + "/teachers/classes/"
 		);
 	}
 
@@ -34,28 +43,32 @@ public class AuthenticationFilter implements Filter {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		String requestURI = httpRequest.getRequestURI();
 
-		//  요청된 주소 허용 목록 포함 확인
-		boolean isWhitelisted = false;
-		for (String whitelistPath : whitelist) {
-			if (requestURI.startsWith(whitelistPath)) {
-				isWhitelisted = true;
-				break;
+		// 공개 경로 통과
+		boolean isWhitelisted = whitelist.stream().anyMatch(requestURI::startsWith);
+		if (isWhitelisted) {
+			chain.doFilter(request, response);
+			return;
+		}
+
+		// 로그인 상태 확인
+		HttpSession session = httpRequest.getSession(false);
+		if (session == null || session.getAttribute("userId") == null) {
+			httpResponse.sendRedirect(httpRequest.getContextPath() + "/login"); // 로그인 페이지로
+			return;
+		}
+
+		// 선생 전용 경로 확인
+		boolean isTeacherPath = teacherOnlyPaths.stream().anyMatch(requestURI::startsWith);
+		if (isTeacherPath) {
+			// 세션에서 선생님 역할 확인
+			Boolean isTeacher = (Boolean) session.getAttribute("isTeacher");
+			if (isTeacher == null || !isTeacher) {
+				httpResponse.sendRedirect(httpRequest.getContextPath() + "/main.jsp");
+				return;
 			}
 		}
 
-		// 허용 목록, 로그인 통과
-		if (isWhitelisted || isAuthenticated(httpRequest)) {
-			chain.doFilter(request, response);
-		} else {
-			// 로그인 페이지로 리다렉트
-			httpResponse.sendRedirect(httpRequest.getContextPath() + "/login");
-		}
-	}
-
-	// 세션으로 사용자 로그인 검사
-	private boolean isAuthenticated(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		return session != null && session.getAttribute("userId") != null;
+		chain.doFilter(request, response);
 	}
 
 	@Override
