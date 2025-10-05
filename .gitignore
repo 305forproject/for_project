@@ -42,6 +42,12 @@ Thumbs.db
 *.swp
 *.swo
 
+# Environment variables
+.env
+
+# Database configuration
+src/main/resources/database.properties
+
 # properties 파일 (필요시 제외)
 src/main/resources/*.properties
 
