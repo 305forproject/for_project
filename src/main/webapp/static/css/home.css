@@ -1,3 +1,8 @@
+/* CSS reset 및 기본 스타일 설정 */
+:root{
+  --slider-height:60vh;
+  --dot-size:12px;
+}
 *{margin: 0;padding: 0; color: #252525;box-sizing:border-box;}
 hr{
     border: none;
@@ -9,6 +14,8 @@ img{
     object-fit: contain;
     object-position: center;
 }
+
+
 /* header */
 .header {
     width: 100%;
@@ -214,33 +221,103 @@ img{
 
 
 /* slider */
-.slider{position:relative;max-width:1100px;margin:40px auto;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,.12);background:#000}
-.slides{display:flex;transition:transform .6s cubic-bezier(.22,.9,.3,1);width:100%}
-.slide{min-width:100%;height:var(--slider-height);display:flex;align-items:center;justify-content:center;color:white;position:relative}
 
+/* slider 기본 스타일 */
+.slider{
+    position:relative;
+    max-width:1100px;
+    margin:5px auto;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 8px 30px rgba(16,24,40,.12)
+    ;background:#000
+}
 
-.s1{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
-.s2{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%)}
-.s3{background:linear-gradient(135deg,#43cea2 0%,#185a9d 100%)}
-.s4{background:linear-gradient(135deg,#ff9a9e 0%,#fecfef 100%)}
-.s5{background:linear-gradient(135deg,#30cfd0 0%,#330867 100%)}
+.slides{
+    display:flex;
+    transition:transform .5s cubic-bezier(.22,.9,.3,1);
+    width:100%
+}
 
+/* 각 슬라이드 스타일*/
+.slide{
+    min-width:100%;
+    height:var(--slider-height);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    position:relative
+}
+.slide .content{
+    padding:28px;
+    max-width:900px;
+    text-align:left
+}
+.slide h2{
+    margin:0 0 8px;
+    font-size:clamp(18px,4vw,34px)
+}
+.slide p{
+    margin:0;
+    font-size:clamp(13px,1.7vw,16px);
+    opacity:.95
+}
 
-.slide .content{padding:28px;max-width:900px;text-align:left}
-.slide h2{margin:0 0 8px;font-size:clamp(18px,4vw,34px);letter-spacing:-0.02em}
-.slide p{margin:0;font-size:clamp(13px,1.7vw,16px);opacity:.95}
+/* 배경 그라디언트 */
+.s1{background-color: #D9D9D9;}
+.s2{background-color: #afafaf;}
+.s3{background-color: #8D8D8D;}
+.s4{background-color: #333333;}
+.s5{background-color: #E0A7DD;}
 
+/* controls */
+.controls{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 8px;
+    pointer-events:none
+}
+.slide-btn{
+    pointer-events:auto;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(4px);
+    color:#fff;
+    border-radius:999px;
+    padding:10px;
+    cursor:pointer
+}
+.slide-btn:focus{
+    outline:2px solid rgba(255,255,255,.2)
+}
 
-.controls{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 8px;pointer-events:none}
-.slide-btn{pointer-events:auto;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(4px);color:#fff;border-radius:999px;padding:10px;cursor:pointer}
-.slide-btn:focus{outline:2px solid rgba(255,255,255,.2)}
-
-
-.dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px}
-.dot{width:var(--dot-size);height:var(--dot-size);border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:transform .18s, background .18s}
-.dot[aria-current="true"]{background:#fff;transform:scale(1.15)}
-
-
+/* dots */
+.dots{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:12px;
+    display:flex;
+    gap:8px;
+    z-index:4
+}
+.dot{
+    width:var(--dot-size);
+    height:var(--dot-size);
+    border-radius:50%;
+    background:#eee;
+    border: 2px solid #fff;
+    cursor:pointer;
+    transition:transform .18s, background .18s;
+}
+/* 활성화된 dot (현재 슬라이드) */
+.dot[aria-current="true"]{
+    background:#E0A7DD;transform:scale(1.15)
+}
 
 
 /* footer */
@@ -463,7 +540,8 @@ img{
     transition: color 0.2s;
 }
 .mobile-menu-modal-content a:hover {
-    color: #E0A7DD;
+    font-weight: bold;
+    
 }
 
 
@@ -523,6 +601,7 @@ img{
 .modal .btn-login-modal:hover {
     background:  #E0A7DD;
     Font-weight: bold;
+    color: white;
 }
 
 /*모달 회원가입 버튼*/
@@ -536,6 +615,7 @@ img{
 .modal .btn-join-modal:hover {
     background: #E0A7DD;
     Font-weight: bold;
+    color: white;
 }
 
 input[type="text"], input[type="password"] {
@@ -829,9 +909,10 @@ input[type="text"], input[type="password"] {
     }
 }
 
+/* slider 반응형 */
 @media (max-width:720px){
     :root{--slider-height:40vh} .slide .content{padding:18px}
-    }
+}
 
 /* 소형 모바일 (320px ~ 480px) */
 @media screen and (max-width: 480px) {
