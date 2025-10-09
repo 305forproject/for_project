@@ -28,6 +28,59 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        /* 시간 입력 필드 특별 스타일링 */
+        input[type="time"] {
+            width: 200px;
+            min-width: 150px;
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+            appearance: none;
+            background: white;
+            cursor: pointer;
+        }
+
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
+
+        input[type="date"] {
+            width: 200px;
+            min-width: 150px;
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+            appearance: none;
+            background: white;
+            cursor: pointer;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
+
+        input[type="number"] {
+            width: 150px;
+            min-width: 100px;
         }
 
         textarea {
@@ -150,13 +203,15 @@
 
     <div class="form-group">
         <label for="startTime">시작 시간:</label>
-        <input type="time" id="startTime" name="startTime" required>
+        <input type="time" id="startTime" name="startTime" required step="300">
+        <small style="color: #666;">예: 14:30 (24시간 형식)</small>
         <div id="timeError" class="error"></div>
     </div>
 
     <div class="form-group">
         <label for="endTime">종료 시간:</label>
-        <input type="time" id="endTime" name="endTime" required>
+        <input type="time" id="endTime" name="endTime" required step="300">
+        <small style="color: #666;">예: 16:30 (24시간 형식)</small>
     </div>
 
     <div class="form-group">
@@ -239,11 +294,15 @@
                 imageItem.className = 'image-item' + (index === representativeIndex ? ' representative' : '');
                 imageItem.onclick = () => setRepresentativeImage(index);
 
-                imageItem.innerHTML = `
-                        <img src="${e.target.result}" alt="Preview ${index + 1}">
-                        ${index === representativeIndex ? '<div class="representative-label">대표</div>' : ''}
-                        <button type="button" class="remove-btn" onclick="removeImage(${index})">&times;</button>
-                    `;
+                // 조건부 HTML을 미리 생성하여 JSP EL과 충돌 방지
+                const representativeLabel = (index === representativeIndex)
+                    ? '<div class="representative-label">대표</div>'
+                    : '';
+
+                imageItem.innerHTML =
+                    '<img src="' + e.target.result + '" alt="Preview ' + (index + 1) + '">' +
+                    representativeLabel +
+                    '<button type="button" class="remove-btn" onclick="removeImage(' + index + ')">&times;</button>';
 
                 preview.appendChild(imageItem);
             };
