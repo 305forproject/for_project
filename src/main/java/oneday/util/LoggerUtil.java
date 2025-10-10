@@ -14,7 +14,7 @@ public class LoggerUtil {
 			// 기본 핸들러 제거, 중복 출력을 방지
 			topLogger.setUseParentHandlers(false);
 
-			//새 핸들러 생성
+			// 새 핸들러 생성
 			ConsoleHandler handler = new ConsoleHandler();
 
 			// 출력 형식 지정하는 포매터 생성
