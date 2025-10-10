@@ -25,7 +25,7 @@ public class LoggerUtil {
 			topLogger.addHandler(handler);
 
 			// 로그 레벨 설정
-			// INFO 레벨 이상의 로그만 출력 -> INFO, WARNING,SEVERE 3가지
+			// INFO 레벨 이상의 로그만 출력 -> INFO, WARNING, SEVERE 3가지
 			topLogger.setLevel(Level.INFO);
 
 		} catch (SecurityException e) {
