@@ -90,49 +90,52 @@
             </section>
         </div>
 
-
+        <!--slide 좌우 조절-->
         <div class="controls">
             <button class="slide-btn prev" id="prev">◀</button>
             <button class="slide-btn next" id="next">▶</button>
         </div>
-
-
         <div class="dots" id="dots" role="tablist" aria-label="슬라이드 인디케이터"></div>
     </div>
+
 
     <!--  강의 카드 영역 -->
     <main class="main-container">
         <div class="items-menu">
             <h2>추천 강의</h2>
         </div>
-
         <div class="items">
-            <!-- 카드 템플릿 예시 -->
+            <!-- 카드 동적 추가용 템플릿 -->
+            <!-- 새로 등록된 강의가 맨 앞에 추가될 영역 -->
             <article class="card">
                 <a href="#">
                     <div class="img-card">
                         <img src="" alt="클래스 이미지">
                     </div>
                     <div class="card-body">
-                        <p class="info1">[초급] 그림 기초</p>
-                        <h3 class="class-name">색연필로 배우는 정물화</h3>
-                        <p class="info2">생동감 있게 표현하는 방법을 배워보세요</p>
+                        <p class="info1">카테고리</p>
+                        <h3 class="class-name">클래스 이름</h3>
+                        <p class="info2">클래스 상세 정보</p>
                     </div>
                 </a>
             </article>
 
-            <article class="card">
-                <a href="#">
-                    <div class="img-card">
-                        <img src="" alt="클래스 이미지">
-                    </div>
-                    <div class="card-body">
-                        <p class="info1">[중급] 웹디자인</p>
-                        <h3 class="class-name">Figma로 디자인 시작하기</h3>
-                        <p class="info2">프로토타이핑부터 협업까지 한 번에 익히기</p>
-                    </div>
-                </a>
-            </article>
+            <!-- 카드 템플릿 예시 -->
+            <template id="card-template">
+                <article class="card">
+                    <a href="#">
+                        <div class="img-card">
+                            <img src="" alt="">
+                        </div>
+                        <div class="card-body">
+                            <p class="info1"></p>
+                            <h3 class="class-name"></h3>
+                            <p class="info2"></p>
+                        </div>
+                    </a>
+                </article>
+            </template>
+
             <article class="card">
                 <a href="#">
                     <div class="img-card">
@@ -151,34 +154,27 @@
                         <img src="" alt="클래스 이미지">
                     </div>
                     <div class="card-body">
-                        <p class="info1">카테고리</p>
-                        <h3 class="class-name">클래스 이름</h3>
-                        <p class="info2">클래스 상세 정보</p>
+                        <p class="info1">[중급] 웹디자인</p>
+                        <h3 class="class-name">Figma로 디자인 시작하기</h3>
+                        <p class="info2">프로토타이핑부터 협업까지 한 번에 익히기</p>
                     </div>
                 </a>
             </article>
-
-
-            <!-- 새로 등록된 강의가 맨 앞에 추가될 영역 -->
-
-
-        </div>
-
-        <!-- 카드 동적 추가용 템플릿 -->
-        <template id="card-template">
             <article class="card">
                 <a href="#">
                     <div class="img-card">
-                        <img src="" alt="">
+                        <img src="" alt="클래스 이미지">
                     </div>
                     <div class="card-body">
-                        <p class="info1"></p>
-                        <h3 class="class-name"></h3>
-                        <p class="info2"></p>
+                        <p class="info1">[초급] 그림 기초</p>
+                        <h3 class="class-name">색연필로 배우는 정물화</h3>
+                        <p class="info2">생동감 있게 표현하는 방법을 배워보세요</p>
                     </div>
                 </a>
             </article>
-        </template>
+        </div>
+
+
     </main>
 
     <!-- Footer 영역 -->

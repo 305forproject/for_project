@@ -958,24 +958,6 @@ input[type="password"] {
     }
 }
 
-/* slider 반응형 */
-/* 작은 데스크톱-큰 모바일 분기: 화면 너비가 880px 이하일 때 카드 2열 배치 */
-@media screen and (max-width: 880px) {
-    .items {
-        flex-wrap: wrap;
-    }
-
-    .items {
-        flex-wrap: wrap;
-    }
-
-    /* 두 개씩 배치: gap(20px)을 고려해 width 계산 */
-    .card {
-        width: calc(50% - 10px);
-        margin-bottom: 20px;
-    }
-}
-
 /* 모바일 (480px ~ 768px) */
 @media screen and (max-width: 768px) {
     .header-container {
