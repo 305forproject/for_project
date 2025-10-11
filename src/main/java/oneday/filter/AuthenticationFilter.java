@@ -16,10 +16,12 @@ public class AuthenticationFilter implements Filter {
 	private List<String> whitelist;
 	// 선생 역할 필요 경로
 	private List<String> teacherOnlyPaths;
+	// 서블릿 컨텍스트 경로를 보관
+	private String contextPath;
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		String contextPath = filterConfig.getServletContext().getContextPath();
+		this.contextPath = filterConfig.getServletContext().getContextPath();
 
 		// 공개 경로 설정
 		whitelist = Arrays.asList(

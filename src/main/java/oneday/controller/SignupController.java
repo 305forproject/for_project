@@ -128,6 +128,7 @@ public class SignupController extends HttpServlet {
 
 			if (success) {
 				// 성공 시 리다이렉트 (Spring에서는 "redirect:/signup/success")
+				System.out.println("[SignupController DEBUG] signup success for loginId=" + signupForm.getLoginId() + " -> redirect to /signup/success");
 				response.sendRedirect(request.getContextPath() + "/signup/success");
 			} else {
 				handleError(request, response, "회원가입 처리 중 오류가 발생했습니다.", signupForm);
@@ -175,6 +176,8 @@ public class SignupController extends HttpServlet {
 		request.setAttribute("error", error);
 		request.setAttribute("loginId", signupForm.getLoginId());
 		request.setAttribute("name", signupForm.getName()); // name 값도 유지
-		request.getRequestDispatcher("/WEB-INF/views/signup.jsp").forward(request, response);
+		// 회원가입 실패 시 홈 페이지의 회원가입 모달에서 오류를 표시하도록 index-home.jsp로 포워드
+		System.out.println("[SignupController DEBUG] signup failed for loginId=" + signupForm.getLoginId() + " -> forward to index-home.jsp, error=" + error);
+		request.getRequestDispatcher("/WEB-INF/jsp/index-home.jsp").forward(request, response);
 	}
 }

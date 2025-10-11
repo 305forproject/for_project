@@ -62,8 +62,8 @@ public class LogoutController extends HttpServlet {
 			response.addCookie(cookie);
 		}
 
-		// 로그인 페이지로 리다이렉트
-		response.sendRedirect("login");
+	// 로그인 페이지로 리다이렉트 (contextPath 사용)
+	response.sendRedirect(request.getContextPath() + "/login");
 	}
 
 	/**

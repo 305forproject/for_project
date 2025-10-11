@@ -77,6 +77,9 @@ public class LoginController extends HttpServlet {
 		String loginId = request.getParameter("loginId");
 		String password = request.getParameter("password");
 
+		// Debug log: entry and parameters (do not log passwords in production)
+		System.out.println("[LoginController DEBUG] doPost - loginId=" + loginId + ", passwordPresent=" + (password != null && !password.isEmpty()));
+
 		User user = authService.authenticate(loginId, password);
 
 		if (user != null) {
@@ -123,15 +126,20 @@ public class LoginController extends HttpServlet {
 				session.setMaxInactiveInterval(LOGIN_TIMEOUT_SECONDS);
 
 				// 메인 페이지로 리다이렉트
-				response.sendRedirect("/");
+				System.out.println("[LoginController DEBUG] authentication success for userId=" + user.getUserId() + " -> redirect to /");
+				response.sendRedirect(request.getContextPath() + "/");
 			} catch (SQLException e) {
 				e.printStackTrace();
 				request.setAttribute("error", "사용자 권한 정보를 가져오는데 실패했습니다.");
-				request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+				// 로그인 실패나 예외 시 홈 페이지의 로그인 모달에서 오류를 표시하도록 index-home.jsp로 포워드
+				System.out.println("[LoginController DEBUG] SQLException on authentication -> forward to index-home.jsp");
+				request.getRequestDispatcher("/WEB-INF/jsp/index-home.jsp").forward(request, response);
 			}
 		} else {
 			request.setAttribute("error", "아이디 또는 비밀번호가 잘못되었습니다.");
-			request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+			// 실패 시 index-home.jsp의 로그인 모달에 에러를 표시
+			System.out.println("[LoginController DEBUG] authentication failed for loginId=" + loginId + " -> forward to index-home.jsp");
+			request.getRequestDispatcher("/WEB-INF/jsp/index-home.jsp").forward(request, response);
 		}
 	}
 }
