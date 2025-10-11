@@ -2,11 +2,13 @@ package oneday.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,11 +20,12 @@ import oneday.dto.CoordinateDto;
  */
 public class KakaoMapService {
 	private static KakaoMapService instance;
-	private static final String KAKAO_API_KEY = "cd113cc26d1219d44007491db261deb6";
+	private final String kakaoApiKey;
 	private static final String GEOCODING_URL = "https://dapi.kakao.com/v2/local/search/address.json";
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 
 	private KakaoMapService() {
+		this.kakaoApiKey = loadKakaoApiKey();
 	}
 
 	public static synchronized KakaoMapService getInstance() {
@@ -30,6 +33,26 @@ public class KakaoMapService {
 			instance = new KakaoMapService();
 		}
 		return instance;
+	}
+
+	/**
+	 * kakao.properties 파일에서 API 키를 로드
+	 */
+	private String loadKakaoApiKey() {
+		Properties properties = new Properties();
+		try (InputStream input = getClass().getClassLoader().getResourceAsStream("kakao.properties")) {
+			if (input == null) {
+				throw new RuntimeException("kakao.properties 파일을 찾을 수 없습니다.");
+			}
+			properties.load(input);
+			String apiKey = properties.getProperty("kakao.api.key");
+			if (apiKey == null || apiKey.trim().isEmpty()) {
+				throw new RuntimeException("kakao.api.key 설정이 없습니다.");
+			}
+			return apiKey;
+		} catch (IOException e) {
+			throw new RuntimeException("kakao.properties 파일을 읽는 중 오류가 발생했습니다.", e);
+		}
 	}
 
 	/**
@@ -47,7 +70,7 @@ public class KakaoMapService {
 			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 
 			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Authorization", "KakaoAK " + KAKAO_API_KEY);
+			conn.setRequestProperty("Authorization", "KakaoAK " + kakaoApiKey);
 			conn.setRequestProperty("Content-Type", "application/json");
 			conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Java Application)");
 			conn.setConnectTimeout(5000);
