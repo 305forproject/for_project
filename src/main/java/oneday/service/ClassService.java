@@ -10,6 +10,7 @@ import javax.servlet.http.Part;
 
 import oneday.dto.ClassListDto;
 import oneday.dto.ClassRegisterDto;
+import oneday.dto.CoordinateDto;
 import oneday.dto.TeacherCalendarDto;
 import oneday.dto.TeacherClassDetailDto;
 import oneday.model.Classes;
@@ -151,11 +152,22 @@ public class ClassService {
 		List<Image> uploadedImages = null;
 
 		try {
-			// 1. 이미지 파일 처리 (카테고리별 폴더에 저장)
+			// 주소로부터 좌표 자동 변환
+			if ((registerDto.getLatitude() == null || registerDto.getLatitude().isEmpty()) &&
+				registerDto.getLocation() != null && !registerDto.getLocation().isEmpty()) {
+				CoordinateDto coordinates =
+					KakaoMapService.getInstance().getCoordinatesFromAddress(registerDto.getLocation());
+				if (coordinates != null) {
+					registerDto.setLatitude(coordinates.latitude());
+					registerDto.setLongitude(coordinates.longitude());
+				}
+			}
+
+			// 이미지 파일 처리 (카테고리별 폴더에 저장)
 			uploadedImages = imageService.processUploadedImages(imageParts, representativeIndex,
 				categoryName, servletContext);
 
-			// 2. 데이터베이스 트랜잭션 실행
+			// 데이터베이스 트랜잭션 실행
 			final List<Image> finalUploadedImages = uploadedImages;
 			return oneday.util.DatabaseTransactionUtil.executeTransactionForBoolean(conn -> {
 				try {
@@ -184,7 +196,6 @@ public class ClassService {
 			if (uploadedImages != null) {
 				imageService.rollbackUploadedFiles(uploadedImages, categoryName, servletContext);
 			}
-			e.printStackTrace();
 			return false;
 		}
 	}
@@ -209,6 +220,8 @@ public class ClassService {
 		classes.setPrice(registerDto.getPrice());
 		classes.setLocation(registerDto.getLocation());
 		classes.setZipcode(registerDto.getZipcode());
+		classes.setLatitude(registerDto.getLatitude());
+		classes.setLongitude(registerDto.getLongitude());
 
 		return classes;
 	}

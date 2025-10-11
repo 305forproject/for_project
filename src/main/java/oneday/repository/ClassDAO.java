@@ -247,10 +247,12 @@ public class ClassDAO {
 			pstmt.setInt(12, classes.getPrice());
 
 			int rowsAffected = pstmt.executeUpdate();
+
 			if (rowsAffected > 0) {
 				try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
-						return generatedKeys.getInt(1);
+						int generatedId = generatedKeys.getInt(1);
+						return generatedId;
 					}
 				}
 			}

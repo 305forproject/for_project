@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>클래스 등록</title>
+    <!-- 카카오 우편번호 서비스만 사용 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +16,9 @@
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         label {
@@ -35,47 +40,53 @@
         input[type="time"] {
             width: 200px;
             min-width: 150px;
-            -webkit-appearance: none;
-            -moz-appearance: textfield;
-            appearance: none;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
             background: white;
             cursor: pointer;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 2;
         }
 
         input[type="time"]::-webkit-calendar-picker-indicator {
-            background: transparent;
-            bottom: 0;
-            color: transparent;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="%23666" d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"/></svg>') no-repeat center;
+            background-size: 16px 16px;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
-            height: auto;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: auto;
+            position: static;
+            margin-left: auto;
+            margin-right: 8px;
         }
 
         input[type="date"] {
             width: 200px;
             min-width: 150px;
-            -webkit-appearance: none;
-            -moz-appearance: textfield;
-            appearance: none;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
             background: white;
             cursor: pointer;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 2;
         }
 
         input[type="date"]::-webkit-calendar-picker-indicator {
-            background: transparent;
-            bottom: 0;
-            color: transparent;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="%23666" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM5 19V8h14v11H5z"/></svg>') no-repeat center;
+            background-size: 16px 16px;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
-            height: auto;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: auto;
+            position: static;
+            margin-left: auto;
+            margin-right: 8px;
         }
 
         input[type="number"] {
@@ -225,9 +236,22 @@
     </div>
 
     <div class="form-group">
+        <label for="zipcode">우편번호:</label>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="zipcode" name="zipcode" readonly placeholder="우편번호 검색 필요" style="flex: 1;">
+            <button type="button" class="btn" onclick="searchAddress()" style="width: auto; padding: 8px 16px;">주소 검색
+            </button>
+        </div>
+    </div>
+
+    <div class="form-group">
         <label for="location">수업 장소:</label>
         <input type="text" id="location" name="location" required>
     </div>
+
+    <!-- 위도/경도 자동 설정 -->
+    <input type="hidden" id="latitude" name="latitude">
+    <input type="hidden" id="longitude" name="longitude">
 
     <div class="form-group">
         <label for="images">이미지 업로드 (최소 1개, 최대 8개):</label>
@@ -395,12 +419,40 @@
             return false;
         }
 
+        // 우편번호 검증 추가
+        if (!document.getElementById('zipcode').value) {
+            alert('주소 검색을 통해 우편번호를 입력해주세요.');
+            e.preventDefault();
+            return false;
+        }
+
         if (!isTimeValid || !isDateValid) {
             e.preventDefault();
             alert('입력한 정보를 다시 확인해주세요.');
             return false;
         }
     });
+
+    // 주소 검색 함수 (간소화됨 - 서버에서 좌표 처리)
+    function searchAddress() {
+        console.log('🔍 주소 검색 시작');
+        new daum.Postcode({
+            oncomplete: function (data) {
+                console.log('📬 우편번호 서비스 완료:', data);
+
+                document.getElementById('zipcode').value = data.zonecode;
+                let fullAddress = data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress;
+                document.getElementById('location').value = fullAddress;
+
+                console.log('📍 주소 설정 완료:', fullAddress);
+                console.log('💡 좌표는 서버에서 자동으로 처리됩니다');
+
+                // 좌표 필드를 비워둠 (서버에서 REST API로 처리)
+                document.getElementById('latitude').value = '';
+                document.getElementById('longitude').value = '';
+            }
+        }).open();
+    }
 </script>
 </body>
 </html>

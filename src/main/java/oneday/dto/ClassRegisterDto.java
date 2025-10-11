@@ -15,6 +15,8 @@ public class ClassRegisterDto {
 	private int price;
 	private String location;
 	private String zipcode;
+	private String latitude;
+	private String longitude;
 
 	/**
 	 * 기본 생성자
@@ -200,5 +202,41 @@ public class ClassRegisterDto {
 	 */
 	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
+	}
+
+	/**
+	 * 위도를 반환
+	 *
+	 * @return 위도
+	 */
+	public String getLatitude() {
+		return latitude;
+	}
+
+	/**
+	 * 위도를 설정
+	 *
+	 * @param latitude 설정할 위도
+	 */
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	/**
+	 * 경도를 반환
+	 *
+	 * @return 경도
+	 */
+	public String getLongitude() {
+		return longitude;
+	}
+
+	/**
+	 * 경도를 설정
+	 *
+	 * @param longitude 설정할 경도
+	 */
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 }
