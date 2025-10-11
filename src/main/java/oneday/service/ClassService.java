@@ -208,6 +208,7 @@ public class ClassService {
 		classes.setMaxCapacity(registerDto.getMaxStudents());
 		classes.setPrice(registerDto.getPrice());
 		classes.setLocation(registerDto.getLocation());
+		classes.setZipcode(registerDto.getZipcode());
 
 		return classes;
 	}

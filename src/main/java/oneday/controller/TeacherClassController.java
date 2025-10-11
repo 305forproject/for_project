@@ -194,6 +194,7 @@ public class TeacherClassController extends HttpServlet {
 			registerDto.setMaxStudents(Integer.parseInt(request.getParameter("maxStudents")));
 			registerDto.setPrice(Integer.parseInt(request.getParameter("price")));
 			registerDto.setLocation(request.getParameter("location"));
+			registerDto.setZipcode(request.getParameter("zipcode"));
 
 			// 대표 이미지 인덱스 가져오기
 			int representativeIndex = Integer.parseInt(request.getParameter("representativeIndex"));

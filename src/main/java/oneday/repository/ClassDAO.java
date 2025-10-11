@@ -153,8 +153,8 @@ public class ClassDAO {
 	 */
 	public boolean insertClass(Classes classes) throws SQLException {
 		String sql = "INSERT INTO CLASSES (TEACHER_ID, CATEGORY_ID, CLASS_NAME, CLASS_DETAIL, " +
-			"START_AT, END_AT, LONGITUDE, LATITUDE, LOCATION, MAX_CAPACITY, PRICE) " +
-			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			"START_AT, END_AT, LONGITUDE, LATITUDE, LOCATION, ZIPCODE, MAX_CAPACITY, PRICE) " +
+			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (Connection conn = dbConfig.getConnection();
 			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -168,8 +168,9 @@ public class ClassDAO {
 			pstmt.setString(7, classes.getLongitude());
 			pstmt.setString(8, classes.getLatitude());
 			pstmt.setString(9, classes.getLocation());
-			pstmt.setInt(10, classes.getMaxCapacity());
-			pstmt.setInt(11, classes.getPrice());
+			pstmt.setString(10, classes.getZipcode());
+			pstmt.setInt(11, classes.getMaxCapacity());
+			pstmt.setInt(12, classes.getPrice());
 
 			int rowsAffected = pstmt.executeUpdate();
 			return rowsAffected > 0;
@@ -228,8 +229,8 @@ public class ClassDAO {
 	 */
 	public int insertClassAndGetId(Connection conn, Classes classes) throws SQLException {
 		String sql = "INSERT INTO CLASSES (TEACHER_ID, CATEGORY_ID, CLASS_NAME, CLASS_DETAIL, " +
-			"START_AT, END_AT, LONGITUDE, LATITUDE, LOCATION, MAX_CAPACITY, PRICE) " +
-			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			"START_AT, END_AT, LONGITUDE, LATITUDE, LOCATION, ZIPCODE, MAX_CAPACITY, PRICE) " +
+			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			pstmt.setInt(1, classes.getTeacherId());
@@ -241,8 +242,9 @@ public class ClassDAO {
 			pstmt.setString(7, classes.getLongitude());
 			pstmt.setString(8, classes.getLatitude());
 			pstmt.setString(9, classes.getLocation());
-			pstmt.setInt(10, classes.getMaxCapacity());
-			pstmt.setInt(11, classes.getPrice());
+			pstmt.setString(10, classes.getZipcode());
+			pstmt.setInt(11, classes.getMaxCapacity());
+			pstmt.setInt(12, classes.getPrice());
 
 			int rowsAffected = pstmt.executeUpdate();
 			if (rowsAffected > 0) {
