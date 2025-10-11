@@ -14,6 +14,7 @@ public class ClassRegisterDto {
 	private int maxStudents;
 	private int price;
 	private String location;
+	private String zipcode;
 
 	/**
 	 * 기본 생성자
@@ -181,5 +182,23 @@ public class ClassRegisterDto {
 	 */
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	/**
+	 * 우편번호를 반환
+	 *
+	 * @return 우편번호
+	 */
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	/**
+	 * 우편번호를 설정
+	 *
+	 * @param zipcode 설정할 우편번호
+	 */
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
 	}
 }

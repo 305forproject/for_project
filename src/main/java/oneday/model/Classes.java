@@ -13,6 +13,7 @@ public class Classes {
 	private String longitude;
 	private String latitude;
 	private String location;
+	private String zipcode;
 	private int maxCapacity;
 	private int price;
 
@@ -94,6 +95,14 @@ public class Classes {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
 	}
 
 	public int getMaxCapacity() {
