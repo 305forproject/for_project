@@ -1,8 +1,8 @@
 // 모바일 메뉴 토글 스크립트
 document.addEventListener('DOMContentLoaded', function () {
-    var menuBtn = document.querySelector('.mobile-menu-toggle');
-    var modal = document.getElementById('mobileMenuModal');
-    var closeBtn = document.getElementById('closeMobileMenu');
+    const menuBtn = document.querySelector('.mobile-menu-toggle');
+    const modal = document.getElementById('mobileMenuModal');
+    const closeBtn = document.getElementById('closeMobileMenu');
     if (menuBtn && modal && closeBtn) {
         menuBtn.addEventListener('click', function () {
             modal.style.display = 'block';
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 이유: 마지막에서 다음으로 넘어갈 때 시각적으로 연속되게 보이도록
     // 첫/마지막 요소를 복제해 앞뒤에 붙인 후, transition 종료 시 실제 인덱스로 점프시킴
     const firstClone = originalSlides[0].cloneNode(true);
-    const lastClone = originalSlides[originalSlides.length-1].cloneNode(true);
+    const lastClone = originalSlides[originalSlides. - ].cloneNode(true);
     slidesEl.appendChild(firstClone);
     slidesEl.insertBefore(lastClone, slidesEl.firstChild);
     const slides = Array.from(slidesEl.children);
