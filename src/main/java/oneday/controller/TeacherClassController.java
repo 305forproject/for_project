@@ -16,6 +16,7 @@ import javax.servlet.http.Part;
 import oneday.dto.ClassRegisterDto;
 import oneday.dto.TeacherCalendarDto;
 import oneday.dto.TeacherClassDetailDto;
+import oneday.repository.CategoryDAO;
 import oneday.service.ClassService;
 
 /**
@@ -31,6 +32,7 @@ import oneday.service.ClassService;
 public class TeacherClassController extends HttpServlet {
 
 	private final ClassService classService = ClassService.getInstance();
+	private final CategoryDAO categoryDAO = new CategoryDAO();
 
 	/**
 	 * GET 요청을 처리하는 메서드
@@ -248,21 +250,13 @@ public class TeacherClassController extends HttpServlet {
 
 	/**
 	 * 카테고리 ID로 카테고리명을 반환
+	 * 데이터베이스에서 동적으로 조회하여 유연한 처리 제공
 	 *
 	 * @param categoryId 카테고리 ID
 	 * @return 카테고리명
 	 */
 	private String getCategoryNameById(int categoryId) {
-		switch (categoryId) {
-			case 1:
-				return "요리";
-			case 2:
-				return "미술";
-			case 3:
-				return "운동";
-			default:
-				return "기타";
-		}
+		return categoryDAO.findCategoryNameById(categoryId);
 	}
 
 	/**
