@@ -97,33 +97,6 @@ img {
     white-space: nowrap;
 }
 
-/* 네비게이션 버튼 */
-.nav-buttons {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.nav-btn {
-    background-color: #fff;
-    color: #E0A7DD;
-    padding: 10px 20px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    border: 2px solid #fff;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-
-.nav-btn:hover {
-    background-color: #E0A7DD;
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(224, 167, 221, 0.3);
-}
-
 /* 모바일 메뉴 */
 .mobile-menu-toggle {
     display: none;
@@ -331,35 +304,6 @@ img {
     font-size: 30px;
 }
 
-/* 모바일 메뉴 버튼들 */
-.mobile-menu-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    margin-bottom: 24px;
-}
-
-.mobile-menu-btn {
-    display: flex;
-    align-items: center;
-    padding: 16px 20px;
-    background-color: #E0A7DD;
-    color: white;
-    text-decoration: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(224, 167, 221, 0.2);
-}
-
-.mobile-menu-btn:hover {
-    background-color: #D88DD5;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(224, 167, 221, 0.3);
-}
-
 .mobile-auth-buttons {
     display: flex;
     flex-direction: column;
@@ -565,7 +509,6 @@ img {
         height: 600px;
     }
 
-
     /* footer 반응형 - 중간 태블릿 */
     .footer-container {
         width: 100%;
@@ -686,12 +629,12 @@ img {
         margin-left: 4px;
     }
 
-    
+
     /* 예약 캘린더 반응형 */
     .reservation-calendar {
-        height: 320px;
-        margin: 12px auto;
-        padding: 12px 10px;
+        height: 400px;
+        margin: 15px auto;
+        padding: 15px 12px;
     }
 
 
@@ -749,6 +692,15 @@ img {
         margin-left: 4px;
     }
 
+
+    /* 예약 캘린더 반응형 */
+    .reservation-calendar {
+        height: 320px;
+        margin: 12px auto;
+        padding: 12px 10px;
+    }
+    
+
     /* footer 반응형 - 매우 작은 화면 */
     .footer-container {
         width: 100%;
@@ -778,10 +730,6 @@ img {
 @media screen and (max-width: 768px) {
     .mobile-menu-toggle {
         display: flex;
-    }
-    
-    .nav-buttons {
-        display: none;
     }
 }
 
