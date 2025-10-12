@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -7,8 +7,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-    <link rel="stylesheet" href="<c:url value='/static/css/home.css'/>">
-    <script src="<c:url value='/static/js/script-home.js'/>"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
+    <script src="${pageContext.request.contextPath}/static/js/script-home.js"></script>
+
 
     <title>Home</title>
 
@@ -27,16 +28,18 @@
         </div>
 
         <!-- 마이페이지 아이콘 영역 -->
-        <div class="mypage-icons">
+        <div class="mypage-icon">
             <div class="icons">
                 <!-- 강사 아이콘 -->
-                <button type="button" class="mypage-icon icon-lecturer">
-                    <img src="<c:url value='/static/img/mypage-icon-lecturer.png'/>" alt="icon-lecturer">
+                <button type="button" class="mypage-icon-lecturer-img">
+                    <img src="${pageContext.request.contextPath}/static/img/mypage-icon-lecturer.png"
+                         alt="icon-lecturer">
                 </button>
 
                 <!-- 학생 아이콘 -->
-                <button type="button" class="mypage-icon icon-student">
-                    <img src="<c:url value='/static/img/mypage-icon-student.png'/>" alt="icon-student">
+                <button type="button" class="mypage-icon-student-img">
+                    <img src="${pageContext.request.contextPath}/static/img/mypage-icon-student.png" alt="icon-student">
+
                 </button>
             </div>
         </div>
@@ -75,7 +78,6 @@
     <button id="joinBtn" class="btn btn-join-main">회원가입</button>
     <button id="logoutBtn" class="btn btn-logout" style="display: none;">로그아웃</button>
 </div>
-
 
  <!-- Slider 영역 -->
     <div class="slider" id="slider" aria-roledescription="carousel">
@@ -198,8 +200,8 @@
 
 
     </main>
-
     
+
 <!-- Footer 영역 -->
 <footer class="footer">
     <div class="footer-container">
@@ -296,9 +298,6 @@
         <button id="messageOkBtn" class="btn btn-check">확인</button>
     </div>
 </div>
-
-
-
 
 </body>
 
