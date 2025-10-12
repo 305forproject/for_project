@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="<c:url value='/static/css/home.css'/>">
-    <script src="<c:url value='/static/script/script-home.js'/>"></script>
+    <script src="<c:url value='/static/js/script-home.js'/>"></script>
 
     <title>Home</title>
 
