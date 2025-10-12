@@ -17,9 +17,11 @@ public class AuthenticationFilter implements Filter {
 	// 선생 역할 필요 경로
 	private List<String> teacherOnlyPaths;
 
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		String contextPath = filterConfig.getServletContext().getContextPath();
+
 
 		// 공개 경로 설정
 		whitelist = Arrays.asList(
@@ -43,9 +45,11 @@ public class AuthenticationFilter implements Filter {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		String requestURI = httpRequest.getRequestURI();
 
+
 		// 공개 경로 통과
 		boolean isWhitelisted = whitelist.stream().anyMatch(requestURI::startsWith);
 		if (isWhitelisted) {
+
 			chain.doFilter(request, response);
 			return;
 		}

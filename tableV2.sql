@@ -63,7 +63,7 @@ CREATE TABLE `CATEGORIES` (
                               PRIMARY KEY (`CATEGORY_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- CLASSES 테이블 생성
+-- CLASSES 테이블 생성 (우편번호 컬럼 추가)
 CREATE TABLE `CLASSES` (
                            `CLASS_ID` INT NOT NULL AUTO_INCREMENT,
                            `TEACHER_ID` INT NOT NULL,
@@ -75,6 +75,7 @@ CREATE TABLE `CLASSES` (
                            `LONGITUDE` VARCHAR(20) NULL,
                            `LATITUDE` VARCHAR(20) NULL,
                            `LOCATION` VARCHAR(255) NULL,
+                           `ZIPCODE` VARCHAR(10) NULL,
                            `MAX_CAPACITY` INT UNSIGNED NULL, -- 정원 수는 음수가 될 수 없으므로 UNSIGNED 옵션 추가
                            `PRICE` INT UNSIGNED NOT NULL DEFAULT 0, -- 가격은 음수가 될 수 없으므로 UNSIGNED 옵션 추가
                            PRIMARY KEY (`CLASS_ID`),
@@ -175,11 +176,11 @@ INSERT INTO `CATEGORIES` (`CATEGORY`) VALUES
 
 -- 4. CLASSES: 3개의 클래스 개설
 -- 김선생(ID:1)이 '요리'와 '미술' 클래스 개설
-INSERT INTO `CLASSES` (`TEACHER_ID`, `CATEGORY_ID`, `CLASS_NAME`, `CLASS_DETAIL`, `START_AT`, `END_AT`, `LOCATION`, `MAX_CAPACITY`, `PRICE`) VALUES
-                                                                                                                                                 (1, 1, '왕초보 파스타 만들기', '토마토 소스 파스타의 모든 것을 알려드립니다.', '2025-11-15 14:00:00', '2025-11-15 16:00:00', '서울시 강남구 요리학원', 10, 50000),
-                                                                                                                                                 (1, 2, '연필 소묘 기초', '인물화 그리기를 위한 기본기 다지기', '2025-11-22 10:00:00', '2025-11-22 13:00:00', '서울시 홍대입구 화실', 8, 75000),
+INSERT INTO `CLASSES` (`TEACHER_ID`, `CATEGORY_ID`, `CLASS_NAME`, `CLASS_DETAIL`, `START_AT`, `END_AT`, `LOCATION`, `ZIPCODE`, `MAX_CAPACITY`, `PRICE`) VALUES
+                                                                                                                                                           (1, 1, '왕초보 파스타 만들기', '토마토 소스 파스타의 모든 것을 알려드립니다.', '2025-11-15 14:00:00', '2025-11-15 16:00:00', '서울시 강남구 요리학원', '06292', 10, 50000),
+                                                                                                                                                           (1, 2, '연필 소묘 기초', '인물화 그리기를 위한 기본기 다지기', '2025-11-22 10:00:00', '2025-11-22 13:00:00', '서울시 홍대입구 화실', '04054', 8, 75000),
 -- 박교사(ID:2)가 '운동' 클래스 개설
-                                                                                                                                                 (2, 3, '주말 아침 요가', '몸과 마음을 깨우는 힐링 요가 클래스입니다.', '2025-11-23 09:00:00', '2025-11-23 10:30:00', '서울시 마포구 요가센터', 15, 30000);
+                                                                                                                                                           (2, 3, '주말 아침 요가', '몸과 마음을 깨우는 힐링 요가 클래스입니다.', '2025-11-23 09:00:00', '2025-11-23 10:30:00', '서울시 마포구 요가센터', '04107', 15, 30000);
 
 -- 5. IMAGES: 각 클래스에 이미지 추가
 -- '왕초보 파스타 만들기'(ID:1) 클래스에 이미지 2개 (하나는 대표 이미지)
