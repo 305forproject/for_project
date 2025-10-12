@@ -167,3 +167,149 @@ document.addEventListener('DOMContentLoaded', function () {
         showMessage("로그아웃", "로그아웃 되었습니다.");
     });
 });
+
+
+//slide
+// script-home.js - 무한 루프 + dot 업데이트 + 터치 스와이프 포함
+document.addEventListener('DOMContentLoaded', function () {
+  (function(){
+    const slidesEl = document.getElementById('slides');
+    const originalSlides = Array.from(slidesEl.children);
+    const dotsEl = document.getElementById('dots');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const slider = document.getElementById('slider');
+
+    let index = 1; // clone 고려한 시작 인덱스
+    const intervalMs = 3500;
+    let timer = null;
+    let isDragging = false;
+    let startX = 0;
+    let currentTranslate = 0;
+
+    // 무한 루프를 위한 “클론 슬라이드” 추가
+    const firstClone = originalSlides[0].cloneNode(true);
+    const lastClone = originalSlides[originalSlides.length-1].cloneNode(true);
+    slidesEl.appendChild(firstClone);
+    slidesEl.insertBefore(lastClone, slidesEl.firstChild);
+    const slides = Array.from(slidesEl.children);
+
+    // 초기 위치
+    slidesEl.style.transform = `translateX(${-index*100}%)`;
+
+    // dots 생성 (원본 슬라이드 수 기준)
+    originalSlides.forEach((s,i)=>{
+      const btn = document.createElement('button');
+      btn.className = 'dot';
+      btn.setAttribute('aria-label', s.dataset.title || `슬라이드 ${i+1}`);
+      btn.addEventListener('click', ()=>{ goTo(i+1); resetTimer(); });
+      dotsEl.appendChild(btn);
+    });
+    const dots = Array.from(dotsEl.children);
+
+    function setTransition(on){
+      slidesEl.style.transition = on ? 'transform .5s ease' : 'none';
+    }
+
+    //dots 표시를 갱신
+    function updateDotsByIndex(i){
+      // i 는 clone 포함 인덱스. 실제 인덱스(0..n-1)는 i-1
+      let realIndex = i-1;
+      if(realIndex < 0) realIndex = originalSlides.length-1;
+      if(realIndex >= originalSlides.length) realIndex = 0;
+      dots.forEach((d,idx)=> d.setAttribute('aria-current', idx === realIndex));
+    }
+
+    //슬라이드 전환 핵심
+    function update(){
+      setTransition(true);
+      slidesEl.style.transform = `translateX(${-index*100}%)`;
+      updateDotsByIndex(index);
+    }
+
+    function next(){ index++; update(); }
+    function prev(){ index--; update(); }
+    function goTo(i){ index = i; update(); }
+
+    nextBtn.addEventListener('click', ()=>{ next(); resetTimer(); });
+    prevBtn.addEventListener('click', ()=>{ prev(); resetTimer(); });
+
+    // transition end 처리: clone 보정
+    // transition 종료 후 “순간 점프”
+    slidesEl.addEventListener('transitionend', ()=>{
+      if(slides[index].isSameNode(firstClone)){
+        // we moved to the clone of first -> jump to real first (index=1)
+        setTransition(false);
+        index = 1;
+        slidesEl.style.transform = `translateX(${-index*100}%)`;
+      }
+      if(slides[index].isSameNode(lastClone)){
+        // moved to clone of last -> jump to real last
+        setTransition(false);
+        index = slides.length - 2;
+        slidesEl.style.transform = `translateX(${-index*100}%)`;
+      }
+      // 항상 dots 업데이트
+      updateDotsByIndex(index);
+    });
+
+    // autoplay
+    function startTimer(){ if(timer) clearInterval(timer); timer = setInterval(()=>{ next(); }, intervalMs); }
+    function stopTimer(){ if(timer){ clearInterval(timer); timer=null; } }
+    function resetTimer(){ stopTimer(); startTimer(); }
+
+    // pause on hover/focus->마우스를 올리면 멈추고, 내리면 다시 시작
+    slider.addEventListener('mouseenter', stopTimer);
+    slider.addEventListener('mouseleave', startTimer);
+    slider.addEventListener('focusin', stopTimer);
+    slider.addEventListener('focusout', startTimer);
+
+    // 터치 스와이프 (모바일)
+    slidesEl.addEventListener('touchstart', touchStart, {passive:true});
+    slidesEl.addEventListener('touchmove', touchMove, {passive:true});
+    slidesEl.addEventListener('touchend', touchEnd);
+
+    function touchStart(e){
+      stopTimer();
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      currentTranslate = -index * slider.clientWidth;
+      setTransition(false);
+    }
+
+    function touchMove(e){
+      if(!isDragging) return;
+      const dx = e.touches[0].clientX - startX;
+      const move = currentTranslate + dx;
+      slidesEl.style.transform = `translateX(${move}px)`;
+    }
+
+    function touchEnd(e){
+      if(!isDragging) return;
+      isDragging = false;
+      const dx = e.changedTouches[0].clientX - startX;
+      const threshold = slider.clientWidth * 0.2;
+      setTransition(true);
+      if(Math.abs(dx) > threshold){
+        if(dx < 0) { index++; }
+        else { index--; }
+      }
+      // 복원: px -> % 변환
+      slidesEl.style.transform = `translateX(${-index*100}%)`;
+      // 보정 필요하면 transitionend 이벤트에서 처리
+      resetTimer();
+    }
+
+    // 초기 dots 상태, 시작
+    updateDotsByIndex(index);
+    startTimer();
+
+    // 윈도우 리사이즈 시 px->% 계산 문제 방지 (transition 끊겼을 수 있어 재설정)
+    window.addEventListener('resize', ()=>{
+      setTransition(false);
+      slidesEl.style.transform = `translateX(${-index*100}%)`;
+      setTimeout(()=> setTransition(true), 50);
+    });
+  })();
+});
+
