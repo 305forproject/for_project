@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 로그인 버튼 → 로그인 모달 열기
     loginBtn.addEventListener("click", () => {
+        console.log("이벤트가 인식되었습니다.");
         loginModal.style.display = "flex";
     });
 
