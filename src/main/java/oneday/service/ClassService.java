@@ -5,9 +5,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.Part;
 
+import oneday.dto.ClassDetailDto;
 import oneday.dto.ClassListDto;
 import oneday.dto.ClassRegisterDto;
 import oneday.dto.CoordinateDto;
@@ -18,6 +21,7 @@ import oneday.model.Classes;
 import oneday.model.Image;
 import oneday.repository.ClassDAO;
 import oneday.repository.ImageDAO;
+import oneday.util.LoggerUtil;
 
 /**
  * 클래스 관련 비즈니스 로직을 처리하는 서비스 클래스
@@ -28,6 +32,7 @@ public class ClassService {
 	private final ClassDAO classDAO;
 	private final ImageService imageService;
 	private final ImageDAO imageDAO;
+	private static final Logger logger = LoggerUtil.getLogger(String.valueOf(ReservationService.class));
 
 	/**
 	 * ClassService 생성자 (private)
@@ -88,6 +93,27 @@ public class ClassService {
 	public TeacherClassDetailDto findMyClassDetail(int classId) {
 		try {
 			return classDAO.findDetailByClassIdAndTeacherId(classId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	//클래스 상세 정보 조회
+	public ClassDetailDto findClassDetail(int classId) {
+		try {
+			//클래스 상세 정보 조회
+			ClassDetailDto detail = classDAO.findDetailById(classId);
+
+			if (detail != null) {
+				//해당 클래스 이미지 목록 조회
+				List<Image> images = imageDAO.findByClassId(classId);
+
+				//
+				detail.setImages(images);
+			}
+			return detail;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
