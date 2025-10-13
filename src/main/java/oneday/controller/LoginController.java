@@ -1,16 +1,21 @@
 package oneday.controller;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import oneday.model.Role;
 import oneday.model.User;
 import oneday.repository.UserDAO;
 import oneday.service.AuthService;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
 
 /**
  * 로그인 처리를 담당하는 서블릿 컨트롤러
@@ -51,7 +56,7 @@ public class LoginController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/jsp/index-home.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/index-home.jsp").forward(request, response);
 	}
 
 	/**
