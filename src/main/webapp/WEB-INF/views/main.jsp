@@ -116,7 +116,7 @@
     <c:if test="${not empty classList}">
         <div class="class-grid">
             <c:forEach var="clazz" items="${classList}">
-                <div class="class-card" onclick="goToClassDetail(${clazz.classId})">
+                <div class="class-card" onclick="goToClassDetail('${clazz.classId}')">
                     <c:choose>
                         <c:when test="${not empty clazz.representativeImageUrl}">
                             <img src="${pageContext.request.contextPath}${clazz.representativeImageUrl}"
@@ -154,7 +154,7 @@
 <script>
     function goToClassDetail(classId) {
         // 강의 상세 페이지로 이동 (실제 URL은 프로젝트에 맞게 수정)
-        window.location.href = '/class/detail?classId=' + classId;
+        window.location.href = '${pageContext.request.contextPath}/class/detail?classId=' + classId;
     }
 </script>
 </body>
