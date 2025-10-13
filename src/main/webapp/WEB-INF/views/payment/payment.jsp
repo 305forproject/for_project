@@ -25,10 +25,6 @@
         </div>
         <button class="button" id="payment-button" style="margin-top: 30px">결제하기</button>
     </div>
-    <div class="box_section" style="padding: 40px 30px 50px 30px; margin-top: 30px; margin-bottom: 50px">
-        <button class="button" id="brandpay-button" style="margin-top: 30px">위젯 없이 브랜드페이만 연동하기</button>
-        <button class="button" id="payment-window-button" style="margin-top: 30px">위젯 없이 결제창만 연동하기</button>
-    </div>
 </div>
 <script>
     let currentURL = window.location.href.replace(/[^/]*$/, '');

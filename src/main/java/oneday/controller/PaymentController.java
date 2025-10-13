@@ -2,6 +2,7 @@ package oneday.controller;
 
 import oneday.config.PaymentConfig;
 import oneday.service.PaymentService;
+import oneday.service.ReservationService;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,6 +21,7 @@ import java.util.Base64;
 @WebServlet(urlPatterns = {"/api/payment/success", "/api/payment/fail"})
 public class PaymentController extends HttpServlet {
 
+	private final ReservationService reservationService = ReservationService.getInstance();
 	private final PaymentService paymentService = PaymentService.getInstance();
 
 	@Override
@@ -28,47 +30,42 @@ public class PaymentController extends HttpServlet {
 
 		//성공 로직
 		if (requestUri.endsWith("/success")) {
-			int reservationId = -1;
-
 			String paymentKey = request.getParameter("paymentKey");
-			String orderId = request.getParameter("orderId");
-			String amount = request.getParameter("amount");
-			System.out.println(orderId);
+			String orderIdFromToss = request.getParameter("orderId");
+			String amountStr = request.getParameter("amount");
 
-			// 이런 예약 번호에서 `oneday-reservation_Id-현재시간`
-			// reservationid만 추출
+			int classId = -1;
+			int studentId = -1;
+
 			try {
-				String[] parts = orderId.split("-");
-				if (parts.length >= 2 && parts[0].equals("oneday")) {
-					reservationId = Integer.parseInt(parts[1]);
+				// [핵심] orderId에서 classId와 studentId를 다시 추출
+				String[] parts = orderIdFromToss.split("-");
+				if (parts.length >= 3 && parts[0].equals("oneday")) {
+					classId = Integer.parseInt(parts[1]);
+					studentId = Integer.parseInt(parts[2]);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
-			// reservationId를 제대로 추출하지 못한 경우, 잘못된 요청으로 처리
-			if (reservationId == -1) {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 주문번호입니다.");
-				return;
-			}
-
 			try {
 				// 토스페이먼츠에 최종 결제 승인 요청
-				JSONObject responseJson = requestPaymentConfirm(paymentKey, orderId, amount);
-				boolean processingResult = paymentService.processPayment(responseJson, reservationId);
-				request.setAttribute("isSuccess", processingResult);
-				// 서비스 계층에 최종 처리 위임
-				paymentService.processPayment(responseJson, reservationId);
+				JSONObject responseJson = requestPaymentConfirm(paymentKey, orderIdFromToss, amountStr);
 
+				paymentService.createReservationAndPayment(classId, studentId, responseJson);
+
+				// --- 4. 모든 과정이 성공했을 때만 success.jsp로 이동 ---
 				request.setAttribute("isSuccess", true);
 				request.setAttribute("paymentResult", responseJson);
+				request.getRequestDispatcher("/WEB-INF/views/payment/success.jsp").forward(request, response);
 
 			} catch (Exception e) {
-				request.setAttribute("isSuccess", false);
-				request.setAttribute("errorMsg", e.getMessage());
+				// --- 5. [수정] 모든 종류의 실패(DB, API 등)를 여기서 처리 ---
+				// 이제 e.getMessage()는 "이미 예약한 강의입니다."와 같은 상세 메시지를 담고 있습니다.
+				request.setAttribute("message", e.getMessage());
+				request.setAttribute("code", "SERVER_ERROR");
+				request.getRequestDispatcher("/WEB-INF/views/payment/fail.jsp").forward(request, response);
 			}
-			request.getRequestDispatcher("/WEB-INF/views/payment/success.jsp").forward(request, response);
-
 		} else if (requestUri.endsWith("/fail")) {
 			request.setAttribute("message", request.getParameter("message"));
 			request.setAttribute("code", request.getParameter("code"));

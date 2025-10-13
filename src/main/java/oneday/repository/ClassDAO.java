@@ -188,6 +188,52 @@ public class ClassDAO {
 	}
 
 	/**
+	 * ID로 특정 강의 정보를 조회합니다.
+	 * @param classId 조회할 강의의 ID
+	 * @return 조회된 강의 정보가 담긴 Classes 객체. 해당하는 강의가 없으면 null을 반환합니다.
+	 * @throws SQLException 데이터베이스 접근 중 오류가 발생한 경우
+	 */
+	public Classes findById(int classId) throws SQLException {
+		// 최종적으로 반환할 Classes 객체를 null로 초기화합니다.
+		Classes cls = null;
+		// CLASS_ID를 기준으로 데이터를 조회하는 SQL 쿼리문입니다.
+		String sql = "SELECT * FROM CLASSES WHERE CLASS_ID = ?";
+
+		// try-with-resources를 사용하여 DB 자원(Connection, PreparedStatement)을 자동으로 닫아줍니다.
+		try (Connection conn = dbConfig.getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			// SQL 쿼리의 첫 번째 물음표(?) 자리에 classId 값을 채워 넣습니다.
+			pstmt.setInt(1, classId);
+
+			// 쿼리를 실행하고 결과(ResultSet)를 받습니다.
+			try (ResultSet rs = pstmt.executeQuery()) {
+				// 결과에 데이터가 한 줄이라도 존재한다면 (if)
+				if (rs.next()) {
+					// 결과를 담을 새로운 Classes 객체를 생성합니다.
+					cls = new Classes();
+
+					// ResultSet(rs)에서 각 컬럼의 값을 가져와 Classes 객체의 필드에 채워 넣습니다.
+					cls.setClassId(rs.getInt("CLASS_ID"));
+					cls.setTeacherId(rs.getInt("TEACHER_ID"));
+					cls.setCategoryId(rs.getInt("CATEGORY_ID"));
+					cls.setClassName(rs.getString("CLASS_NAME"));
+					cls.setClassDetail(rs.getString("CLASS_DETAIL"));
+					cls.setStartAt(rs.getTimestamp("START_AT").toLocalDateTime());
+					cls.setEndAt(rs.getTimestamp("END_AT").toLocalDateTime());
+					cls.setLongitude(rs.getString("LONGITUDE"));
+					cls.setLatitude(rs.getString("LATITUDE"));
+					cls.setLocation(rs.getString("LOCATION"));
+					cls.setMaxCapacity(rs.getInt("MAX_CAPACITY"));
+					cls.setPrice(rs.getInt("PRICE"));
+				}
+			}
+		}
+		// 채워진 Classes 객체 또는 (데이터가 없었다면) null을 반환합니다.
+		return cls;
+	}
+
+	/**
 	 * 새로운 클래스를 데이터베이스에 등록
 	 *
 	 * @param classes 등록할 클래스 정보가 담긴 Classes 객체

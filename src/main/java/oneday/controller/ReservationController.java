@@ -42,31 +42,48 @@ public class ReservationController extends HttpServlet {
 		ServletException,
 		IOException {
 
-		// 1. DTO 객체 생성
-		ReservationRequestDto reservationDto = new ReservationRequestDto();
-
+		// --- 1. 요청의 Body에 담긴 JSON 데이터를 읽기 위한 준비 ---
+		// 클라이언트가 보낸 데이터가 JSON 형식이므로, getParameter 대신 getReader를 사용합니다.
+		Gson gson = new Gson();
+		ReservationRequestDto reservationDto = null;
 		try {
-			// 2. 요청 파라미터를 DTO에 자동 채우기
-			// request.getParameterMap()의 key와 DTO의 필드 이름이 일치
-			BeanUtils.populate(reservationDto, request.getParameterMap());
-
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			throw new ServletException("DTO 파라미터 매핑 오류", e);
+			// request.getReader()로 읽어온 JSON 문자열을 ReservationRequestDto 객체로 자동 변환합니다.
+			reservationDto = gson.fromJson(request.getReader(), ReservationRequestDto.class);
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "JSON 파싱 오류", e);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 요청 형식입니다.");
+			return;
 		}
 
-		// 3. 세션에서 사용자 ID 가져오기
-		int studentId = (Integer)request.getSession().getAttribute("userId");
+		// --- 2. 세션에서 로그인된 사용자 ID를 안전하게 가져오기 ---
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("userId") == null) {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
+			return;
+		}
+		int studentId = (Integer) session.getAttribute("userId");
 
 		try {
-			// 4. 서비스를 호출하여 예약 생성 (이후 로직은 동일)
+			// --- 3. 서비스를 호출하여 예약 생성 로직 실행 ---
+			// Service는 정원 초과, 중복 예약 등의 규칙을 검사하고 예외를 발생시킬 수 있습니다.
 			Reservation createdReservation = reservationService.createReservation(reservationDto, studentId);
 
-			// 5. 성공 시 응답 (단순 성공 메시지 또는 페이지 리디렉션)
-			response.setStatus(HttpServletResponse.SC_CREATED);
-			response.getWriter().write(createdReservation.getReservationId() + "예약 완료 ");
+			// --- 4. 성공 시: 생성된 예약 정보를 JSON으로 변환하여 응답 ---
+			// 클라이언트(JavaScript)는 이 JSON 데이터를 받아 토스페이먼츠 결제창을 띄우는 데 사용합니다.
+			response.setStatus(HttpServletResponse.SC_CREATED); // '성공적으로 생성됨'을 의미하는 201 상태 코드
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(gson.toJson(createdReservation));
 
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			// --- 5. 실패 시: Service에서 발생한 오류 메시지를 JSON으로 변환하여 응답 ---
+			// 클라이언트(JavaScript)는 이 오류 메시지를 받아 alert() 창으로 사용자에게 보여줍니다.
+			logger.log(Level.INFO, "예약 생성 실패: " + e.getMessage()); // 서버에는 정보성 로그를 남김
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // '잘못된 요청'을 의미하는 400 상태 코드
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			// {"message": "정원이 모두 마감되었습니다."} 와 같은 JSON 응답 생성
+			response.getWriter().write("{\"message\": \"" + e.getMessage() + "\"}");
 		}
 	}
 

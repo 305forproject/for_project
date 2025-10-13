@@ -30,7 +30,11 @@ public class DatabaseTransactionUtil {
 
 		} catch (Exception e) {
 			safeRollback(conn);
-			throw new RuntimeException("트랜잭션 실행 중 오류가 발생했습니다.", e);
+			if (e instanceof RuntimeException) {
+				throw (RuntimeException) e;
+			}
+			throw new RuntimeException("트랜잭션 실행 중 데이터베이스 오류가 발생했습니다.", e);
+
 		} finally {
 			safeClose(conn);
 		}
