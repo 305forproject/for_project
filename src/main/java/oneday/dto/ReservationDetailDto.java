@@ -10,6 +10,33 @@ public class ReservationDetailDto {
 	private LocalDateTime startAt;
 	private LocalDateTime endAt;
 	private String location;
+	private String categoryName;
+	private String latitude;
+	private String longitude;
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
 
 	public ReservationDetailDto() {
 	}

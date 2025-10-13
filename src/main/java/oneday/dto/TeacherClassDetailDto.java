@@ -5,34 +5,38 @@ import java.time.ZoneId;
 import java.util.Date;
 
 public class TeacherClassDetailDto {
-	private int classId;
-	private int categoryId;
 	private String className;
-	private String classDetail;
 	private LocalDateTime startAt;
 	private LocalDateTime endAt;
-	private String longitude;
-	private String latitude;
 	private String location;
-	private int maxCapacity;
-	private int price;
-	private String teacherName;
 	private int currentReservationCount;
+	private int maxCapacity;
+	private String categoryName;
+	private String latitude;
+	private String longitude;
 
-	public int getClassId() {
-		return classId;
+	public String getCategoryName() {
+		return categoryName;
 	}
 
-	public void setClassId(int classId) {
-		this.classId = classId;
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
-	public int getCategoryId() {
-		return categoryId;
+	public String getLatitude() {
+		return latitude;
 	}
 
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 
 	public String getClassName() {
@@ -41,14 +45,6 @@ public class TeacherClassDetailDto {
 
 	public void setClassName(String className) {
 		this.className = className;
-	}
-
-	public String getClassDetail() {
-		return classDetail;
-	}
-
-	public void setClassDetail(String classDetail) {
-		this.classDetail = classDetail;
 	}
 
 	public LocalDateTime getStartAt() {
@@ -67,52 +63,12 @@ public class TeacherClassDetailDto {
 		this.endAt = endAt;
 	}
 
-	public String getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
-	}
-
-	public String getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
-	}
-
 	public String getLocation() {
 		return location;
 	}
 
 	public void setLocation(String location) {
 		this.location = location;
-	}
-
-	public int getMaxCapacity() {
-		return maxCapacity;
-	}
-
-	public void setMaxCapacity(int maxCapacity) {
-		this.maxCapacity = maxCapacity;
-	}
-
-	public int getPrice() {
-		return price;
-	}
-
-	public void setPrice(int price) {
-		this.price = price;
-	}
-
-	public String getTeacherName() {
-		return teacherName;
-	}
-
-	public void setTeacherName(String teacherName) {
-		this.teacherName = teacherName;
 	}
 
 	public int getCurrentReservationCount() {
@@ -123,19 +79,11 @@ public class TeacherClassDetailDto {
 		this.currentReservationCount = currentReservationCount;
 	}
 
-	public TeacherClassDetailDto() {
+	public int getMaxCapacity() {
+		return maxCapacity;
 	}
 
-	// jsp 출력은  위한 메소드
-	// "${event.startAtAsDate} 이런 식으로 사용
-	public Date getStartAtAsDate() {
-		if (this.startAt == null) return null;
-		return Date.from(this.startAt.atZone(ZoneId.systemDefault()).toInstant());
+	public void setMaxCapacity(int maxCapacity) {
+		this.maxCapacity = maxCapacity;
 	}
-
-	public Date getEndAtAsDate() {
-		if (this.endAt == null) return null;
-		return Date.from(this.endAt.atZone(ZoneId.systemDefault()).toInstant());
-	}
-
 }
