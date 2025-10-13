@@ -397,6 +397,394 @@ document.addEventListener('DOMContentLoaded', function () {
     })();
 });
 
+// 카테고리 필터링 시스템 - 동적 카드 지원 버전
+class CategoryFilter {
+    constructor() {
+        this.currentCategory = 'all';
+        this.itemsContainer = document.querySelector('.items');
+        
+        this.init();
+        this.setupMutationObserver(); // 새 카드 감지용
+    }
+    
+    // 카테고리 버튼들을 동적으로 가져오는 함수
+    getCategoryButtons() {
+        return document.querySelectorAll('.category-btn');
+    }
+    
+    init() {
+        this.bindEvents();
+        this.filterCards('all'); // 초기 전체 표시
+    }
+    
+    // DOM 변화 감지 (새 카드 추가 시 자동으로 필터링 적용)
+    setupMutationObserver() {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    // 새로 추가된 노드들 확인
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            // 새로 추가된 카드가 있는지 확인
+                            const newCards = node.classList && node.classList.contains('card') 
+                                ? [node] 
+                                : node.querySelectorAll ? node.querySelectorAll('.card') : [];
+                            
+                            newCards.forEach(card => {
+                                this.initializeCardCategory(card);
+                                this.applyCurrentFilter(card);
+                            });
+                        }
+                    });
+                }
+            });
+        });
+        
+        // items 컨테이너의 자식 노드 변화 감지
+        observer.observe(this.itemsContainer, {
+            childList: true,
+            subtree: true
+        });
+    }
+    
+    // 개별 카드에 카테고리 초기화
+    initializeCardCategory(card) {
+        // 이미 초기화된 카드는 스킵
+        if (card.getAttribute('data-category')) return;
+        
+        // 카드의 카테고리 정보 추출 (info1 텍스트에서)
+        const categoryText = card.querySelector('.info1');
+        let category = '기타'; // 기본값
+        
+        if (categoryText) {
+            const text = categoryText.textContent;
+            const match = text.match(/\[([^\]]+)\]/);
+            if (match) {
+                category = match[1];
+            }
+        }
+        
+        // 카테고리 데이터 속성 설정
+        card.setAttribute('data-category', category);
+    }
+    
+    // 현재 필터를 새 카드에 적용
+    applyCurrentFilter(card) {
+        const cardCategory = card.getAttribute('data-category');
+        const shouldShow = this.currentCategory === 'all' || cardCategory === this.currentCategory;
+        
+        if (shouldShow) {
+            this.showCard(card);
+        } else {
+            this.hideCard(card);
+        }
+    }
+    
+    bindEvents() {
+        // 이벤트 위임을 사용하여 동적으로 생성된 버튼들도 처리
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('category-btn')) {
+                const category = e.target.getAttribute('data-category');
+                this.setActiveCategory(category);
+                this.filterCards(category);
+            }
+        });
+    }
+    
+    setActiveCategory(category) {
+        // 현재 존재하는 모든 카테고리 버튼에서 active 제거
+        this.getCategoryButtons().forEach(btn => btn.classList.remove('active'));
+        
+        // 새로 선택된 카테고리 버튼에 active 추가
+        const activeBtns = document.querySelectorAll(`[data-category="${category}"]`);
+        activeBtns.forEach(btn => btn.classList.add('active'));
+        
+        this.currentCategory = category;
+    }
+    
+    // 모든 카드를 다시 찾아서 필터링 (동적 카드 포함)
+    filterCards(category) {
+        // 현재 존재하는 모든 카드 찾기 (템플릿 제외)
+        const allCards = document.querySelectorAll('.card:not(#card-template)');
+        
+        allCards.forEach(card => {
+            // 카드가 아직 초기화되지 않았다면 초기화
+            this.initializeCardCategory(card);
+            
+            const cardCategory = card.getAttribute('data-category');
+            const shouldShow = category === 'all' || cardCategory === category;
+            
+            if (shouldShow) {
+                this.showCard(card);
+            } else {
+                this.hideCard(card);
+            }
+        });
+    }
+    
+    showCard(card) {
+        card.classList.remove('hidden', 'fade-out');
+        card.classList.add('fade-in');
+        card.style.display = 'block';
+    }
+    
+    hideCard(card) {
+        card.classList.add('fade-out');
+        setTimeout(() => {
+            card.classList.add('hidden');
+            card.classList.remove('fade-in');
+        }, 300);
+    }
+    
+    // 외부에서 새 카드 추가 시 호출할 수 있는 메서드
+    refreshFilter() {
+        this.filterCards(this.currentCategory);
+    }
+}
 
+// 전역 카테고리 필터 인스턴스 (외부에서 접근 가능하도록)
+let categoryFilterInstance = null;
+
+// 서버에서 클래스 목록을 받아와서 카드를 동적으로 생성
+async function loadClassesFromServer() {
+    try {
+        const response = await fetch('/api/classes');
+        const classes = await response.json();
+        
+        const itemsContainer = document.querySelector('.items');
+        const template = document.getElementById('card-template');
+        
+        // 기존 카드들 제거 (템플릿 제외)
+        const existingCards = itemsContainer.querySelectorAll('.card:not(#card-template)');
+        existingCards.forEach(card => card.remove());
+        
+        // 새로운 카드들 생성
+        classes.forEach(classData => {
+            const card = template.content.cloneNode(true);
+            
+            // 카드 데이터 설정
+            const img = card.querySelector('.img-card img');
+            const category = card.querySelector('.info1');
+            const title = card.querySelector('.class-name');
+            const description = card.querySelector('.info2');
+            const link = card.querySelector('a');
+            
+            img.src = classData.imageUrl || '';
+            img.alt = classData.title || '클래스 이미지';
+            category.textContent = `[${classData.category}]`;
+            title.textContent = classData.title;
+            description.textContent = classData.description;
+            link.href = `/class/${classData.id}`;
+            
+            // 카테고리 데이터 속성 설정
+            card.querySelector('.card').setAttribute('data-category', classData.category);
+            
+            itemsContainer.appendChild(card);
+        });
+        
+        // 카테고리 필터 새로고침
+        if (categoryFilterInstance) {
+            categoryFilterInstance.refreshFilter();
+        }
+        
+    } catch (error) {
+        console.error('클래스 데이터 로딩 실패:', error);
+    }
+}
+
+// 외부에서 새 카드 추가 시 필터링 새로고침을 위한 전역 함수
+window.refreshCategoryFilter = function() {
+    if (categoryFilterInstance) {
+        categoryFilterInstance.refreshFilter();
+    }
+};
+
+// 외부에서 서버 데이터 로드 함수 호출 가능하도록 전역 등록
+window.loadClassesFromServer = loadClassesFromServer;
+
+// 카테고리 슬라이더 클래스
+class CategorySlider {
+    constructor() {
+        this.container = document.getElementById('category-slider');
+        this.slidesEl = document.getElementById('categorySlides');
+        this.prevBtn = document.getElementById('categoryPrev');
+        this.nextBtn = document.getElementById('categoryNext');
+        
+        // 필요한 요소들이 존재하는지 확인
+        if (!this.container || !this.slidesEl || !this.prevBtn || !this.nextBtn) {
+            console.warn('카테고리 슬라이더 초기화 실패: 필요한 요소들이 없습니다.');
+            return;
+        }
+        
+        this.allButtons = this.getAllButtons();
+        this.currentIndex = 0;
+        this.buttonsPerView = this.getButtonsPerView();
+        
+        this.init();
+    }
+    
+    init() {
+        // 초기 슬라이드 구성
+        this.reorganizeSlides();
+        
+        // 버튼 이벤트 등록
+        this.prevBtn.addEventListener('click', () => this.prevSlide());
+        this.nextBtn.addEventListener('click', () => this.nextSlide());
+        
+        // 리사이즈 이벤트 등록
+        window.addEventListener('resize', () => this.handleResize());
+        
+        // 초기 상태 설정
+        this.updateSlider();
+        this.updateButtons();
+    }
+    
+    getAllButtons() {
+        const buttons = [];
+        const slides = Array.from(this.slidesEl.children);
+        slides.forEach(slide => {
+            const slideButtons = Array.from(slide.querySelectorAll('.category-btn'));
+            buttons.push(...slideButtons);
+        });
+        return buttons;
+    }
+    
+    reorganizeSlides() {
+        // 현재 활성 카테고리 저장
+        const activeButton = document.querySelector('.category-btn.active');
+        const activeCategory = activeButton ? activeButton.getAttribute('data-category') : 'all';
+        
+        // 기존 슬라이드들 제거
+        this.slidesEl.innerHTML = '';
+        
+        // 화면 크기에 맞게 버튼들을 새로운 슬라이드로 재구성
+        const buttonsPerSlide = this.buttonsPerView;
+        let currentSlide = null;
+        
+        this.allButtons.forEach((button, index) => {
+            if (index % buttonsPerSlide === 0) {
+                // 새 슬라이드 생성
+                currentSlide = document.createElement('div');
+                currentSlide.className = 'category-slide';
+                this.slidesEl.appendChild(currentSlide);
+            }
+            
+            // 버튼을 현재 슬라이드에 추가 (이벤트도 함께 복사됨)
+            const clonedButton = button.cloneNode(true);
+            
+            // 활성 상태 복원
+            if (button.getAttribute('data-category') === activeCategory) {
+                clonedButton.classList.add('active');
+            }
+            
+            currentSlide.appendChild(clonedButton);
+        });
+        
+        // 슬라이드 배열 업데이트
+        this.slides = Array.from(this.slidesEl.children);
+    }
+    
+    getButtonsPerView() {
+        const containerWidth = this.container.clientWidth;
+        const buttonMinWidth = 140; // CSS의 기본 min-width
+        const gap = 16; // CSS의 기본 gap
+        
+        // 화면 크기별 버튼 수 계산
+        if (containerWidth <= 320) {
+            return 2; // 매우 작은 화면
+        } else if (containerWidth <= 480) {
+            return 3; // 소형 모바일
+        } else if (containerWidth <= 768) {
+            return 4; // 모바일
+        } else if (containerWidth <= 1024) {
+            return 5; // 태블릿
+        } else {
+            return 6; // 데스크탑
+        }
+    }
+    
+    getTotalSlides() {
+        return this.slides.length;
+    }
+    
+    handleResize() {
+        const newButtonsPerView = this.getButtonsPerView();
+        if (newButtonsPerView !== this.buttonsPerView) {
+            this.buttonsPerView = newButtonsPerView;
+            
+            // 슬라이드 재구성
+            this.reorganizeSlides();
+            
+            // 현재 인덱스가 새로운 화면에서 유효한지 확인
+            const maxIndex = Math.max(0, this.slides.length - 1);
+            if (this.currentIndex > maxIndex) {
+                this.currentIndex = maxIndex;
+            }
+            
+            this.updateSlider();
+            this.updateButtons();
+        }
+    }
+    
+    prevSlide() {
+        if (this.currentIndex > 0) {
+            this.currentIndex--;
+            this.updateSlider();
+            this.updateButtons();
+        }
+    }
+    
+    nextSlide() {
+        const maxIndex = Math.max(0, this.slides.length - 1);
+        if (this.currentIndex < maxIndex) {
+            this.currentIndex++;
+            this.updateSlider();
+            this.updateButtons();
+        }
+    }
+    
+    updateSlider() {
+        const translateX = -this.currentIndex * 100;
+        this.slidesEl.style.transform = `translateX(${translateX}%)`;
+    }
+    
+    updateButtons() {
+        const maxIndex = Math.max(0, this.slides.length - 1);
+        
+        // 이전 버튼 상태
+        this.prevBtn.style.opacity = this.currentIndex === 0 ? '0.3' : '1';
+        this.prevBtn.style.pointerEvents = this.currentIndex === 0 ? 'none' : 'auto';
+        
+        // 다음 버튼 상태
+        this.nextBtn.style.opacity = this.currentIndex >= maxIndex ? '0.3' : '1';
+        this.nextBtn.style.pointerEvents = this.currentIndex >= maxIndex ? 'none' : 'auto';
+        
+        // 슬라이드가 1개뿐이면 슬라이드 버튼 숨기기
+        if (this.slides.length <= 1) {
+            this.prevBtn.style.display = 'none';
+            this.nextBtn.style.display = 'none';
+        } else {
+            this.prevBtn.style.display = 'flex';
+            this.nextBtn.style.display = 'flex';
+        }
+    }
+}
+
+// DOM 로드 완료 후 카테고리 필터 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    // 기존 슬라이더 초기화 코드는 위에 이미 있음...
+    
+    // 카테고리 슬라이더 초기화 (요소가 존재하는 경우에만)
+    const categorySliderElement = document.getElementById('category-slider');
+    if (categorySliderElement) {
+        const categorySlider = new CategorySlider();
+    }
+    
+    // 카테고리 필터 초기화
+    categoryFilterInstance = new CategoryFilter();
+    
+    // 페이지 로드 시 서버에서 데이터 로드 (선택사항)
+    // loadClassesFromServer();
+});
 
 
