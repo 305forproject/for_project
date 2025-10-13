@@ -1,76 +1,46 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>내 강의 관리</title>
+    <title>내 강의 현황</title>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+    <script src="${pageContext.request.contextPath}/static/js/calendar.js"></script>
     <style>
         body { font-family: sans-serif; }
-        .container { width: 800px; margin: 20px auto; }
-        .filter-form { margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .no-result { color: #888; }
+        .container { max-width: 1200px; margin: 40px auto; display: flex; gap: 20px; }
+        #calendar-container { flex: 2; }
+        #detail-container { flex: 1; border: 1px solid #ddd; padding: 20px; border-radius: 8px; height: fit-content; }
+        .detail-item { margin-bottom: 10px; }
+        .detail-item span { font-weight: bold; }
+        .placeholder { color: #888; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>내 강의 관리</h1>
+    <div id="calendar-container">
+        <h1>내 강의 현황</h1>
+        <div id="teacher-calendar"></div>
+    </div>
 
-    <%-- 연/월 선택 폼 --%>
-    <form class="filter-form" action="${pageContext.request.contextPath}/teachers/classes" method="GET">
-        <select name="year">
-            <option value="2025">2025년</option>
-            <option value="2024">2024년</option>
-        </select>
-        <select name="month">
-            <c:forEach begin="1" end="12" var="m">
-                <option value="${m}">${m}월</option>
-            </c:forEach>
-        </select>
-        <button type="submit">조회하기</button>
-    </form>
-
-    <%-- 조회 결과 표시 --%>
-    <hr>
-    <h3>조회 결과</h3>
-    <table>
-        <thead>
-        <tr>
-            <th>강의 ID (상세보기)</th>
-            <th>수업 시작 시간</th>
-            <th>수업 종료 시간</th>
-            <th>예약 현황 (현재/최대)</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:choose>
-            <c:when test="${not empty calendarEvents}">
-                <c:forEach items="${calendarEvents}" var="event">
-                    <tr>
-                        <td>
-                                <%-- 클릭하면 상세 정보 페이지로 이동하는 링크 --%>
-                            <a href="${pageContext.request.contextPath}/teachers/classes/${event.classId}">
-                                    ${event.classId}
-                            </a>
-                        </td>
-                        <td><fmt:formatDate value="${event.startAtAsDate}" pattern="yyyy-MM-dd HH:mm"/></td>
-                        <td><fmt:formatDate value="${event.endAtAsDate}" pattern="yyyy-MM-dd HH:mm"/></td>
-                        <td>${event.currentReservationCount} / ${event.maxCapacity}</td>
-                    </tr>
-                </c:forEach>
-            </c:when>
-            <c:otherwise>
-                <tr>
-                    <td colspan="4" class="no-result">해당 월에 등록된 강의가 없습니다.</td>
-                </tr>
-            </c:otherwise>
-        </c:choose>
-        </tbody>
-    </table>
+    <div id="detail-container">
+        <h3>강의 상세 정보</h3>
+        <div id="event-detail-box">
+            <p class="placeholder">달력에서 강의를 클릭하세요.</p>
+        </div>
+    </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 선생님 강의 정보를 JSON으로 보내주는 컨트롤러의 URL
+        const teacherEventsUrl = "${pageContext.request.contextPath}/teachers/classes";
+
+        // 달력 이벤트를 클릭했을 때 상세 정보를 요청할 URL의 앞부분
+        const teacherDetailUrlPrefix = "${pageContext.request.contextPath}/teachers/classes/";
+
+        initializeCalendar('teacher-calendar', '/oneday/teachers/classes/events', teacherDetailUrlPrefix);
+    });
+</script>
 
 </body>
 </html>

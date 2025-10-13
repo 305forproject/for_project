@@ -1,6 +1,7 @@
 package oneday.controller;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,11 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import oneday.dto.ClassRegisterDto;
+import oneday.dto.FullCalendarEventDto;
 import oneday.dto.TeacherCalendarDto;
 import oneday.dto.TeacherClassDetailDto;
 import oneday.repository.CategoryDAO;
 import oneday.service.ClassService;
+import oneday.util.LocalDateTimeAdapter;
 
 /**
  * 강사의 클래스 관리를 담당하는 컨트롤러
@@ -33,6 +39,9 @@ public class TeacherClassController extends HttpServlet {
 
 	private final ClassService classService = ClassService.getInstance();
 	private final CategoryDAO categoryDAO = new CategoryDAO();
+	private final Gson gson = new GsonBuilder()
+		.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+		.create();
 
 	/**
 	 * GET 요청을 처리하는 메서드
@@ -44,31 +53,63 @@ public class TeacherClassController extends HttpServlet {
 	 * @throws IOException 입출력 오류 발생 시
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
-		ServletException,
-		IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String pathInfo = request.getPathInfo();
+		Integer teacherId = (Integer) request.getSession().getAttribute("userId");
 
-		// 권한 검증
-		if (!validateTeacherPermission(request, response)) {
+		if (teacherId == null) {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
 			return;
 		}
 
-		Integer teacherId = (Integer)request.getSession().getAttribute("userId");
-
-		// 1. 달력 조회: /teachers/classes?year=...&month=...
-		if (pathInfo == null || pathInfo.equals("/")) {
-			handleCalendarView(request, response, teacherId);
-		}
-		// 2. 등록 폼 페이지: /teachers/classes/register
-		else if (pathInfo.equals("/register")) {
+		// '/register' 경로로 접속하면 등록 폼 페이지
+		if ("/register".equals(pathInfo)) {
 			handleRegisterView(request, response);
+			return;
 		}
-		// 3. 상세 정보 조회: /teachers/classes/{classId}
-		else {
-			handleDetailView(request, response, teacherId, pathInfo);
+
+		// '/events' 와 같은 명시적인 API 경로로 JSON 데이터 요청
+		if ("/events".equals(pathInfo)) {
+			String startParam = request.getParameter("start");
+			String endParam = request.getParameter("end");
+			List<FullCalendarEventDto> events = classService.findMyCalendarEventsByDateRange(teacherId, startParam, endParam);
+
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(gson.toJson(events));
+			return;
 		}
+
+		// pathInfo가 숫자 형태이면 상세 정보 JSON을 반환 (API 역할)
+		// 정규 표현식을 사용하여 숫자 경로인지 확인
+		if (pathInfo != null && pathInfo.matches("/\\d+")) {
+			try {
+				int classId = Integer.parseInt(pathInfo.substring(1));
+				TeacherClassDetailDto detail = classService.findMyClassDetail(classId);
+
+				if (detail != null) {
+					response.setContentType("application/json");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write(gson.toJson(detail));
+				} else {
+					response.sendError(HttpServletResponse.SC_NOT_FOUND, "강의 정보를 찾을 수 없거나 권한이 없습니다.");
+				}
+			} catch (NumberFormatException e) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 강의 ID 형식입니다.");
+			}
+			return;
+		}
+
+		// 기본 경로('/')는 달력 JSP 페이지
+		if (pathInfo == null || pathInfo.equals("/")) {
+			request.getRequestDispatcher("/WEB-INF/views/teacherCalendar.jsp").forward(request, response);
+			return;
+		}
+
+		// 그 외의 모든 경로 404
+		response.sendError(HttpServletResponse.SC_NOT_FOUND, "요청한 페이지를 찾을 수 없습니다.");
 	}
+
 
 	/**
 	 * POST 요청을 처리하는 메서드
@@ -127,33 +168,6 @@ public class TeacherClassController extends HttpServlet {
 		}
 
 		return true;
-	}
-
-	/**
-	 * 강사의 월별 클래스 달력을 조회하고 표시
-	 *
-	 * @param request HTTP 요청 객체
-	 * @param response HTTP 응답 객체
-	 * @param teacherId 강사 ID
-	 * @throws ServletException 서블릿 처리 중 오류 발생 시
-	 * @throws IOException 입출력 오류 발생 시
-	 */
-	private void handleCalendarView(HttpServletRequest request, HttpServletResponse response, int teacherId) throws
-		ServletException,
-		IOException {
-		String yearParam = request.getParameter("year");
-		String monthParam = request.getParameter("month");
-
-		if (yearParam != null && monthParam != null) {
-			int year = Integer.parseInt(yearParam);
-			int month = Integer.parseInt(monthParam);
-
-			List<TeacherCalendarDto> events = classService.findMyCalendarEvents(teacherId, year, month);
-			request.setAttribute("calendarEvents", events);
-			request.getRequestDispatcher("/WEB-INF/views/teacherCalendar.jsp").forward(request, response);
-		} else {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "year와 month 가 필요합니다.");
-		}
 	}
 
 	/**
@@ -264,17 +278,16 @@ public class TeacherClassController extends HttpServlet {
 	 *
 	 * @param request HTTP 요청 객체
 	 * @param response HTTP 응답 객체
-	 * @param teacherId 강사 ID
 	 * @param pathInfo 요청 경로 정보 (클래스 ID 포함)
 	 * @throws ServletException 서블릿 처리 중 오류 발생 시
 	 * @throws IOException 입출력 오류 발생 시
 	 */
-	private void handleDetailView(HttpServletRequest request, HttpServletResponse response, int teacherId,
+	private void handleDetailView(HttpServletRequest request, HttpServletResponse response,
 		String pathInfo) throws ServletException, IOException {
 		try {
 			int classId = Integer.parseInt(pathInfo.substring(1));
 
-			TeacherClassDetailDto detail = classService.findMyClassDetail(classId, teacherId);
+			TeacherClassDetailDto detail = classService.findMyClassDetail(classId);
 			request.setAttribute("classDetail", detail);
 			request.getRequestDispatcher("/WEB-INF/views/teacherClassDetail.jsp").forward(request, response);
 
@@ -282,4 +295,4 @@ public class TeacherClassController extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 강의 ID 형식입니다.");
 		}
 	}
-}
+	}
