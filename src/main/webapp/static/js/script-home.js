@@ -169,6 +169,21 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// 마이페이지 아이콘 클릭 이벤트
+document.addEventListener('DOMContentLoaded', function() {
+    // 선생님 아이콘 클릭 이벤트
+    const teacherIcon = document.querySelector('.mypage-icon img[alt="icon-teacher"]').parentElement;
+    teacherIcon.addEventListener('click', function() {
+        window.location.href = '/for_project/teacher-page';
+    });
+
+    // 학생 아이콘 클릭 이벤트
+    const studentIcon = document.querySelector('.mypage-icon img[alt="icon-student"]').parentElement;
+    studentIcon.addEventListener('click', function() {
+        window.location.href = '/for_project/student-page';
+    });
+});
+
 
 // slide
 // script-home.js - 무한 루프(carousel) 구현 + dot(인디케이터) 업데이트 + 터치 스와이프 포함
