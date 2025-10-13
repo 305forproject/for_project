@@ -3,16 +3,21 @@ package oneday.service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import oneday.dto.FullCalendarEventDto;
 import oneday.dto.ReservationCalendarDto;
 import oneday.dto.ReservationDetailDto;
 import oneday.dto.ReservationRequestDto;
 import oneday.model.Reservation;
 import oneday.repository.ReservationDAO;
+import oneday.util.LoggerUtil;
 
 public class ReservationService {
 	private static ReservationService instance;
 	private final ReservationDAO reservationDAO;
+	private static final Logger logger = LoggerUtil.getLogger(String.valueOf(ReservationService.class));
 
 	public ReservationService() {
 		this.reservationDAO = new ReservationDAO();
@@ -62,6 +67,16 @@ public class ReservationService {
 			return reservationDAO.findCalendarEventsByStudentIdAndMonth(studentId, year, month);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
+
+	//예약 조회
+	public List<FullCalendarEventDto> findMyCalendarEventsByDateRange(int studentId, String startDate, String endDate) {
+		try {
+			return reservationDAO.findEventsForCalendar(studentId, startDate, endDate);
+		} catch (SQLException e) {
+			logger.log(Level.SEVERE, "날짜 범위로 캘린더 이벤트 조회 중 DB 오류 발생", e);
 			return new ArrayList<>();
 		}
 	}

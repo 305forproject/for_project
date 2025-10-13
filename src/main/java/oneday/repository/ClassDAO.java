@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import oneday.config.DatabaseConfig;
+import oneday.dto.ClassDetailDto;
 import oneday.dto.ClassListDto;
+import oneday.dto.FullCalendarEventDto;
 import oneday.dto.TeacherCalendarDto;
 import oneday.dto.TeacherClassDetailDto;
 import oneday.model.Classes;
@@ -28,46 +32,44 @@ public class ClassDAO {
 		this.dbConfig = DatabaseConfig.getInstance();
 	}
 
-	/**
-	 * 클래스 ID로 수업 정보를 조회
-	 *
-	 * @param classId 조회할 클래스 ID
-	 * @return 클래스 상세 정보가 담긴 TeacherClassDetailDto 객체, 조회 실패 시 null
-	 * @throws SQLException 데이터베이스 접근 중 오류 발생 시
-	 */
-	public TeacherClassDetailDto findById(int classId) throws SQLException {
-		TeacherClassDetailDto dto = null;
-		String sql = "SELECT c.*, u.NAME as teacher_name, " +
-			"       (SELECT COUNT(*) FROM RESERVATIONS r WHERE r.CLASS_ID = c.CLASS_ID) as current_reservation_count " +
-			"FROM CLASSES c " +
-			"JOIN USERS u ON c.TEACHER_ID = u.USER_ID " +
-			"WHERE c.CLASS_ID = ?";
+	//날짜로 달력 조회
+	public List<FullCalendarEventDto> findEventsForCalendarByTeacher(int teacherId, String startDate,
+		String endDate) throws SQLException {
+		List<FullCalendarEventDto> events = new ArrayList<>();
+
+		String sql = "SELECT CLASS_ID, CLASS_NAME, START_AT " +
+			"FROM CLASSES " +
+			"WHERE TEACHER_ID = ? AND START_AT >= ? AND START_AT < ?";
 
 		try (Connection conn = dbConfig.getConnection();
 			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-			pstmt.setInt(1, classId);
-			try (ResultSet rs = pstmt.executeQuery()) {
-				if (rs.next()) {
-					dto = new TeacherClassDetailDto();
+			pstmt.setInt(1, teacherId);
+			pstmt.setString(2, startDate);
+			pstmt.setString(3, endDate);
 
-					dto.setClassId(rs.getInt("CLASS_ID"));
-					dto.setCategoryId(rs.getInt("CATEGORY_ID"));
-					dto.setClassName(rs.getString("CLASS_NAME"));
-					dto.setClassDetail(rs.getString("CLASS_DETAIL"));
-					dto.setStartAt(rs.getTimestamp("START_AT").toLocalDateTime());
-					dto.setEndAt(rs.getTimestamp("END_AT").toLocalDateTime());
-					dto.setLongitude(rs.getString("LONGITUDE"));
-					dto.setLatitude(rs.getString("LATITUDE"));
-					dto.setLocation(rs.getString("LOCATION"));
-					dto.setMaxCapacity(rs.getInt("MAX_CAPACITY"));
-					dto.setPrice(rs.getInt("PRICE"));
-					dto.setTeacherName(rs.getString("teacher_name"));
-					dto.setCurrentReservationCount(rs.getInt("current_reservation_count"));
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					FullCalendarEventDto dto = new FullCalendarEventDto();
+					dto.setId(String.valueOf(rs.getInt("CLASS_ID")));
+
+					// 3. 시작 시간과 종료 시간을 LocalDateTime 객체
+					LocalDateTime startAt = rs.getTimestamp("START_AT").toLocalDateTime();
+
+					// 4. 각 시간을 지정된 형식의 문자열로 변환
+					String formattedStartTime = startAt.format(formatter);
+
+					dto.setTitle(formattedStartTime);
+
+					dto.setStart(startAt.toString());
+
+					events.add(dto);
 				}
 			}
 		}
-		return dto;
+		return events;
 	}
 
 	/**
@@ -114,21 +116,21 @@ public class ClassDAO {
 	 * 강사 본인의 클래스만 조회 가능
 	 *
 	 * @param classId 조회할 클래스 ID
-	 * @param teacherId 강사 ID
 	 * @return 클래스 상세 정보, 조회 실패 시 null
 	 * @throws SQLException 데이터베이스 접근 중 오류 발생 시
 	 */
-	public TeacherClassDetailDto findDetailByClassIdAndTeacherId(int classId, int teacherId) throws SQLException {
+	public TeacherClassDetailDto findDetailByClassIdAndTeacherId(int classId) throws SQLException {
 		TeacherClassDetailDto dto = null;
 		String sql = "SELECT c.CLASS_NAME, c.START_AT, c.END_AT, c.LOCATION, c.MAX_CAPACITY, " +
-			"(SELECT COUNT(*) FROM RESERVATIONS r WHERE r.CLASS_ID = c.CLASS_ID) as current_count " +
+			"       c.LATITUDE, c.LONGITUDE, cat.CATEGORY, " +
+			"       (SELECT COUNT(*) FROM RESERVATIONS r WHERE r.CLASS_ID = c.CLASS_ID) as current_count " +
 			"FROM CLASSES c " +
-			"WHERE c.CLASS_ID = ? AND c.TEACHER_ID = ?";
+			"JOIN CATEGORIES cat ON c.CATEGORY_ID = cat.CATEGORY_ID " +
+			"WHERE c.CLASS_ID = ?";
 
 		try (Connection conn = dbConfig.getConnection();
 			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, classId);
-			pstmt.setInt(2, teacherId);
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 					dto = new TeacherClassDetailDto();
@@ -138,6 +140,47 @@ public class ClassDAO {
 					dto.setLocation(rs.getString("LOCATION"));
 					dto.setMaxCapacity(rs.getInt("MAX_CAPACITY"));
 					dto.setCurrentReservationCount(rs.getInt("current_count"));
+					dto.setCategoryName(rs.getString("CATEGORY"));
+					dto.setLatitude(rs.getString("LATITUDE"));
+					dto.setLongitude(rs.getString("LONGITUDE"));
+				}
+			}
+		}
+		return dto;
+	}
+
+	/**
+	 * ID로 클래스 상세 정보를 조회합니다. (강사 이름, 현재 예약 인원 포함)
+	 */
+	public ClassDetailDto findDetailById(int classId) throws SQLException {
+		ClassDetailDto dto = null;
+		// SQL 쿼리: USERS 테이블을 JOIN하고, 서브쿼리로 예약 인원을 계산합니다.
+		String sql = "SELECT c.*, u.NAME as teacher_name, " +
+			"       (SELECT COUNT(*) FROM RESERVATIONS r WHERE r.CLASS_ID = c.CLASS_ID) as current_reservation_count " +
+			"FROM CLASSES c " +
+			"JOIN USERS u ON c.TEACHER_ID = u.USER_ID " +
+			"WHERE c.CLASS_ID = ?";
+
+		try (Connection conn = dbConfig.getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setInt(1, classId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					dto = new ClassDetailDto();
+					dto.setClassId(rs.getInt("CLASS_ID"));
+					dto.setCategoryId(rs.getInt("CATEGORY_ID"));
+					dto.setClassName(rs.getString("CLASS_NAME"));
+					dto.setDescription(rs.getString("CLASS_DETAIL"));
+					dto.setStartAt(rs.getTimestamp("START_AT").toLocalDateTime());
+					dto.setEndAt(rs.getTimestamp("END_AT").toLocalDateTime());
+					dto.setLongitude(rs.getString("LONGITUDE"));
+					dto.setLatitude(rs.getString("LATITUDE"));
+					dto.setLocation(rs.getString("LOCATION"));
+					dto.setMaxStudents(rs.getInt("MAX_CAPACITY"));
+					dto.setPrice(rs.getInt("PRICE"));
+					dto.setTeacherName(rs.getString("teacher_name"));
+					dto.setCurrentReservationCount(rs.getInt("current_reservation_count"));
 				}
 			}
 		}

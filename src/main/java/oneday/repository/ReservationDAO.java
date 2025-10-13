@@ -1,11 +1,14 @@
 package oneday.repository;
 
 import oneday.config.DatabaseConfig;
+import oneday.dto.FullCalendarEventDto;
 import oneday.dto.ReservationCalendarDto;
 import oneday.dto.ReservationDetailDto;
 import oneday.model.Reservation;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,38 +113,70 @@ public class ReservationDAO {
 	//예약 상세 조회
 	public ReservationDetailDto findReservationDetailsById(int reservationId, int studentId) throws SQLException {
 		ReservationDetailDto dto = null;
-		String sql = "SELECT c.CLASS_NAME, c.START_AT, c.END_AT, c.LOCATION " +
+		String sql = "SELECT c.class_id, c.class_name, c.start_at, c.end_at, c.location," +
+			"c.latitude, c.longitude, cat.category " +
 			"FROM RESERVATIONS r " +
-			"JOIN CLASSES c ON r.CLASS_ID = c.CLASS_ID " +
-			"WHERE r.RESERVATION_ID = ? AND r.STUDENT_ID = ?";
+			"JOIN CLASSES c ON r.class_id = c.class_id " +
+			"JOIN CATEGORIES cat ON c.category_id = cat.category_id " +
+			"WHERE r.reservation_id = ?";
 
 		try (Connection conn = dbConfig.getConnection();
 			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setInt(1, reservationId);
-			pstmt.setInt(2, studentId);
-
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 					dto = new ReservationDetailDto();
 					dto.setClassName(rs.getString("CLASS_NAME"));
+					dto.setLocation(rs.getString("LOCATION"));
 					dto.setStartAt(rs.getTimestamp("START_AT").toLocalDateTime());
 					dto.setEndAt(rs.getTimestamp("END_AT").toLocalDateTime());
-					dto.setLocation(rs.getString("LOCATION"));
+					dto.setLatitude(rs.getString("latitude"));
+					dto.setLongitude(rs.getString("longitude"));
+					dto.setCategoryName(rs.getString("category"));
 				}
 			}
 		}
 		return dto;
 	}
 
-	//예약 상태 변경
-	public int updateStatusCode(Connection conn, int reservationId, int statusCode) throws SQLException {
-		String sql = "UPDATE RESERVATIONS SET STATUS_CODE = ? WHERE RESERVATION_ID = ?";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, statusCode);
-			pstmt.setInt(2, reservationId);
-			return pstmt.executeUpdate();
+	// 날짜 범위 조절하여 학생 예약 조회
+	public List<FullCalendarEventDto> findEventsForCalendar(int studentId, String startDate, String endDate) throws
+		SQLException {
+		List<FullCalendarEventDto> events = new ArrayList<>();
+		String sql = "SELECT r.RESERVATION_ID, c.START_AT, c.END_AT, c.CLASS_NAME " +
+			"FROM RESERVATIONS r " +
+			"JOIN CLASSES c ON r.CLASS_ID = c.CLASS_ID " +
+			"WHERE r.STUDENT_ID = ? AND c.START_AT BETWEEN ? AND ?";
+
+		try (Connection conn = dbConfig.getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setInt(1, studentId);
+			pstmt.setString(2, startDate);
+			pstmt.setString(3, endDate);
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					FullCalendarEventDto dto = new FullCalendarEventDto();
+					dto.setId(String.valueOf(rs.getInt("RESERVATION_ID")));
+
+					// 3. 시작 시간과 종료 시간을 LocalDateTime 객체
+					LocalDateTime startAt = rs.getTimestamp("START_AT").toLocalDateTime();
+
+					// 4. 각 시간을 지정된 형식의 문자열로 변환
+					String formattedStartTime = startAt.format(formatter);
+
+					dto.setTitle(formattedStartTime);
+
+					dto.setStart(startAt.toString());
+					events.add(dto);
+				}
+			}
 		}
+		return events;
 	}
 
 }

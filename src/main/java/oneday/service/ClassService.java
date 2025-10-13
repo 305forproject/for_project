@@ -5,18 +5,23 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.Part;
 
+import oneday.dto.ClassDetailDto;
 import oneday.dto.ClassListDto;
 import oneday.dto.ClassRegisterDto;
 import oneday.dto.CoordinateDto;
+import oneday.dto.FullCalendarEventDto;
 import oneday.dto.TeacherCalendarDto;
 import oneday.dto.TeacherClassDetailDto;
 import oneday.model.Classes;
 import oneday.model.Image;
 import oneday.repository.ClassDAO;
 import oneday.repository.ImageDAO;
+import oneday.util.LoggerUtil;
 
 /**
  * 클래스 관련 비즈니스 로직을 처리하는 서비스 클래스
@@ -27,6 +32,7 @@ public class ClassService {
 	private final ClassDAO classDAO;
 	private final ImageService imageService;
 	private final ImageDAO imageDAO;
+	private static final Logger logger = LoggerUtil.getLogger(String.valueOf(ReservationService.class));
 
 	/**
 	 * ClassService 생성자 (private)
@@ -51,21 +57,6 @@ public class ClassService {
 	}
 
 	/**
-	 * 클래스 ID로 수업 정보를 조회
-	 *
-	 * @param classId 조회할 클래스 ID
-	 * @return 클래스 상세 정보, 조회 실패 시 null
-	 */
-	public TeacherClassDetailDto findClassById(int classId) {
-		try {
-			return classDAO.findById(classId);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
 	 * 강사의 월별 클래스 일정을 조회
 	 *
 	 * @param teacherId 강사 ID
@@ -82,16 +73,47 @@ public class ClassService {
 		}
 	}
 
+	public List<FullCalendarEventDto> findMyCalendarEventsByDateRange(int teacherId, String startDate, String endDate) {
+		try {
+			return classDAO.findEventsForCalendarByTeacher(teacherId, startDate, endDate);
+		} catch (SQLException e) {
+			// Logger를 사용한 에러 처리
+			// logger.log(Level.SEVERE, "강사 캘린더 이벤트 조회 중 DB 오류", e);
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
+
 	/**
 	 * 강사 본인의 클래스 상세 정보를 조회
 	 *
 	 * @param classId 조회할 클래스 ID
-	 * @param teacherId 강사 ID
 	 * @return 클래스 상세 정보, 조회 실패 시 null
 	 */
-	public TeacherClassDetailDto findMyClassDetail(int classId, int teacherId) {
+	public TeacherClassDetailDto findMyClassDetail(int classId) {
 		try {
-			return classDAO.findDetailByClassIdAndTeacherId(classId, teacherId);
+			return classDAO.findDetailByClassIdAndTeacherId(classId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	//클래스 상세 정보 조회
+	public ClassDetailDto findClassDetail(int classId) {
+		try {
+			//클래스 상세 정보 조회
+			ClassDetailDto detail = classDAO.findDetailById(classId);
+
+			if (detail != null) {
+				//해당 클래스 이미지 목록 조회
+				List<Image> images = imageDAO.findByClassId(classId);
+
+				//
+				detail.setImages(images);
+			}
+			return detail;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
