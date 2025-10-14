@@ -21,10 +21,9 @@ public class ReservationDAO {
 	}
 
 	//예약자 수 확인
-	public int countByClassId(int classId) throws SQLException {
+	public int countByClassId(Connection conn, int classId) throws SQLException {
 		String sql = "SELECT COUNT(*) FROM RESERVATIONS WHERE CLASS_ID = ?";
-		try (Connection conn = dbConfig.getConnection();
-			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, classId);
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
@@ -36,10 +35,9 @@ public class ReservationDAO {
 	}
 
 	//이미 예약 했는지
-	public boolean existsByStudentIdAndClassId(int studentId, int classId) throws SQLException {
+	public boolean existsByStudentIdAndClassId(Connection conn, int studentId, int classId) throws SQLException {
 		String sql = "SELECT COUNT(*) FROM RESERVATIONS WHERE STUDENT_ID = ? AND CLASS_ID = ?";
-		try (Connection conn = dbConfig.getConnection();
-			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, studentId);
 			pstmt.setInt(2, classId);
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -52,11 +50,36 @@ public class ReservationDAO {
 	}
 
 	//새 예약 저장
+
+	/**
+	 * 트랜잭션 외부에서 예약을 저장할 때 사용하는 메소드.
+	 * 내부적으로 DB 커넥션을 열고 닫습니다.
+	 * @param reservation 저장할 예약 정보
+	 * @return 저장된 예약 정보 (ID 포함)
+	 * @throws SQLException DB 오류 발생 시
+	 */
 	public Reservation save(Reservation reservation) throws SQLException {
+		// 1. 이 메소드는 스스로 DB 커넥션을 엽니다.
+		try (Connection conn = dbConfig.getConnection()) {
+			// 2. 그리고 아래에 있는, Connection을 받는 save 메소드를 호출하여 실제 작업을 위임합니다.
+			return save(conn, reservation);
+		}
+	}
+
+	/**
+	 * 트랜잭션 내부에서 예약을 저장할 때 사용하는 메소드.
+	 * 외부(서비스 계층)에서 전달받은 DB 커넥션을 사용합니다.
+	 * @param conn 외부에서 전달받은 데이터베이스 연결
+	 * @param reservation 저장할 예약 정보
+	 * @return 저장된 예약 정보 (ID 포함)
+	 * @throws SQLException DB 오류 발생 시
+	 */
+	public Reservation save(Connection conn, Reservation reservation) throws SQLException {
 		String sql = "INSERT INTO RESERVATIONS (CLASS_ID, STUDENT_ID, STATUS_CODE) VALUES (?, ?, ?)";
 
-		try (Connection conn = dbConfig.getConnection();
-			 PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+		// try-with-resources에서 Connection을 여는 코드를 제거합니다.
+		// 이제 파라미터로 받은 conn을 사용합니다.
+		try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
 			pstmt.setInt(1, reservation.getClassId());
 			pstmt.setInt(2, reservation.getStudentId());
@@ -177,6 +200,16 @@ public class ReservationDAO {
 			}
 		}
 		return events;
+	}
+
+	//예약 상태 변경
+	public int updateStatusCode(Connection conn, int reservationId, int statusCode) throws SQLException {
+		String sql = "UPDATE RESERVATIONS SET STATUS_CODE = ? WHERE RESERVATION_ID = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, statusCode);
+			pstmt.setInt(2, reservationId);
+			return pstmt.executeUpdate();
+		}
 	}
 
 }
