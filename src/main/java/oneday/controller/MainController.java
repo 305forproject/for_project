@@ -24,9 +24,14 @@ public class MainController extends HttpServlet {
 		throws ServletException, IOException {
 		// 이미지 받아와 전달
 		List<Image> slideImages = imageService.getMainSlideImages();
-		
+
 		request.setAttribute("slideImages", slideImages);
 
+		// 강사 등록 성공 메시지 처리
+		String success = request.getParameter("success");
+		if ("teacher-registered".equals(success)) {
+			request.setAttribute("successMessage", "강사 등록이 완료되었습니다!");
+		}
 
 		String sortOption = request.getParameter("sort");
 		if (sortOption == null) {

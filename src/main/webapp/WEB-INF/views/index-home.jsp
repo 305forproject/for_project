@@ -290,7 +290,7 @@
             <h2>강사 계좌번호 등록</h2>
             <span class="close">&times;</span>
         </div>
-        <form id="teacherAccountForm" method="post" action="${pageContext.request.contextPath}/teacher/account">
+        <form id="teacherAccountForm" method="post" action="${pageContext.request.contextPath}/teacher-page">
             <input type="text" id="accountNumber" name="accountNumber"
                    placeholder="계좌번호를 입력해주세요 (예: 국민은행 123-456-789012)" required maxlength="50"><br>
             <small style="color: #666; font-size: 12px; margin-bottom: 15px; display: block;">
@@ -346,6 +346,31 @@
         if (messageModal && messageTitle && messageText) {
             messageTitle.textContent = '회원가입 완료';
             messageText.textContent = '${signupSuccess}';
+            messageModal.style.display = 'flex';
+
+            // 확인 버튼 클릭 시 모달 닫기
+            const messageOkBtn = document.getElementById('messageOkBtn');
+            if (messageOkBtn) {
+                messageOkBtn.onclick = function () {
+                    messageModal.style.display = 'none';
+                };
+            }
+        }
+    });
+</script>
+<% } %>
+
+<!-- 강사 등록 성공 처리를 위한 스크립트 -->
+<% if (request.getAttribute("successMessage") != null) { %>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const messageModal = document.getElementById('messageModal');
+        const messageTitle = document.getElementById('messageTitle');
+        const messageText = document.getElementById('messageText');
+
+        if (messageModal && messageTitle && messageText) {
+            messageTitle.textContent = '강사 등록 완료';
+            messageText.textContent = '${successMessage}';
             messageModal.style.display = 'flex';
 
             // 확인 버튼 클릭 시 모달 닫기

@@ -28,7 +28,7 @@ import oneday.util.DatabaseTransactionUtil;
  */
 public class AuthService {
 	/** 사용자 데이터 접근을 위한 DAO 인스턴스 */
-	private UserDAO userDAO = new UserDAO();
+	private final UserDAO userDAO = new UserDAO();
 
 	/** 역할 ID 상수 */
 	private static final int TEACHER_ROLE_ID = 1;
@@ -117,6 +117,56 @@ public class AuthService {
 			return stmt.executeUpdate() > 0;
 		} catch (SQLException e) {
 			throw new RuntimeException("선생님 롤 생성 중 오류가 발생했습니다.", e);
+		}
+	}
+
+	/**
+	 * 강사 계좌번호 등록 및 강사 역할 부여
+	 *
+	 * @param userId 사용자 ID
+	 * @param accountNumber 계좌번호
+	 * @return 성공 시 true, 실패 시 false
+	 * @throws SQLException 데이터베이스 오류 시
+	 */
+	public boolean registerTeacherAccount(int userId, String accountNumber) throws SQLException {
+		return DatabaseTransactionUtil.executeTransactionForBoolean(conn -> {
+			try {
+				// 1. 계좌번호 업데이트
+				boolean accountUpdated = updateUserAccountWithConnection(conn, userId, accountNumber);
+				if (!accountUpdated) {
+					throw new RuntimeException("계좌번호 업데이트 실패");
+				}
+
+				// 2. 강사 역할이 있는지 확인
+				if (!hasTeacherRole(conn, userId)) {
+					// 3. 강사 역할 추가
+					boolean roleAdded = insertTeacherRole(conn, userId);
+					if (!roleAdded) {
+						throw new RuntimeException("강사 역할 추가 실패");
+					}
+				}
+
+				return true;
+
+			} catch (SQLException e) {
+				throw new RuntimeException("강사 계좌번호 등록 실패: " + e.getMessage(), e);
+			}
+		});
+	}
+
+	/**
+	 * 사용자 계좌번호 업데이트 (Connection 사용)
+	 */
+	private boolean updateUserAccountWithConnection(Connection conn, int userId, String accountNumber) throws
+		SQLException {
+		String sql = "UPDATE USERS SET ACCOUNT = ? WHERE USER_ID = ?";
+
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, accountNumber);
+			pstmt.setInt(2, userId);
+
+			int affectedRows = pstmt.executeUpdate();
+			return affectedRows > 0;
 		}
 	}
 }
