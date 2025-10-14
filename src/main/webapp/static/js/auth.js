@@ -101,25 +101,6 @@ function checkLoginStatus() {
 }
 
 /**
- * 로그인 에러 확인
- */
-function checkLoginError() {
-    const loginError = getCookie('loginError');
-
-    if (loginError && loginError === 'true') {
-        // 로그인 에러가 있는 경우, 로그인 모달을 표시
-        document.getElementById('loginModal').style.display = 'flex';
-
-        // 에러 메시지 표시 (추가적인 에러 처리 로직 가능)
-        const errorMessage = document.getElementById('loginErrorMessage');
-        if (errorMessage) {
-            errorMessage.style.display = 'block';
-            errorMessage.innerText = '로그인에 실패하였습니다. 아이디와 비밀번호를 확인하세요.';
-        }
-    }
-}
-
-/**
  * 쿠키 값 가져오기 함수
  * @param {string} name - 쿠키 이름
  * @returns {string|null} 쿠키 값 또는 null
