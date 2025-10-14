@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+
 // 마이페이지 아이콘 클릭 이벤트
 document.addEventListener('DOMContentLoaded', function() {
     // 선생님 아이콘 클릭 이벤트
@@ -290,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => setTransition(true), 50);
         });
     })();
-});
+  
 
 // 카테고리 필터링 시스템 - 동적 카드 지원 버전
 class CategoryFilter {
