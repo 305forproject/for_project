@@ -670,6 +670,76 @@ textarea {
 .close:hover {
     color: black;
 }
+.toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: #fff;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.22, 0.9, 0.3, 1);
+    max-width: 420px;
+    min-width: 320px;
+    text-align: center;
+    color: #333;
+    font-size: 16px;
+    border: 1px solid #e0e0e0;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* 배경 오버레이 */
+.toast-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.toast-overlay.show {
+    opacity: 1;
+}
+
+/* 닫기 버튼 */
+.toast-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    background: none;
+    border: none;
+}
+
+.toast-close-btn:hover {
+    background: #f0f0f0;
+    color: #666;
+}
+
+
+/* 토스트 알림 스타일 - 모달형 (화면 중앙) */
+
 
 /* 반응형 디자인 */
 
@@ -846,6 +916,15 @@ textarea {
         font-size: 14px;
         margin-top: 5px;
     }
+
+    /* 🔽 토스트 모바일 스타일 추가 🔽 */
+    .toast {
+        max-width: 90vw;
+        min-width: 280px;
+        padding: 24px 20px;
+        font-size: 15px;
+    }
+
 }
 
 /* 소형 모바일 (320px ~ 480px) */
@@ -900,6 +979,15 @@ textarea {
         font-size: 13px;
         margin-top: 4px;
     }
+
+    /* 🔽 토스트 소형 모바일 스타일 추가 🔽 */
+    .toast {
+        max-width: 95vw;
+        min-width: 260px;
+        padding: 20px 16px;
+        font-size: 14px;
+    }
+
 }
 
 /* 매우 작은 화면 (320px 이하) */
