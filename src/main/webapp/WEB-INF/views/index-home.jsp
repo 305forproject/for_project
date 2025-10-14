@@ -298,21 +298,7 @@
         <p id="messageText">메시지가 여기에 표시됩니다.</p>
         <button id="messageOkBtn" class="btn btn-check">확인</button>
     </div>
-</div>
-
-<!-- 로그인 에러 처리를 위한 스크립트 -->
-<% if (request.getAttribute("error") != null) { %>
-<script>
-    // 페이지 로드 완료 후 로그인 모달 자동 열기
-    document.addEventListener('DOMContentLoaded', function () {
-        const loginModal = document.getElementById('loginModal');
-        if (loginModal) {
-            loginModal.style.display = 'flex';
-        }
-    });
-</script>
-<% } %>
-
+</div
 </body>
 
 </html>
