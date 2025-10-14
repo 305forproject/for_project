@@ -35,7 +35,7 @@ function setupTeacherIconClickEvent() {
                 document.getElementById('teacherAccountModal').style.display = 'flex';
             } else {
                 // 강사인 경우 강사 마이페이지로 이동
-                window.location.href = '/teacher/mypage';
+                window.location.href = '/teacher-page';
             }
         });
     }
