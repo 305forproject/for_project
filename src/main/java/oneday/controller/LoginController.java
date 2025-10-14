@@ -19,18 +19,6 @@ import oneday.service.AuthService;
 
 /**
  * 로그인 처리를 담당하는 서블릿 컨트롤러
- *
- * <p>이 클래스는 사용자의 로그인 요청을 처리합니다.
- * GET 요청 시 로그인 폼을 보여주고, POST 요청 시 로그인 인증을 수행합니다.</p>
- *
- * <p>로그인 성공 시 세션에 사용자 ID를 저장하고 메인 페이지로 리다이렉트하며,
- * 실패 시 오류 메시지와 함께 로그인 페이지를 다시 표시합니다.</p>
- *
- * <p>매핑 URL: /login</p>
- *
- * @author Oneday Team
- * @version 1.0
- * @since 2024
  */
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
@@ -38,38 +26,13 @@ public class LoginController extends HttpServlet {
 	private static final int LOGIN_TIMEOUT_SECONDS = 1800;
 
 	/** 사용자 인증을 위한 서비스 인스턴스 */
-	private AuthService authService = new AuthService();
+	private final AuthService authService = new AuthService();
 
 	/** 사용자 역할 정보 조회를 위한 DAO 인스턴스 */
-	private UserDAO userDAO = new UserDAO();
-
-	/**
-	 * GET 요청을 처리하여 로그인 폼을 표시합니다.
-	 *
-	 * <p>사용자가 /login URL에 접근했을 때 로그인 JSP 페이지를 포워드합니다.</p>
-	 *
-	 * @param request HTTP 요청 객체
-	 * @param response HTTP 응답 객체
-	 * @throws ServletException 서블릿 처리 중 오류가 발생한 경우
-	 * @throws IOException 입출력 오류가 발생한 경우
-	 */
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/views/index-home.jsp").forward(request, response);
-	}
+	private final UserDAO userDAO = new UserDAO();
 
 	/**
 	 * POST 요청을 처리하여 로그인 인증을 수행합니다.
-	 *
-	 * <p>폼에서 전송된 로그인 ID와 비밀번호를 받아 인증을 수행하고,
-	 * 성공 시 세션에 사용자 ID와 역할 정보를 저장한 후 메인 페이지로 리다이렉트합니다.
-	 * 실패 시 오류 메시지를 설정하고 로그인 페이지를 다시 표시합니다.</p>
-	 *
-	 * @param request HTTP 요청 객체 (loginId, password 파라미터 포함)
-	 * @param response HTTP 응답 객체
-	 * @throws ServletException 서블릿 처리 중 오류가 발생한 경우
-	 * @throws IOException 입출력 오류가 발생한 경우
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -116,22 +79,23 @@ public class LoginController extends HttpServlet {
 				// 세션 생성 및 사용자 정보 저장
 				HttpSession session = request.getSession(true);
 				session.setAttribute("userId", user.getUserId());
+				session.setAttribute("userName", user.getName());
 				session.setAttribute("isTeacher", isTeacher);
 				session.setAttribute("isStudent", isStudent);
-
-				// 세션 타임아웃 설정 (30분)
 				session.setMaxInactiveInterval(LOGIN_TIMEOUT_SECONDS);
 
-				// 메인 페이지로 리다이렉트
-				response.sendRedirect("/");
+				// 로그인 성공 시 /main으로 리다이렉트
+				response.sendRedirect(request.getContextPath() + "/main");
 			} catch (SQLException e) {
 				e.printStackTrace();
-				request.setAttribute("error", "사용자 권한 정보를 가져오는데 실패했습니다.");
-				request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+				// 데이터베이스 오류 시 에러 메시지 설정
+				request.setAttribute("error", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+				request.getRequestDispatcher("/WEB-INF/views/index-home.jsp").forward(request, response);
 			}
 		} else {
-			request.setAttribute("error", "아이디 또는 비밀번호가 잘못되었습니다.");
-			request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+			// 로그인 실패 시 에러 메시지 설정 후 다시 메인 페이지로 포워드
+			request.setAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
+			request.getRequestDispatcher("/WEB-INF/views/index-home.jsp").forward(request, response);
 		}
 	}
 }

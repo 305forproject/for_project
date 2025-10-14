@@ -56,14 +56,14 @@ public class LogoutController extends HttpServlet {
 		for (Cookie cookie : cookiesToDelete) {
 			cookie.setMaxAge(0);
 			cookie.setPath("/");
-			cookie.setHttpOnly(true);
+			cookie.setHttpOnly(false); // JavaScript에서 접근 가능하도록 변경
 			cookie.setSecure(request.isSecure());
 
 			response.addCookie(cookie);
 		}
 
-		// 로그인 페이지로 리다이렉트
-		response.sendRedirect("login");
+		// 메인 페이지로 리다이렉트
+		response.sendRedirect(request.getContextPath() + "/main");
 	}
 
 	/**

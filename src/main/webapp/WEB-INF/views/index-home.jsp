@@ -6,9 +6,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
         <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
         <script src="${pageContext.request.contextPath}/static/js/script-home.js"></script>
+
 
 
         <title>Home</title>
@@ -53,13 +53,55 @@
             </div>
         </header>
 
+<!--login, logout, join-->
+<div class="login-container">
+    <button id="loginBtn" class="btn btn-login-main">로그인</button>
+    <button id="joinBtn" class="btn btn-join-main">회원가입</button>
+    <button id="logoutBtn" class="btn btn-logout" style="display: none;">로그아웃</button>
+</div>
 
-        <!--login, logout, join-->
-        <div class="login-container">
-            <button id="loginBtn" class="btn btn-login-main">로그인</button>
-            <button id="joinBtn" class="btn btn-join-main">회원가입</button>
-            <button id="logoutBtn" class="btn btn-logout" style="display: none;">로그아웃</button>
-        </div>
+<!-- Slider 영역 -->
+<div class="slider" id="slider" aria-roledescription="carousel">
+    <div class="slides" id="slides">
+        <section class="slide s1" data-title="슬라이드 1">
+            <div class="content">
+                <h2>슬라이드 1</h2>
+                <p>첫번째 슬라이드입니다.</p>
+            </div>
+        </section>
+        <section class="slide s2" data-title="슬라이드 2">
+            <div class="content">
+                <h2>슬라이드 2</h2>
+                <p>두번째 슬라이드입니다.</p>
+            </div>
+        </section>
+        <section class="slide s3" data-title="슬라이드 3">
+            <div class="content">
+                <h2>슬라이드 3</h2>
+                <p>세번째 슬라이드입니다.</p>
+            </div>
+        </section>
+        <section class="slide s4" data-title="슬라이드 4">
+            <div class="content">
+                <h2>슬라이드 4</h2>
+                <p>네번째 슬라이드입니다.</p>
+            </div>
+        </section>
+        <section class="slide s5" data-title="슬라이드 5">
+            <div class="content">
+                <h2>슬라이드 5</h2>
+                <p>마지막 슬라이드입니다.</p>
+            </div>
+        </section>
+    </div>
+
+    <!--slide 좌우 조절-->
+    <div class="controls">
+        <button class="slide-btn prev" id="prev">◀</button>
+        <button class="slide-btn next" id="next">▶</button>
+    </div>
+    <div class="dots" id="dots" role="tablist" aria-label="슬라이드 인디케이터"></div>
+</div>
 
         <!-- Slider 영역 -->
         <div class="slider" id="slider" aria-roledescription="carousel">
@@ -232,8 +274,6 @@
                     </a>
                 </article>
             </div>
-
-
         </main>
 
 
