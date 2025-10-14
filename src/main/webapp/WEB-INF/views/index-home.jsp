@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -6,11 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
+    <%--  슬라이더 api css  --%>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
-    <script src="${pageContext.request.contextPath}/static/js/auth.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/script-home.js"></script>
-
 
     <title>Home</title>
 
@@ -81,46 +80,17 @@
 </div>
 
 <!-- Slider 영역 -->
-<div class="slider" id="slider" aria-roledescription="carousel">
-    <div class="slides" id="slides">
-        <section class="slide s1" data-title="슬라이드 1">
-            <div class="content">
-                <h2>슬라이드 1</h2>
-                <p>첫번째 슬라이드입니다.</p>
+<div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+        <c:forEach items="${slideImages}" var="image">
+            <div class="swiper-slide">
+                <img src="${pageContext.request.contextPath}${image.imageUrl}" alt="클래스 이미지">
             </div>
-        </section>
-        <section class="slide s2" data-title="슬라이드 2">
-            <div class="content">
-                <h2>슬라이드 2</h2>
-                <p>두번째 슬라이드입니다.</p>
-            </div>
-        </section>
-        <section class="slide s3" data-title="슬라이드 3">
-            <div class="content">
-                <h2>슬라이드 3</h2>
-                <p>세번째 슬라이드입니다.</p>
-            </div>
-        </section>
-        <section class="slide s4" data-title="슬라이드 4">
-            <div class="content">
-                <h2>슬라이드 4</h2>
-                <p>네번째 슬라이드입니다.</p>
-            </div>
-        </section>
-        <section class="slide s5" data-title="슬라이드 5">
-            <div class="content">
-                <h2>슬라이드 5</h2>
-                <p>마지막 슬라이드입니다.</p>
-            </div>
-        </section>
+        </c:forEach>
     </div>
-
-    <!--slide 좌우 조절-->
-    <div class="controls">
-        <button class="slide-btn prev" id="prev">◀</button>
-        <button class="slide-btn next" id="next">▶</button>
-    </div>
-    <div class="dots" id="dots" role="tablist" aria-label="슬라이드 인디케이터"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
 </div>
 
 
@@ -298,7 +268,12 @@
         <p id="messageText">메시지가 여기에 표시됩니다.</p>
         <button id="messageOkBtn" class="btn btn-check">확인</button>
     </div>
-</div
+</div>
+<%--js 파일 헤더에 위치시 태그 생성 전이라 인식을 하지 못함
+따라서 가능하면 body 태그가 끝나기 전에 호출 할 것--%>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/script-home.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/auth.js"></script>
 </body>
 
 </html>

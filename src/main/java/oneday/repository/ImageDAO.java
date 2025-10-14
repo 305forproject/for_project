@@ -49,7 +49,9 @@ public class ImageDAO {
 	 */
 	public List<Image> findByClassId(int classId) throws SQLException {
 		List<Image> images = new ArrayList<>();
-		String sql = "SELECT IMAGE_ID, CLASS_ID, IMAGE_URL, IS_REPRESENTATIVE FROM IMAGES WHERE CLASS_ID = ?";
+		String sql = "SELECT IMAGE_ID, CLASS_ID, IMAGE_URL, IS_REPRESENTATIVE, IS_MAIN_SLIDE " +
+			"FROM IMAGES WHERE CLASS_ID = ? AND IS_MAIN_SLIDE = 0";
+
 
 		try (Connection conn = oneday.config.DatabaseConfig.getInstance().getConnection();
 			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -90,5 +92,27 @@ public class ImageDAO {
 			}
 		}
 		return null;
+	}
+
+	//메인 화면에 보여줄 is_main_slide가 1인 이미지만 조회
+	public List<Image> findMainSlideImages() throws SQLException {
+		List<Image> slideImages = new ArrayList<>();
+		String sql = "SELECT * FROM IMAGES WHERE IS_MAIN_SLIDE = 1";
+
+		try (Connection conn = oneday.config.DatabaseConfig.getInstance().getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(sql);
+			 ResultSet rs = pstmt.executeQuery()) {
+
+			while (rs.next()) {
+				Image image = new Image();
+				image.setImageId(rs.getInt("IMAGE_ID"));
+				image.setClassId(rs.getInt("CLASS_ID"));
+				image.setImageUrl(rs.getString("IMAGE_URL"));
+				image.setRepresentative(rs.getBoolean("IS_REPRESENTATIVE"));
+				image.setMainSlide(rs.getBoolean("IS_MAIN_SLIDE"));
+				slideImages.add(image);
+			}
+		}
+		return slideImages;
 	}
 }
