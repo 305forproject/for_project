@@ -62,12 +62,6 @@ function setupAuthEventListeners() {
  * 로그인 상태 확인 및 UI 업데이트
  */
 function checkLoginStatus() {
-    const userId = getCookie('userId');
-    const isStudentCookie = getCookie('isStudent');
-
-    // 안전한 boolean 변환 - falsy 값들을 모두 false로 처리
-    const isStudent = !!(isStudentCookie && isStudentCookie !== 'false' && isStudentCookie !== 'null');
-
     // UI 요소 가져오기
     const loginBtn = document.getElementById('loginBtn');
     const joinBtn = document.getElementById('joinBtn');
@@ -76,7 +70,7 @@ function checkLoginStatus() {
     const mobileJoinBtn = document.getElementById('mobileJoinBtn');
     const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
 
-    if (userId && userId !== 'null' && userId !== '' && userId !== 'undefined') {
+    if (isLoggedIn()) {
         // 로그인된 상태: 로그인/회원가입 버튼 숨기고 로그아웃 버튼 표시
         if (loginBtn) loginBtn.style.display = 'none';
         if (joinBtn) joinBtn.style.display = 'none';
@@ -97,19 +91,4 @@ function checkLoginStatus() {
         if (mobileJoinBtn) mobileJoinBtn.style.display = 'block';
         if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'none';
     }
-}
-
-/**
- * 쿠키 값 가져오기 함수
- * @param {string} name - 쿠키 이름
- * @returns {string|null} 쿠키 값 또는 null
- */
-function getCookie(name) {
-    const value = "; " + document.cookie;
-    const parts = value.split("; " + name + "=");
-    if (parts.length === 2) {
-        const cookieValue = parts.pop().split(";").shift();
-        return decodeURIComponent(cookieValue);
-    }
-    return null;
 }
