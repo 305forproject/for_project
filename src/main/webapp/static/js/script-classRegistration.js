@@ -1,3 +1,49 @@
+// 토스트 알림 함수
+function showToast(message, type = 'info') {
+    // 기존 토스트와 오버레이 제거
+    const existingToast = document.querySelector('.toast');
+    const existingOverlay = document.querySelector('.toast-overlay');
+    if (existingToast) existingToast.remove();
+    if (existingOverlay) existingOverlay.remove();
+
+    // 오버레이 생성
+    const overlay = document.createElement('div');
+    overlay.className = 'toast-overlay';
+    document.body.appendChild(overlay);
+
+    // 토스트 생성
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+
+    // 닫기 버튼 추가
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'toast-close-btn';
+    closeBtn.innerHTML = '×';
+    closeBtn.onclick = hideToast;
+    toast.appendChild(closeBtn);
+
+    document.body.appendChild(toast);
+
+    // 토스트 표시
+    setTimeout(() => {
+        overlay.classList.add('show');
+        toast.classList.add('show');
+    }, 10);
+
+    // 3초 후 자동 닫기
+    setTimeout(hideToast, 3000);
+
+    function hideToast() {
+        if (toast) toast.classList.remove('show');
+        if (overlay) overlay.classList.remove('show');
+        setTimeout(() => {
+            if (toast && toast.parentNode) toast.remove();
+            if (overlay && overlay.parentNode) overlay.remove();
+        }, 400);
+    }
+}
+
 // 모바일 메뉴 토글 스크립트
 document.addEventListener('DOMContentLoaded', function () {
     const menuBtn = document.querySelector('.mobile-menu-toggle');
@@ -134,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
                 reader.readAsDataURL(file);
             } else {
-                alert('이미지 파일만 업로드 가능합니다.');
+                showToast('이미지 파일만 업로드 가능합니다.', 'error');
             }
         }
     }
@@ -223,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
             reader.readAsDataURL(file);
         } else {
-            alert('이미지 파일만 업로드 가능합니다.');
+            showToast('이미지 파일만 업로드 가능합니다.', 'error');
         }
     }
 
