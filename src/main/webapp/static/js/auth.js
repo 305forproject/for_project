@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
 function initAuthSystem() {
     checkLoginStatus();
     setupAuthEventListeners();
-    checkLoginError(); // 로그인 에러 확인 추가
 }
 
 /**
