@@ -201,8 +201,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 현재 로그인한 사용자 ID 가져오기 (실제 구현 시 세션에서 가져와야 함)
     function getCurrentUserId() {
-        // 임시 구현 - 실제로는 서버에서 세션 정보를 가져와야 함
-        return 'user123';
+        // 서버에서 렌더링 시 <meta name="current-user-id" content="실제사용자ID"> 태그에 삽입
+        var meta = document.querySelector('meta[name="current-user-id"]');
+        return meta ? meta.getAttribute('content') : null;
     }
 
     /* ===== slider for detail page (no auto-play) ===== */
