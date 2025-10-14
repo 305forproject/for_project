@@ -101,21 +101,28 @@
     <div class="items-menu">
         <h2>추천 강의</h2>
     </div>
+    <div>
+        <a href="${pageContext.request.contextPath}/main?sort=newest">최신순</a> |
+        <a href="${pageContext.request.contextPath}/main?sort=popular">인기순</a> |
+        <a href="${pageContext.request.contextPath}/main?sort=deadline">마감임박순</a>
+    </div>
     <div class="items">
-        <!-- 카드 동적 추가용 템플릿 -->
-        <!-- 새로 등록된 강의가 맨 앞에 추가될 영역 -->
-        <article class="card">
-            <a href="#">
-                <div class="img-card">
-                    <img src="" alt="클래스 이미지">
-                </div>
-                <div class="card-body">
-                    <p class="info1">카테고리</p>
-                    <h3 class="class-name">클래스 이름</h3>
-                    <p class="info2">클래스 상세 정보</p>
-                </div>
-            </a>
-        </article>
+        <c:forEach items="${classList}" var="classItem">
+            <article class="card">
+                    <%-- 각 카드의 링크(href)를 동적으로 생성합니다. --%>
+                <a href="${pageContext.request.contextPath}/class/detail?classId=${classItem.classId}">
+                    <div class="img-card">
+                            <%-- 4. 대표 이미지 URL을 동적으로 설정합니다. --%>
+                        <img src="${pageContext.request.contextPath}${classItem.representativeImageUrl}" alt="${classItem.className} 이미지">
+                    </div>
+                    <div class="card-body">
+                        <p class="info1">${classItem.categoryName}</p>
+                        <h3 class="class-name">${classItem.className}</h3>
+                        <p class="info2">${classItem.teacherName}</p>
+                    </div>
+                </a>
+            </article>
+        </c:forEach>
 
         <!-- 카드 템플릿 예시 -->
         <template id="card-template">

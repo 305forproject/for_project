@@ -251,11 +251,11 @@ public class ClassService {
 	/**
 	 * 모든 강의 목록을 최신순으로 조회
 	 *
-	 * @return 최신순으로 정렬된 강의 목록
+	 * @return sort option으로 정렬된 강의 목록
 	 */
-	public List<ClassListDto> getAllClassList() {
+	public List<ClassListDto> getClassList(String sortOption) {
 		try {
-			return classDAO.findAllClassListOrderByNewest();
+			return classDAO.findAllClasses(sortOption);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return new ArrayList<>();
