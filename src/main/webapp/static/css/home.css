@@ -292,7 +292,7 @@ img {
     align-items: center;
     justify-content: space-between;
     padding: 0 8px;
-    pointer-events: none
+    pointer-events: none;
 }
 
 .slide-btn {
@@ -303,11 +303,11 @@ img {
     color: #fff;
     border-radius: 999px;
     padding: 10px;
-    cursor: pointer
+    cursor: pointer;
 }
 
 .slide-btn:focus {
-    outline: 2px solid rgba(255, 255, 255, .2)
+    outline: 2px solid rgba(255, 255, 255, .2);
 }
 
 /* dots */
@@ -318,7 +318,7 @@ img {
     bottom: 12px;
     display: flex;
     gap: 8px;
-    z-index: 4
+    z-index: 4;
 }
 
 .dot {
@@ -334,7 +334,7 @@ img {
 /* 활성화된 dot (현재 슬라이드) */
 .dot[aria-current="true"] {
     background: #E0A7DD;
-    transform: scale(1.15)
+    transform: scale(1.15);
 }
 
 
@@ -1179,11 +1179,11 @@ input[type="password"] {
     /* slider 반응형 */
 
     :root {
-        --slider-height: 40vh
+        --slider-height: 40vh;
     }
 
     .slide .content {
-        padding: 18px
+        padding: 18px;
     }
 
 
