@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -17,11 +18,9 @@ public class AuthenticationFilter implements Filter {
 	// 선생 역할 필요 경로
 	private List<String> teacherOnlyPaths;
 
-
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		String contextPath = filterConfig.getServletContext().getContextPath();
-
 
 		// 공개 경로 설정
 		whitelist = Arrays.asList(
@@ -32,7 +31,7 @@ public class AuthenticationFilter implements Filter {
 		);
 
 		// 선생님 전용 경로 설정
-		teacherOnlyPaths = Arrays.asList(
+		teacherOnlyPaths = List.of(
 			contextPath + "/teachers/classes/"
 		);
 	}
@@ -41,10 +40,9 @@ public class AuthenticationFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 		throws IOException, ServletException {
 
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		HttpServletResponse httpResponse = (HttpServletResponse) response;
+		HttpServletRequest httpRequest = (HttpServletRequest)request;
+		HttpServletResponse httpResponse = (HttpServletResponse)response;
 		String requestURI = httpRequest.getRequestURI();
-
 
 		// 공개 경로 통과
 		boolean isWhitelisted = whitelist.stream().anyMatch(requestURI::startsWith);
@@ -57,7 +55,7 @@ public class AuthenticationFilter implements Filter {
 		// 로그인 상태 확인
 		HttpSession session = httpRequest.getSession(false);
 		if (session == null || session.getAttribute("userId") == null) {
-			httpResponse.sendRedirect(httpRequest.getContextPath() + "/login"); // 로그인 페이지로
+			httpResponse.sendRedirect(httpRequest.getContextPath() + "/main");
 			return;
 		}
 
@@ -65,9 +63,9 @@ public class AuthenticationFilter implements Filter {
 		boolean isTeacherPath = teacherOnlyPaths.stream().anyMatch(requestURI::startsWith);
 		if (isTeacherPath) {
 			// 세션에서 선생님 역할 확인
-			Boolean isTeacher = (Boolean) session.getAttribute("isTeacher");
+			Boolean isTeacher = (Boolean)session.getAttribute("isTeacher");
 			if (isTeacher == null || !isTeacher) {
-				httpResponse.sendRedirect(httpRequest.getContextPath() + "/main.jsp");
+				httpResponse.sendRedirect(httpRequest.getContextPath() + "/main");
 				return;
 			}
 		}
@@ -76,5 +74,6 @@ public class AuthenticationFilter implements Filter {
 	}
 
 	@Override
-	public void destroy() {}
+	public void destroy() {
+	}
 }

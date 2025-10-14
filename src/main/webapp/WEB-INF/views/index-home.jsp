@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
+    <script src="${pageContext.request.contextPath}/static/js/auth.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/script-home.js"></script>
 
 
@@ -79,128 +80,128 @@
     <button id="logoutBtn" class="btn btn-logout" style="display: none;">로그아웃</button>
 </div>
 
- <!-- Slider 영역 -->
-    <div class="slider" id="slider" aria-roledescription="carousel">
-        <div class="slides" id="slides">
-            <section class="slide s1" data-title="슬라이드 1">
-                <div class="content">
-                    <h2>슬라이드 1</h2>
-                    <p>첫번째 슬라이드입니다.</p>
-                </div>
-            </section>
-            <section class="slide s2" data-title="슬라이드 2">
-                <div class="content">
-                    <h2>슬라이드 2</h2>
-                    <p>두번째 슬라이드입니다.</p>
-                </div>
-            </section>
-            <section class="slide s3" data-title="슬라이드 3">
-                <div class="content">
-                    <h2>슬라이드 3</h2>
-                    <p>세번째 슬라이드입니다.</p>
-                </div>
-            </section>
-            <section class="slide s4" data-title="슬라이드 4">
-                <div class="content">
-                    <h2>슬라이드 4</h2>
-                    <p>네번째 슬라이드입니다.</p>
-                </div>
-            </section>
-            <section class="slide s5" data-title="슬라이드 5">
-                <div class="content">
-                    <h2>슬라이드 5</h2>
-                    <p>마지막 슬라이드입니다.</p>
-                </div>
-            </section>
-        </div>
+<!-- Slider 영역 -->
+<div class="slider" id="slider" aria-roledescription="carousel">
+    <div class="slides" id="slides">
+        <section class="slide s1" data-title="슬라이드 1">
+            <div class="content">
+                <h2>슬라이드 1</h2>
+                <p>첫번째 슬라이드입니다.</p>
+            </div>
+        </section>
+        <section class="slide s2" data-title="슬라이드 2">
+            <div class="content">
+                <h2>슬라이드 2</h2>
+                <p>두번째 슬라이드입니다.</p>
+            </div>
+        </section>
+        <section class="slide s3" data-title="슬라이드 3">
+            <div class="content">
+                <h2>슬라이드 3</h2>
+                <p>세번째 슬라이드입니다.</p>
+            </div>
+        </section>
+        <section class="slide s4" data-title="슬라이드 4">
+            <div class="content">
+                <h2>슬라이드 4</h2>
+                <p>네번째 슬라이드입니다.</p>
+            </div>
+        </section>
+        <section class="slide s5" data-title="슬라이드 5">
+            <div class="content">
+                <h2>슬라이드 5</h2>
+                <p>마지막 슬라이드입니다.</p>
+            </div>
+        </section>
+    </div>
 
-        <!--slide 좌우 조절-->
-        <div class="controls">
-            <button class="slide-btn prev" id="prev">◀</button>
-            <button class="slide-btn next" id="next">▶</button>
-        </div>
-        <div class="dots" id="dots" role="tablist" aria-label="슬라이드 인디케이터"></div>
+    <!--slide 좌우 조절-->
+    <div class="controls">
+        <button class="slide-btn prev" id="prev">◀</button>
+        <button class="slide-btn next" id="next">▶</button>
+    </div>
+    <div class="dots" id="dots" role="tablist" aria-label="슬라이드 인디케이터"></div>
+</div>
+
+
+<!--  강의 카드 영역 -->
+<main class="main-container">
+    <div class="items-menu">
+        <h2>추천 강의</h2>
+    </div>
+    <div class="items">
+        <!-- 카드 동적 추가용 템플릿 -->
+        <!-- 새로 등록된 강의가 맨 앞에 추가될 영역 -->
+        <article class="card">
+            <a href="#">
+                <div class="img-card">
+                    <img src="" alt="클래스 이미지">
+                </div>
+                <div class="card-body">
+                    <p class="info1">카테고리</p>
+                    <h3 class="class-name">클래스 이름</h3>
+                    <p class="info2">클래스 상세 정보</p>
+                </div>
+            </a>
+        </article>
+
+        <!-- 카드 템플릿 예시 -->
+        <template id="card-template">
+            <article class="card">
+                <a href="#">
+                    <div class="img-card">
+                        <img src="" alt="">
+                    </div>
+                    <div class="card-body">
+                        <p class="info1"></p>
+                        <h3 class="class-name"></h3>
+                        <p class="info2"></p>
+                    </div>
+                </a>
+            </article>
+        </template>
+
+        <article class="card">
+            <a href="#">
+                <div class="img-card">
+                    <img src="" alt="클래스 이미지">
+                </div>
+                <div class="card-body">
+                    <p class="info1">[고급] 웹디자인</p>
+                    <h3 class="class-name">Figma로 웹페이 만들기</h3>
+                    <p class="info2">실제 디자인을 웹페이지로 구현해보세요</p>
+                </div>
+            </a>
+        </article>
+        <article class="card">
+            <a href="#">
+                <div class="img-card">
+                    <img src="" alt="클래스 이미지">
+                </div>
+                <div class="card-body">
+                    <p class="info1">[중급] 웹디자인</p>
+                    <h3 class="class-name">Figma로 디자인 시작하기</h3>
+                    <p class="info2">프로토타이핑부터 협업까지 한 번에 익히기</p>
+                </div>
+            </a>
+        </article>
+        <article class="card">
+            <a href="#">
+                <div class="img-card">
+                    <img src="" alt="클래스 이미지">
+                </div>
+                <div class="card-body">
+                    <p class="info1">[초급] 그림 기초</p>
+                    <h3 class="class-name">색연필로 배우는 정물화</h3>
+                    <p class="info2">생동감 있게 표현하는 방법을 배워보세요</p>
+                </div>
+            </a>
+        </article>
     </div>
 
 
-    <!--  강의 카드 영역 -->
-    <main class="main-container">
-        <div class="items-menu">
-            <h2>추천 강의</h2>
-        </div>
-        <div class="items">
-            <!-- 카드 동적 추가용 템플릿 -->
-            <!-- 새로 등록된 강의가 맨 앞에 추가될 영역 -->
-            <article class="card">
-                <a href="#">
-                    <div class="img-card">
-                        <img src="" alt="클래스 이미지">
-                    </div>
-                    <div class="card-body">
-                        <p class="info1">카테고리</p>
-                        <h3 class="class-name">클래스 이름</h3>
-                        <p class="info2">클래스 상세 정보</p>
-                    </div>
-                </a>
-            </article>
+</main>
 
-            <!-- 카드 템플릿 예시 -->
-            <template id="card-template">
-                <article class="card">
-                    <a href="#">
-                        <div class="img-card">
-                            <img src="" alt="">
-                        </div>
-                        <div class="card-body">
-                            <p class="info1"></p>
-                            <h3 class="class-name"></h3>
-                            <p class="info2"></p>
-                        </div>
-                    </a>
-                </article>
-            </template>
-
-            <article class="card">
-                <a href="#">
-                    <div class="img-card">
-                        <img src="" alt="클래스 이미지">
-                    </div>
-                    <div class="card-body">
-                        <p class="info1">[고급] 웹디자인</p>
-                        <h3 class="class-name">Figma로 웹페이 만들기</h3>
-                        <p class="info2">실제 디자인을 웹페이지로 구현해보세요</p>
-                    </div>
-                </a>
-            </article>
-            <article class="card">
-                <a href="#">
-                    <div class="img-card">
-                        <img src="" alt="클래스 이미지">
-                    </div>
-                    <div class="card-body">
-                        <p class="info1">[중급] 웹디자인</p>
-                        <h3 class="class-name">Figma로 디자인 시작하기</h3>
-                        <p class="info2">프로토타이핑부터 협업까지 한 번에 익히기</p>
-                    </div>
-                </a>
-            </article>
-            <article class="card">
-                <a href="#">
-                    <div class="img-card">
-                        <img src="" alt="클래스 이미지">
-                    </div>
-                    <div class="card-body">
-                        <p class="info1">[초급] 그림 기초</p>
-                        <h3 class="class-name">색연필로 배우는 정물화</h3>
-                        <p class="info2">생동감 있게 표현하는 방법을 배워보세요</p>
-                    </div>
-                </a>
-            </article>
-        </div>
-
-
-    </main>
-    
 
 <!-- Footer 영역 -->
 <footer class="footer">
@@ -298,6 +299,19 @@
         <button id="messageOkBtn" class="btn btn-check">확인</button>
     </div>
 </div>
+
+<!-- 로그인 에러 처리를 위한 스크립트 -->
+<% if (request.getAttribute("error") != null) { %>
+<script>
+    // 페이지 로드 완료 후 로그인 모달 자동 열기
+    document.addEventListener('DOMContentLoaded', function () {
+        const loginModal = document.getElementById('loginModal');
+        if (loginModal) {
+            loginModal.style.display = 'flex';
+        }
+    });
+</script>
+<% } %>
 
 </body>
 
