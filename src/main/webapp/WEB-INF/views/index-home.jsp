@@ -84,7 +84,9 @@
     <div class="swiper-wrapper">
         <c:forEach items="${slideImages}" var="image">
             <div class="swiper-slide">
-                <img src="${pageContext.request.contextPath}${image.imageUrl}" alt="클래스 이미지">
+                <a href="${pageContext.request.contextPath}/class/detail?classId=${image.classId}">
+                    <img src="${pageContext.request.contextPath}${image.imageUrl}" alt="클래스 이미지">
+                </a>
             </div>
         </c:forEach>
     </div>
