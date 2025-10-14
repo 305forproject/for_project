@@ -262,8 +262,6 @@ public class ClassDAO {
 
 		// 기본 SQL과 ORDER BY 절을 합쳐 최종 쿼리 완성
 		String finalSql = baseSql + orderByClause;
-
-
 		try (Connection conn = dbConfig.getConnection();
 			 PreparedStatement pstmt = conn.prepareStatement(finalSql);
 			 ResultSet rs = pstmt.executeQuery()) {
