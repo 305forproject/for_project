@@ -21,10 +21,9 @@ public class ReservationDAO {
 	}
 
 	//예약자 수 확인
-	public int countByClassId(int classId) throws SQLException {
+	public int countByClassId(Connection conn, int classId) throws SQLException {
 		String sql = "SELECT COUNT(*) FROM RESERVATIONS WHERE CLASS_ID = ?";
-		try (Connection conn = dbConfig.getConnection();
-			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, classId);
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
@@ -36,10 +35,9 @@ public class ReservationDAO {
 	}
 
 	//이미 예약 했는지
-	public boolean existsByStudentIdAndClassId(int studentId, int classId) throws SQLException {
+	public boolean existsByStudentIdAndClassId(Connection conn, int studentId, int classId) throws SQLException {
 		String sql = "SELECT COUNT(*) FROM RESERVATIONS WHERE STUDENT_ID = ? AND CLASS_ID = ?";
-		try (Connection conn = dbConfig.getConnection();
-			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, studentId);
 			pstmt.setInt(2, classId);
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -52,6 +50,7 @@ public class ReservationDAO {
 	}
 
 	//새 예약 저장
+
 	/**
 	 * 트랜잭션 외부에서 예약을 저장할 때 사용하는 메소드.
 	 * 내부적으로 DB 커넥션을 열고 닫습니다.

@@ -10,18 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/main/classes/*")
+@WebServlet("/class/detail")
 public class ClassController extends HttpServlet {
 	private final ClassService classService = ClassService.getInstance();
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String pathInfo = request.getPathInfo();
+		String classIdParam = request.getParameter("classId");
 
 		// URL에 ID가 포함된 경우 (상세 조회)
-		if (pathInfo != null && !pathInfo.equals("/")) {
+		if (classIdParam != null && !classIdParam.isEmpty()) {
 			try {
-				int classId = Integer.parseInt(pathInfo.substring(1));
+				int classId = Integer.parseInt(classIdParam);
 				ClassDetailDto detail = classService.findClassDetail(classId);
 
 				if (detail != null) {

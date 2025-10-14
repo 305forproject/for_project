@@ -21,7 +21,6 @@ import java.util.Base64;
 @WebServlet(urlPatterns = {"/api/payment/success", "/api/payment/fail"})
 public class PaymentController extends HttpServlet {
 
-	private final ReservationService reservationService = ReservationService.getInstance();
 	private final PaymentService paymentService = PaymentService.getInstance();
 
 	@Override
@@ -38,7 +37,7 @@ public class PaymentController extends HttpServlet {
 			int studentId = -1;
 
 			try {
-				// [핵심] orderId에서 classId와 studentId를 다시 추출
+				//orderId에서 classId와 studentId를 다시 추출
 				String[] parts = orderIdFromToss.split("-");
 				if (parts.length >= 3 && parts[0].equals("oneday")) {
 					classId = Integer.parseInt(parts[1]);
@@ -54,14 +53,12 @@ public class PaymentController extends HttpServlet {
 
 				paymentService.createReservationAndPayment(classId, studentId, responseJson);
 
-				// --- 4. 모든 과정이 성공했을 때만 success.jsp로 이동 ---
+				// 성공시 success.jsp로 이동
 				request.setAttribute("isSuccess", true);
 				request.setAttribute("paymentResult", responseJson);
 				request.getRequestDispatcher("/WEB-INF/views/payment/success.jsp").forward(request, response);
 
 			} catch (Exception e) {
-				// --- 5. [수정] 모든 종류의 실패(DB, API 등)를 여기서 처리 ---
-				// 이제 e.getMessage()는 "이미 예약한 강의입니다."와 같은 상세 메시지를 담고 있습니다.
 				request.setAttribute("message", e.getMessage());
 				request.setAttribute("code", "SERVER_ERROR");
 				request.getRequestDispatcher("/WEB-INF/views/payment/fail.jsp").forward(request, response);
