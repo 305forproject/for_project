@@ -167,161 +167,168 @@ document.addEventListener('DOMContentLoaded', function () {
         showMessage("로그아웃", "로그아웃 되었습니다.");
     });
 
-    /* ===== slider for detail page .class-img (copied/adapted behavior from home slider) ===== */
-    (function initDetailSlider(){
-        try {
-            const slider = document.getElementById('slider');
-            const slidesEl = document.getElementById('slides');
-            const prevBtn = document.getElementById('prev');
-            const nextBtn = document.getElementById('next');
-            const dotsEl = document.getElementById('dots');
-
-            if (!slider || !slidesEl) return; // nothing to do
-
-            const originalSlides = Array.from(slidesEl.children);
-            if (originalSlides.length === 0) return;
-
-            // create clones for infinite loop
-            const firstClone = originalSlides[0].cloneNode(true);
-            const lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
-            slidesEl.appendChild(firstClone);
-            slidesEl.insertBefore(lastClone, slidesEl.firstChild);
-
-            const slides = Array.from(slidesEl.children);
-            let index = 1; // start at first real slide (because of leading clone)
-            let isDragging = false;
-            let startX = 0;
-            let currentTranslate = 0;
-            const intervalMs = 3500;
-            let timer = null;
-
-            // set initial position in px
-            function setTranslate(x){
-                slidesEl.style.transform = `translateX(${x}px)`;
-            }
-
-            function setTransition(on){
-                slidesEl.style.transition = on ? 'transform .5s cubic-bezier(.22, .9, .3, 1)' : 'none';
-            }
-
-            function slideWidth(){ return slider.clientWidth; }
-
-            function update(){
-                setTransition(true);
-                const x = -index * slideWidth();
-                setTranslate(x);
-                updateDotsByIndex(index);
-            }
-
-            function updateDotsByIndex(i){
-                // map index to original index (1..n -> 0..n-1)
-                const n = originalSlides.length;
-                const originalIndex = ((i - 1) % n + n) % n;
-                if (!dotsEl) return;
-                Array.from(dotsEl.children).forEach((d, idx)=>{
-                    if (idx === originalIndex) d.setAttribute('aria-current','true');
-                    else d.removeAttribute('aria-current');
-                });
-            }
-
-            // create dots
-            if (dotsEl) {
-                originalSlides.forEach((s,i)=>{
-                    const btn = document.createElement('button');
-                    btn.className = 'dot';
-                    btn.setAttribute('aria-label', s.dataset.title || `슬라이드 ${i+1}`);
-                    btn.addEventListener('click', ()=>{ goTo(i+1); });
-                    dotsEl.appendChild(btn);
-                });
-            }
-
-            // initial position (no transition)
-            setTransition(false);
-            setTranslate(-index * slideWidth());
-            // small timeout to allow layout then enable transition for first update
-            setTimeout(()=>{ setTransition(true); }, 50);
-
-            function next(){ index++; update(); }
-            function prev(){ index--; update(); }
-            function goTo(i){ index = i; update(); }
-
-            if (nextBtn) nextBtn.addEventListener('click', ()=>{ next(); resetTimer(); });
-            if (prevBtn) prevBtn.addEventListener('click', ()=>{ prev(); resetTimer(); });
-
-            slidesEl.addEventListener('transitionend', ()=>{
-                // safety: ensure slides[index] exists
-                if (!slides[index]) return;
-                // if moved to the clones, jump to corresponding real slide without transition
-                if (slides[index].isSameNode(firstClone)){
-                    setTransition(false);
-                    index = 1;
-                    setTranslate(-index * slideWidth());
-                    // force reflow then restore transition
-                    void slidesEl.offsetWidth;
-                    setTimeout(()=> setTransition(true), 20);
-                } else if (slides[index].isSameNode(lastClone)){
-                    setTransition(false);
-                    index = slides.length - 2;
-                    setTranslate(-index * slideWidth());
-                    void slidesEl.offsetWidth;
-                    setTimeout(()=> setTransition(true), 20);
-                }
-            });
-
-            // autoplay
-            function startTimer(){ stopTimer(); timer = setInterval(()=>{ next(); }, intervalMs); }
-            function stopTimer(){ if (timer) { clearInterval(timer); timer = null; } }
-            function resetTimer(){ stopTimer(); startTimer(); }
-            startTimer();
-
-            slider.addEventListener('mouseenter', stopTimer);
-            slider.addEventListener('mouseleave', startTimer);
-            slider.addEventListener('focusin', stopTimer);
-            slider.addEventListener('focusout', startTimer);
-
-            // touch handlers (basic)
-            slidesEl.addEventListener('touchstart', (e)=>{
-                isDragging = true;
-                startX = e.touches[0].clientX;
-                currentTranslate = -index * slideWidth();
-                setTransition(false);
-                stopTimer();
-            }, {passive:true});
-
-            slidesEl.addEventListener('touchmove', (e)=>{
-                if (!isDragging) return;
-                const dx = e.touches[0].clientX - startX;
-                setTranslate(currentTranslate + dx);
-            }, {passive:true});
-
-            slidesEl.addEventListener('touchend', (e)=>{
-                if (!isDragging) return;
-                isDragging = false;
-                const endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : startX;
-                const dx = endX - startX;
-                setTransition(true);
-                const threshold = slideWidth() * 0.2;
-                if (dx > threshold) { prev(); }
-                else if (dx < -threshold) { next(); }
-                else { update(); }
-                resetTimer();
-            });
-
-            // resize: recalc position without animation
-            window.addEventListener('resize', ()=>{
-                setTransition(false);
-                setTranslate(-index * slideWidth());
-                void slidesEl.offsetWidth;
-                setTimeout(()=> setTransition(true), 50);
-            });
-
-            // set initial dots state
-            updateDotsByIndex(index);
-        } catch (err) {
-            // don't break the rest of the page if something fails
-            console.error('detail slider init error', err);
+    // 클래스 신청 함수 (전역 함수로 선언)
+    window.applyClass = function(classId) {
+        if (!isLoggedIn) {
+            showMessage("로그인 필요", "클래스 신청을 위해 로그인이 필요합니다.");
+            return;
         }
-    })();
+        
+        // 클래스 신청 처리
+        fetch('/api/classes/' + classId + '/apply', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                classId: classId,
+                userId: getCurrentUserId() // 현재 로그인한 사용자 ID
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showMessage("신청 완료", "클래스 신청이 완료되었습니다.");
+            } else {
+                showMessage("신청 실패", data.message || "클래스 신청에 실패했습니다.");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage("오류 발생", "클래스 신청 중 오류가 발생했습니다.");
+        });
+    };
+
+    // 현재 로그인한 사용자 ID 가져오기 (실제 구현 시 세션에서 가져와야 함)
+    function getCurrentUserId() {
+        // 서버에서 렌더링 시 <meta name="current-user-id" content="실제사용자ID"> 태그에 삽입
+        var meta = document.querySelector('meta[name="current-user-id"]');
+        return meta ? meta.getAttribute('content') : null;
+    }
+
+    /* ===== slider for detail page (no auto-play) ===== */
+(function initDetailSlider(){
+    const slider = document.getElementById('slider');
+    const slidesEl = document.getElementById('slides');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const dotsEl = document.getElementById('dots');
+    if (!slider || !slidesEl) return;
+
+    const originalSlides = Array.from(slidesEl.children);
+    if (originalSlides.length === 0) return;
+
+    // 무한 루프를 위한 클론 추가
+    const firstClone = originalSlides[0].cloneNode(true);
+    const lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
+    slidesEl.appendChild(firstClone);
+    slidesEl.insertBefore(lastClone, slidesEl.firstChild);
+    const slides = Array.from(slidesEl.children);
+
+    let index = 1; // 첫 번째 실제 슬라이드에서 시작
+    let isDragging = false;
+    let startX = 0;
+
+    function slideWidth() { return slider.clientWidth; }
+    function setTransition(on){ slidesEl.style.transition = on ? 'transform .5s ease' : 'none'; }
+    function setTranslate(x){ slidesEl.style.transform = `translateX(${x}px)`; }
+
+    function update(){
+        setTransition(true);
+        const x = -index * slideWidth();
+        setTranslate(x);
+        updateDots();
+    }
+
+    // 도트 생성 및 갱신
+    function updateDots(){
+        if (!dotsEl || dotsEl.children.length === 0) return;
+        const n = originalSlides.length;
+        let active = index - 1; // 클론을 고려한 실제 인덱스
+        
+        // 인덱스 범위 보정
+        if (active < 0) active = n - 1;
+        if (active >= n) active = 0;
+        
+        Array.from(dotsEl.children).forEach((dot,i)=>{
+            dot.setAttribute('aria-current', i === active ? 'true' : 'false');
+        });
+    }
+
+    if (dotsEl){
+        originalSlides.forEach((s,i)=>{
+            const dot = document.createElement('button');
+            dot.className = 'dot';
+            dot.setAttribute('aria-label', s.dataset.title || `슬라이드 ${i+1}`);
+            dot.addEventListener('click', ()=>{ goTo(i+1); });
+            dotsEl.appendChild(dot);
+        });
+    }
+
+    function next(){ index++; update(); }
+    function prev(){ index--; update(); }
+    function goTo(i){ index = i; update(); }
+
+    nextBtn.addEventListener('click', next);
+    prevBtn.addEventListener('click', prev);
+
+    slidesEl.addEventListener('transitionend', ()=>{
+        // 마지막 클론(첫 번째 슬라이드의 클론)에 도달했을 때
+        if (index === slides.length - 1){
+            setTransition(false);
+            index = 1; // 첫 번째 실제 슬라이드로 이동
+            setTranslate(-index * slideWidth());
+        }
+        // 첫 번째 클론(마지막 슬라이드의 클론)에 도달했을 때
+        if (index === 0){
+            setTransition(false);
+            index = originalSlides.length; // 마지막 실제 슬라이드로 이동
+            setTranslate(-index * slideWidth());
+        }
+    });
+
+    // 터치/드래그 이동 (모바일 대응)
+    slider.addEventListener('touchstart', e=>{
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        setTransition(false);
+    }, {passive: true});
+    
+    slider.addEventListener('touchmove', e=>{
+        if(!isDragging) return;
+        e.preventDefault();
+        const dx = e.touches[0].clientX - startX;
+        setTranslate(-index * slideWidth() + dx);
+    }, {passive: false});
+    
+    slider.addEventListener('touchend', e=>{
+        if(!isDragging) return;
+        isDragging = false;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) < 10) {
+            // 작은 움직임은 클릭으로 간주
+            update();
+            return;
+        }
+        if (dx < -50) next();
+        else if (dx > 50) prev();
+        else update();
+    }, {passive: true});
+
+    // 윈도우 리사이즈 처리
+    window.addEventListener('resize', ()=>{
+        setTransition(false);
+        setTranslate(-index * slideWidth());
+    });
+
+    // 초기 위치 설정
+    setTimeout(()=>{
+        setTransition(false);
+        setTranslate(-index * slideWidth());
+        updateDots();
+    }, 100);
+})();
+
 });
 
 

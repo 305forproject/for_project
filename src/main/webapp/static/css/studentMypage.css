@@ -1,0 +1,745 @@
+/* CSS reset 및 기본 스타일 설정 */
+:root {
+    --primary: #E0A7DD;
+    --text-dark: #333;
+    --text-muted: #777;
+    --bg-light: #fafafa;
+    --card-gap: 24px;
+    --radius: 12px;
+    --shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    /* slider defaults */
+    --slider-height: 60vh;
+    --dot-size: 12px;
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    color: #252525;
+    box-sizing: border-box;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #333333;
+}
+
+img {
+    object-fit: contain;
+    object-position: center;
+}
+
+
+/* header */
+.header {
+    width: 100%;
+    height: 80px;
+    background: #E0A7DD;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+/* header container */
+.header-container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 1280px;
+    height: 100%;
+    padding: 0 20px;
+}
+
+/* logo div */
+.logo {
+    width: 168px;
+    height: 60px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* logo-img */
+.logo-img {
+    width: 80px;
+    height: 60px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* logo-img 내부 img 태그 */
+.logo-img img {
+    width: 100%;
+    height: 100%;
+}
+
+/* logo text */
+.logo-text {
+    margin-left: 12px;
+    font-family: 'Imprima', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1.15;
+    white-space: nowrap;
+}
+
+/* 모바일 메뉴 */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+}
+
+/* 메뉴 슬라이드 애니메이션 */
+@keyframes slideInMenu {
+    from {
+        right: -70vw;
+        opacity: 0;
+    }
+
+    to {
+        right: 0;
+        opacity: 1;
+    }
+}
+
+
+/* 예약 캘린더 */
+.reservation-calendar {
+    width: 100%;
+    max-width: 1280px;
+    height: 800px;
+    margin: 40px auto;
+    padding: 30px 50px;
+    border: 1px solid #ddd;
+    border-radius: var(--radius);
+    background-color: #fff;
+}
+
+
+/* footer */
+.footer {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 300px;
+    background: #afafaf;
+    position: relative;
+
+}
+
+/* footer container */
+.footer-container {
+    box-sizing: border-box;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+
+/* footer-top  */
+.footer-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    min-height: 150px;
+    position: relative;
+    padding-top: 10px;
+}
+
+/* footer-down */
+.footer-down {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+    min-height: 160px;
+    position: relative;
+}
+
+/* 로고 프레임 */
+.footer-logo-frame {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    /* 로고만 위쪽에 붙임 */
+    margin-bottom: auto;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 200px;
+    height: auto;
+    flex-shrink: 0;
+    /* 로고 크기 고정 */
+}
+
+.footer-logo {
+    width: 80px;
+    height: 50px;
+    font-family: 'Imprima', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 46px;
+    align-items: center;
+    justify-content: center;
+    top: 20px;
+}
+
+.footer-info {
+    margin-top: 8px;
+    font-size: 16px;
+    font-family: 'Imprima', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* 고객센터, 운영시간, 연락처, 사업자정보, 이용약관 */
+.footer-contents {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    min-width: 120px;
+    height: 60px;
+    font-family: 'Imprima', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 25px;
+    align-items: flex-start;
+    padding-top: 10px;
+    flex: 1;
+    /* 남은 공간을 균등하게 분배 */
+}
+
+.footer-contents>p {
+    font-size: 16px;
+    padding-top: 20px;
+
+}
+
+
+/*모마일 메뉴 모달*/
+.mobile-menu-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    margin: 5px 0;
+    background-color: #fff;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.mobile-menu-modal-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60vw;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    animation: slideInMenu 0.3s;
+    font-size: 16px;
+    color: #8D8D8D;
+}
+
+.mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+
+.mobile-menu-modal-content h2 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.mobile-auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.mobile-auth-btn {
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    background: #8D8D8D;
+    color: white;
+    width: 100%;
+    height: 30px;
+}
+
+.mobile-auth-btn:hover {
+    background: #E0A7DD;
+}
+
+.mobile-menu-modal-header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    font-size: 24px;
+    margin-bottom: 24px;
+    font-size: 32px;
+}
+
+.mobile-menu-modal-header h2 {
+    margin: 0;
+    font-size: 30px;
+
+}
+
+.mobile-menu-modal-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.mobile-menu-modal-content li {
+    margin-bottom: 20px;
+}
+
+.mobile-menu-modal-content a {
+    font-size: 1.2rem;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.mobile-menu-modal-content a:hover {
+    font-weight: bold;
+}
+
+/* 모바일 메뉴 빈 컨텐츠 영역 */
+.mobile-menu-empty {
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.mobile-menu-empty p {
+    color: #999;
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* 닫기 버튼 스타일 */
+.close {
+    background: none;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    color: #aaa;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+
+.close:hover {
+    color: black;
+}
+
+
+/* 반응형 디자인 */
+
+/* 전체 화면에서 최대 너비 제한 */
+@media screen and (min-width: 1280px) {
+
+    .header-container,
+    .footer-container {
+        max-width: 1280px;
+        margin: 0 auto;
+    }
+}
+
+
+/* 대형 태블릿 (1024px ~ 1200px) */
+@media screen and (max-width: 1200px) {
+    .header-container {
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .login-container {
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .logo {
+        width: 120px;
+        height: 60px;
+    }
+
+    .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .logo-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .logo-text {
+        font-size: 36px;
+        margin-left: 8px;
+    }
+
+    /* 예약 캘린더 반응형 */
+    .reservation-calendar {
+        height: 650px;
+    }
+
+    /* footer 반응형 - 태블릿 */
+    .footer-container {
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .footer-top {
+        flex-direction: row;
+        gap: 15px;
+    }
+
+    .footer-contents {
+        min-width: 100px;
+        font-size: 14px;
+    }
+
+    .footer-info {
+        font-size: 14px;
+    }
+}
+
+
+/* 태블릿 (768px ~ 1024px) */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+    .header-container {
+        width: 100%;
+        padding: 0 16px;
+        position: relative;
+    }
+
+    .logo {
+        width: 104px;
+        height: 60px;
+    }
+
+    .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .logo-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .logo-text {
+        font-size: 36px;
+        margin-left: 8px;
+    }
+
+    /* 예약 캘린더 반응형 */
+    .reservation-calendar {
+        height: 600px;
+    }
+
+    /* footer 반응형 - 중간 태블릿 */
+    .footer-container {
+        width: 100%;
+        padding: 0 16px;
+    }
+
+    .footer-top {
+        flex-direction: row;
+        gap: 12px;
+    }
+
+    .footer-contents {
+        min-width: 90px;
+        font-size: 13px;
+    }
+
+    .footer-info {
+        font-size: 13px;
+    }
+}
+
+
+/* 모바일 (480px ~ 768px) */
+@media screen and (max-width: 768px) {
+    .header-container {
+        width: 100%;
+        padding: 0 14px;
+    }
+
+    .logo {
+        width: 88px;
+        height: 60px;
+    }
+
+    .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .logo-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .logo-text {
+        font-size: 36px;
+        margin-left: 6px;
+    }
+
+
+    /* 예약 캘린더 반응형 */
+    .reservation-calendar {
+        height: 500px;
+        margin: 20px auto;
+        padding: 20px 14px;
+    }
+
+
+    /* footer 반응형 - 모바일 */
+    .footer-container {
+        width: 100%;
+        padding: 0 14px;
+    }
+
+    .footer-top {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .footer-logo-frame {
+        align-self: flex-start;
+        margin-bottom: 0;
+    }
+
+    .footer-contents {
+        width: 100%;
+        min-width: auto;
+        font-size: 14px;
+        padding-top: 5px;
+    }
+
+    .footer-info {
+        font-size: 14px;
+        margin-top: 5px;
+    }
+}
+
+
+/* 소형 모바일 (320px ~ 480px) */
+@media screen and (max-width: 480px) {
+    .header-container {
+        width: 100%;
+        padding: 0 12px;
+    }
+
+    .logo {
+        width: 72px;
+        height: 60px;
+    }
+
+    .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .logo-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .logo-text {
+        font-size: 36px;
+        margin-left: 4px;
+    }
+
+
+    /* 예약 캘린더 반응형 */
+    .reservation-calendar {
+        height: 400px;
+        margin: 15px auto;
+        padding: 15px 12px;
+    }
+
+
+    /* footer 반응형 - 소형 모바일 */
+    .footer-container {
+        width: 100%;
+        padding: 0 12px;
+    }
+
+    .footer-top {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .footer-contents {
+        width: 100%;
+        min-width: auto;
+        font-size: 13px;
+        padding-top: 5px;
+    }
+
+    .footer-info {
+        font-size: 13px;
+        margin-top: 4px;
+    }
+}
+
+/* 매우 작은 화면 (320px 이하) */
+@media screen and (max-width: 320px) {
+    .header-container {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    .logo {
+        width: 64px;
+        height: 60px;
+    }
+
+    .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .logo-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .logo-text {
+        font-size: 36px;
+        margin-left: 4px;
+    }
+
+
+    /* 예약 캘린더 반응형 */
+    .reservation-calendar {
+        height: 320px;
+        margin: 12px auto;
+        padding: 12px 10px;
+    }
+    
+
+    /* footer 반응형 - 매우 작은 화면 */
+    .footer-container {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    .footer-top {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .footer-contents {
+        width: 100%;
+        min-width: auto;
+        font-size: 12px;
+        padding-top: 5px;
+    }
+
+    .footer-info {
+        font-size: 12px;
+        margin-top: 3px;
+    }
+}
+
+/* 모바일에서 메뉴 표시 */
+@media screen and (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+}
+
+/* 터치 디바이스 최적화 */
+@media (hover: none) and (pointer: coarse) {
+    .mobile-menu-toggle:hover {
+        transform: none;
+    }
+
+    .mobile-menu-toggle:active {
+        transform: scale(0.95);
+    }
+}
