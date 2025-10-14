@@ -69,8 +69,6 @@ function checkLoginStatus() {
     // 안전한 boolean 변환 - falsy 값들을 모두 false로 처리
     const isStudent = !!(isStudentCookie && isStudentCookie !== 'false' && isStudentCookie !== 'null');
 
-    console.log('쿠키 확인:', {userId, isStudent});
-
     // UI 요소 가져오기
     const loginBtn = document.getElementById('loginBtn');
     const joinBtn = document.getElementById('joinBtn');
