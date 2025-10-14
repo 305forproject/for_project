@@ -222,26 +222,50 @@ public class ClassDAO {
 
 	/**
 	 * 메인 페이지용 강의 목록을 최신순으로 조회 (대표 이미지 포함)
-	 *
+	 * @param sortOption 정렬 옵션 ("newest", "popular", "deadline")
 	 * @return 최신순으로 정렬된 강의 목록 (대표 이미지 URL 포함)
 	 * @throws SQLException 데이터베이스 오류 발생 시
 	 */
-	public List<ClassListDto> findAllClassListOrderByNewest() throws SQLException {
+	public List<ClassListDto> findAllClasses(String sortOption) throws SQLException {
 		List<ClassListDto> classList = new ArrayList<>();
-		String sql = """
-			SELECT c.CLASS_ID, c.CLASS_NAME, u.NAME as TEACHER_NAME, c.PRICE,
-				   DATE_FORMAT(c.START_AT, '%Y-%m-%d %H:%i') as START_AT, c.LOCATION,
-				   i.IMAGE_URL as REPRESENTATIVE_IMAGE_URL,
-				   cat.CATEGORY as CATEGORY_NAME
-			FROM CLASSES c
-			JOIN USERS u ON c.TEACHER_ID = u.USER_ID
-			JOIN CATEGORIES cat ON c.CATEGORY_ID = cat.CATEGORY_ID
-			LEFT JOIN IMAGES i ON c.CLASS_ID = i.CLASS_ID AND i.IS_REPRESENTATIVE = 1
-			ORDER BY c.CLASS_ID DESC
-			""";
+
+		// 기본 SQL 쿼리문 (ORDER BY 제외)
+		String baseSql = """
+            SELECT c.CLASS_ID, c.CLASS_NAME, u.NAME as TEACHER_NAME, c.PRICE,
+                  DATE_FORMAT(c.START_AT, '%Y-%m-%d %H:%i') as START_AT, c.LOCATION,
+                  i.IMAGE_URL as REPRESENTATIVE_IMAGE_URL,
+                  cat.CATEGORY as CATEGORY_NAME,
+                  (SELECT COUNT(*) FROM RESERVATIONS r WHERE r.CLASS_ID = c.CLASS_ID) as reservation_count
+            FROM CLASSES c
+            JOIN USERS u ON c.TEACHER_ID = u.USER_ID
+            JOIN CATEGORIES cat ON c.CATEGORY_ID = cat.CATEGORY_ID
+            LEFT JOIN IMAGES i ON c.CLASS_ID = i.CLASS_ID AND i.IS_REPRESENTATIVE = 1
+            """;
+
+		// 정렬 옵션에 따라 ORDER BY 절을 동적으로 선택
+		String orderByClause;
+		switch (sortOption) {
+			case "popular":
+				// 인기순: 예약 많은 순 -> 최신순
+				orderByClause = "ORDER BY reservation_count DESC, c.CLASS_ID DESC";
+				break;
+			case "deadline":
+				// 마감임박순: 시작 시간이 현재 시간과 가장 가까운 순
+				orderByClause = "ORDER BY c.START_AT ASC";
+				break;
+			case "newest":
+			default:
+				// 최신순 (기본값)
+				orderByClause = "ORDER BY c.CLASS_ID DESC";
+				break;
+		}
+
+		// 기본 SQL과 ORDER BY 절을 합쳐 최종 쿼리 완성
+		String finalSql = baseSql + orderByClause;
+
 
 		try (Connection conn = dbConfig.getConnection();
-			 PreparedStatement pstmt = conn.prepareStatement(sql);
+			 PreparedStatement pstmt = conn.prepareStatement(finalSql);
 			 ResultSet rs = pstmt.executeQuery()) {
 
 			while (rs.next()) {
