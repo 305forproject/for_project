@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import oneday.dto.SignupForm;
+import oneday.dto.SignupFormDTO;
 import oneday.service.UserService;
 
 /**
@@ -108,13 +108,15 @@ public class SignupController extends HttpServlet {
 
 		request.setCharacterEncoding("UTF-8");
 
-		// 1. 요청 파라미터를 SignupForm으로 변환 (Spring에서는 @ModelAttribute로 자동 바인딩)
-		SignupForm signupForm = extractSignupForm(request);
+		// 1. 요청 파라미터를 SignupForm으로 변환
+		SignupFormDTO signupForm = extractSignupForm(request);
 
-		// 2. 유효성 검증 (Spring에서는 @Valid와 Validator 사용)
+		// 2. 유효성 검증
 		String validationError = signupForm.validate();
 		if (validationError != null) {
-			handleValidationError(request, response, validationError, signupForm);
+			// 에러 시 모달에서 에러 메시지 표시하도록 메인 페이지로 forward
+			request.setAttribute("signupError", validationError);
+			request.getRequestDispatcher("/WEB-INF/views/index-home.jsp").forward(request, response);
 			return;
 		}
 
@@ -127,19 +129,23 @@ public class SignupController extends HttpServlet {
 			);
 
 			if (success) {
-				// 성공 시 리다이렉트 (Spring에서는 "redirect:/signup/success")
-				response.sendRedirect(request.getContextPath() + "/signup/success");
+				// 성공 시 메인 페이지로 forward하며 성공 메시지 전달
+				request.setAttribute("signupSuccess", "회원가입이 성공적으로 완료되었습니다!");
+				request.getRequestDispatcher("/WEB-INF/views/index-home.jsp").forward(request, response);
 			} else {
-				handleError(request, response, "회원가입 처리 중 오류가 발생했습니다.", signupForm);
+				request.setAttribute("signupError", "회원가입 처리 중 오류가 발생했습니다.");
+				request.getRequestDispatcher("/WEB-INF/views/index-home.jsp").forward(request, response);
 			}
 
 		} catch (IllegalArgumentException e) {
 			// 비즈니스 로직 예외 (아이디 중복 등)
-			handleError(request, response, e.getMessage(), signupForm);
+			request.setAttribute("signupError", e.getMessage());
+			request.getRequestDispatcher("/WEB-INF/views/index-home.jsp").forward(request, response);
 		} catch (SQLException e) {
 			// 데이터베이스 예외
 			e.printStackTrace();
-			handleError(request, response, "데이터베이스 오류가 발생했습니다.", signupForm);
+			request.setAttribute("signupError", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+			request.getRequestDispatcher("/WEB-INF/views/index-home.jsp").forward(request, response);
 		}
 	}
 
@@ -148,8 +154,8 @@ public class SignupController extends HttpServlet {
 	 *
 	 * <p>Spring에서는 @ModelAttribute로 자동 처리됩니다.</p>
 	 */
-	private SignupForm extractSignupForm(HttpServletRequest request) {
-		SignupForm form = new SignupForm();
+	private SignupFormDTO extractSignupForm(HttpServletRequest request) {
+		SignupFormDTO form = new SignupFormDTO();
 		form.setLoginId(request.getParameter("loginId"));
 		form.setPassword(request.getParameter("password"));
 		form.setPasswordConfirm(request.getParameter("passwordConfirm"));
@@ -161,7 +167,7 @@ public class SignupController extends HttpServlet {
 	 * 유효성 검증 오류 처리
 	 */
 	private void handleValidationError(HttpServletRequest request, HttpServletResponse response,
-		String error, SignupForm signupForm)
+		String error, SignupFormDTO signupForm)
 		throws ServletException, IOException {
 		handleError(request, response, error, signupForm);
 	}
@@ -170,7 +176,7 @@ public class SignupController extends HttpServlet {
 	 * 오류 처리 및 뷰로 포워드
 	 */
 	private void handleError(HttpServletRequest request, HttpServletResponse response,
-		String error, SignupForm signupForm)
+		String error, SignupFormDTO signupForm)
 		throws ServletException, IOException {
 		request.setAttribute("error", error);
 		request.setAttribute("loginId", signupForm.getLoginId());

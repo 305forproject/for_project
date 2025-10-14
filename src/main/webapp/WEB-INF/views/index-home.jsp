@@ -246,15 +246,18 @@
     <div class="modal-content">
         <div class="mobile-menu-header">
             <h2>회원가입</h2>
+            <% if (request.getAttribute("signupError") != null) { %>
+            <p style="color: red;">${signupError}</p>
+            <% } %>
             <span class="close">&times;</span>
         </div>
         <form id="joinForm" method="post" action="${pageContext.request.contextPath}/signup">
             <input type="text" id="joinName" name="name" placeholder="이름" required><br>
             <input type="text" id="joinUsername" name="loginId" placeholder="아이디" required><br>
             <input type="password" id="joinPassword" name="password" placeholder="비밀번호" required><br>
-            영문, 숫자 포함 8~20자를 입력해 주세요<br>
+            <small style="color: #666;">영문, 숫자 포함 8~20자를 입력해 주세요</small><br>
             <input type="password" id="joinPasswordConfirm" name="passwordConfirm" placeholder="비밀번호 확인" required><br>
-            영문, 숫자 포함 8~20자를 입력해 주세요<br>
+            <small style="color: #666;">영문, 숫자 포함 8~20자를 입력해 주세요</small><br>
             <button type="submit" class="btn btn-join-modal">회원가입</button>
         </form>
     </div>
@@ -276,6 +279,56 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/script-home.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/auth.js"></script>
+
+<!-- 로그인 에러 처리를 위한 스크립트 -->
+<% if (request.getAttribute("error") != null) { %>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const loginModal = document.getElementById('loginModal');
+        if (loginModal) {
+            loginModal.style.display = 'flex';
+        }
+    });
+</script>
+<% } %>
+
+<!-- 회원가입 에러 처리를 위한 스크립트 -->
+<% if (request.getAttribute("signupError") != null) { %>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const joinModal = document.getElementById('joinModal');
+        if (joinModal) {
+            joinModal.style.display = 'flex';
+        }
+    });
+</script>
+<% } %>
+
+<!-- 회원가입 성공 처리를 위한 스크립트 -->
+<% if (request.getAttribute("signupSuccess") != null) { %>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const messageModal = document.getElementById('messageModal');
+        const messageTitle = document.getElementById('messageTitle');
+        const messageText = document.getElementById('messageText');
+
+        if (messageModal && messageTitle && messageText) {
+            messageTitle.textContent = '회원가입 완료';
+            messageText.textContent = '${signupSuccess}';
+            messageModal.style.display = 'flex';
+
+            // 확인 버튼 클릭 시 모달 닫기
+            const messageOkBtn = document.getElementById('messageOkBtn');
+            if (messageOkBtn) {
+                messageOkBtn.onclick = function () {
+                    messageModal.style.display = 'none';
+                };
+            }
+        }
+    });
+</script>
+<% } %>
+
 </body>
 
 </html>

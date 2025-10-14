@@ -25,7 +25,7 @@ package oneday.dto;
  * @version 1.0
  * @since 2024
  */
-public class SignupForm {
+public class SignupFormDTO {
 
 	private String loginId;
 	private String password;
@@ -35,7 +35,7 @@ public class SignupForm {
 	/**
 	 * 기본 생성자
 	 */
-	public SignupForm() {
+	public SignupFormDTO() {
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class SignupForm {
 	 * @param passwordConfirm 비밀번호 확인
 	 * @param name 사용자 이름
 	 */
-	public SignupForm(String loginId, String password, String passwordConfirm, String name) {
+	public SignupFormDTO(String loginId, String password, String passwordConfirm, String name) {
 		this.loginId = loginId;
 		this.password = password;
 		this.passwordConfirm = passwordConfirm;
