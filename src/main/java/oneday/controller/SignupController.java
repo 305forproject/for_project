@@ -162,25 +162,4 @@ public class SignupController extends HttpServlet {
 		form.setName(request.getParameter("name"));
 		return form;
 	}
-
-	/**
-	 * 유효성 검증 오류 처리
-	 */
-	private void handleValidationError(HttpServletRequest request, HttpServletResponse response,
-		String error, SignupFormDTO signupForm)
-		throws ServletException, IOException {
-		handleError(request, response, error, signupForm);
-	}
-
-	/**
-	 * 오류 처리 및 뷰로 포워드
-	 */
-	private void handleError(HttpServletRequest request, HttpServletResponse response,
-		String error, SignupFormDTO signupForm)
-		throws ServletException, IOException {
-		request.setAttribute("error", error);
-		request.setAttribute("loginId", signupForm.getLoginId());
-		request.setAttribute("name", signupForm.getName()); // name 값도 유지
-		request.getRequestDispatcher("/WEB-INF/views/signup.jsp").forward(request, response);
-	}
 }
