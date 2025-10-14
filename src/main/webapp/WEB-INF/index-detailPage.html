@@ -28,8 +28,8 @@
             <div class="mypage-icons">
                 <div class="icons">
                     <!-- 강사 아이콘 -->
-                    <button type="button" class="mypage-icon icon-teacher">
-                        <img src="../static/img/mypage-icon-lecturer.png" alt="icon-teacher">
+                    <button type="button" class="mypage-icon icon-lecturer">
+                        <img src="../static/img/mypage-icon-lecturer.png" alt="icon-lecturer">
                     </button>
 
                     <!-- 학생 아이콘 -->
@@ -48,13 +48,6 @@
         </div>
     </header>
 
-    <!--login, logout, join-->
-    <div class="login-container">
-        <button id="loginBtn" class="btn btn-login-main">로그인</button>
-        <button id="joinBtn" class="btn btn-join-main">회원가입</button>
-        <button id="logoutBtn" class="btn btn-logout" style="display: none;">로그아웃</button>
-    </div>
-
 
     <!--main-->
     <!-- 클래스 썸네일 및 기본 정보 -->
@@ -64,25 +57,19 @@
                 <!-- Slider copied from home for class-img -->
                 <div class="slider" id="slider" aria-roledescription="carousel">
                     <div class="slides" id="slides">
-                        
-                            <!-- JS에서 동적으로 이미지 삽입 -->
-                       
                         <section class="slide s1" data-title="이미지 1">
                             <div class="content">
-                                <h2>요리 클래스</h2>
-                                <p>맛있는 요리를 배워보세요! 전문 셰프와 함께하는 특별한 시간입니다.</p>
+                                <h2>이미지 1</h2>
                             </div>
                         </section>
                         <section class="slide s2" data-title="이미지 2">
                             <div class="content">
-                                <h2>아트 클래스</h2>
-                                <p>창의적인 예술 작품을 만들어보세요. 모든 재료가 제공됩니다.</p>
+                                <h2>이미지 2</h2>
                             </div>
                         </section>
                         <section class="slide s3" data-title="이미지 3">
                             <div class="content">
-                                <h2>음악 클래스</h2>
-                                <p>악기 연주의 기초부터 실전까지 배울 수 있는 기회입니다.</p>
+                                <h2>이미지 3</h2>
                             </div>
                         </section>
                     </div>
@@ -94,37 +81,36 @@
                     <div class="dots" id="dots" role="tablist" aria-label="슬라이드 인디케이터"></div>
                 </div>
             </div>
-
             <div class="class-side">
-                <h2 class="class-title" id="className">클래스이름</h2>
-                <p class="class-infomation" id="classDescription">클래스 간단 소개글</p>
-                <p class="class-price" id="classPrice">10,000원</p>
+                <h2 class="class-title">클래스이름</h2>
+                <p class="class-infomation">클래스 간단 소개글</p>
+                <p class="class-price">10,000</p>
                 <button class="apply-btn">클래스 신청</button>
             </div>
         </section>
 
         <!--  클래스 상세 정보 -->
         <section class="class-info">
-            <h2 id="classDetailTitle">클래스이름</h2>
+            <h2>클래스이름</h2>
             <ul class="info-box">
                 <li>
-                    <span id="classType">클래스 유형</span>
+                    <span>클래스 유형</span>
                 </li>
                 <li>
                     <img src="../static/img/time-icon.png" alt="시간">
-                    <span id="classDuration">60분</span>
+                    <span>60분</span>
                 </li>
                 <li>
                     <img src="../static/img/location-icon.png" alt="주소">
-                    <span id="classLocation">주소</span>
+                    <span>주소</span>
                 </li>
                 <li>
                     <img src="../static/img/level-icon.png" alt="클래스 등급">
-                    <span id="classLevel">클래스 등급</span>
+                    <span>클래스 등급</span>
                 </li>
                 <li>
                     <img src="../static/img/people-icon.png" alt="수용인원">
-                    <span id="classCapacity">수용인원</span>
+                    <span>수용인원</span>
                 </li>
             </ul>
         </section>
@@ -149,11 +135,7 @@
     </main>
 
     <div class="reservation-calendar">
-        달력
-    </div>
 
-    <div class="map-address">
-        지도
     </div>
 
     <!-- Footer 영역 -->
@@ -212,62 +194,10 @@
                 <h2>원데이클래스</h2>
                 <button id="closeMobileMenu" class="close">></button>
             </div>
-            <div id="mobileAuthButtons" class="mobile-auth-buttons">
-                <button id="mobileLoginBtn" class="mobile-auth-btn">로그인</button>
-                <button id="mobileJoinBtn" class="mobile-auth-btn">회원가입</button>
-                <button id="mobileLogoutBtn" class="mobile-auth-btn hidden">로그아웃</button>
-            </div>
             <ul>
-                <li><a href="#">강사 마이페이지</a></li>
-                <li><a href="#">학생 마이페이지</a></li>
+                <li><a href="#">예시1</a></li>
+                <li><a href="#">예시2</a></li>
             </ul>
-        </div>
-    </div>
-
-    <!-- 로그인 모달 -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-content-header">
-                <h2>로그인</h2>
-                <span class="close">&times;</span>
-            </div>
-            <form id="loginForm" method="post" action="login">
-                <input type="text" id="username" placeholder="아이디" required><br>
-                <input type="password" id="password" placeholder="비밀번호" required><br>
-                <button type="submit" class="btn btn-login-modal">로그인</button>
-                <button type="button" class="btn btn-join-modal">회원가입</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- 회원가입 모달 -->
-    <div id="joinModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-content-header">
-                <h2>회원가입</h2>
-                <span class="close">&times;</span>
-            </div>
-            <form id="joinForm">
-                <input type="text" id="joinName" placeholder="이름" required><br>
-                <input type="text" id="joinUsername" placeholder="아이디" required><br>
-                <input type="password" id="joinPassword" placeholder="비밀번호" required><br>
-                영문, 숫자 포함 8~20자를 입력해 주세요<br>
-                <input type="password" id="joinPasswordConfirm" placeholder="비밀번호 확인" required><br>
-                영문, 숫자 포함 8~20자를 입력해 주세요<br>
-                <button type="submit" class="btn btn-join-modal">회원가입</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- 성공/실패 메시지 모달 -->
-    <div id="messageModal" class="modal">
-        <div class="modal-content">
-            <div class="mobile-menu-header">
-                <h2 id="messageTitle">알림</h2>
-                <span class="close">&times;</span>
-            </div>
-            <p id="messageText">메시지가 여기에 표시됩니다.</p>
-            <button id="messageOkBtn" class="btn btn-check">확인</button>
         </div>
     </div>
 
