@@ -69,7 +69,7 @@ public class TeacherPageController extends HttpServlet {
 
 			// 3. 선생님 전용페이지로 이동
 			request.setAttribute("userId", userId);
-			request.getRequestDispatcher("/WEB-INF/views/index-teacherMypage.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/teacher-main.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			request.setAttribute("errorMessage", "서버 오류가 발생했습니다: " + e.getMessage());
