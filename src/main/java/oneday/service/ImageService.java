@@ -5,15 +5,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.Part;
 
 import oneday.model.Image;
+import oneday.repository.ImageDAO;
+import oneday.util.LoggerUtil;
 
 /**
  * 이미지 파일 처리를 담당하는 서비스 클래스
@@ -21,11 +26,14 @@ import oneday.model.Image;
  */
 public class ImageService {
 	private static ImageService instance;
+	private final ImageDAO imageDAO;
 	private static final String UPLOAD_BASE_DIR = "uploads/images/";
 	private static final String[] ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "gif"};
 	private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+	private static final Logger logger = LoggerUtil.getLogger(String.valueOf(ReservationService.class));
 
 	private ImageService() {
+		this.imageDAO = new ImageDAO();
 	}
 
 	/**
@@ -38,6 +46,16 @@ public class ImageService {
 			instance = new ImageService();
 		}
 		return instance;
+	}
+
+	//메인 화면 슬라이드 이미지
+	public List<Image> getMainSlideImages() {
+		try {
+			return imageDAO.findMainSlideImages();
+		} catch (SQLException e) {
+			logger.log(Level.SEVERE, "메인 슬라이드 이미지 조회 중 DB 오류 발생", e);
+			return new ArrayList<>();
+		}
 	}
 
 	/**

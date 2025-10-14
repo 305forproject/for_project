@@ -9,14 +9,16 @@ public class Image {
 	private int classId;
 	private String imageUrl;
 	private boolean isRepresentative;
+	private boolean isMainSlide;
 
 	public Image() {
 	}
 
-	public Image(int classId, String imageUrl, boolean isRepresentative) {
+	public Image(int classId, String imageUrl, boolean isRepresentative, boolean isMainSlide) {
 		this.classId = classId;
 		this.imageUrl = imageUrl;
 		this.isRepresentative = isRepresentative;
+		this.isMainSlide = isMainSlide;
 	}
 
 	// Getter와 Setter 메서드들
@@ -50,5 +52,13 @@ public class Image {
 
 	public void setRepresentative(boolean representative) {
 		isRepresentative = representative;
+	}
+
+	public boolean isMainSlide() {
+		return isMainSlide;
+	}
+
+	public void setMainSlide(boolean mainSlide) {
+		isMainSlide = mainSlide;
 	}
 }

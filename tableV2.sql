@@ -89,6 +89,7 @@ CREATE TABLE `IMAGES` (
                           `CLASS_ID` INT NOT NULL,
                           `IMAGE_URL` VARCHAR(255) NOT NULL,
                           `IS_REPRESENTATIVE` TINYINT(1) NOT NULL DEFAULT 0,
+                          `IS_MAIN_SLIDE` TINYINT(1) NOT NULL DEFAULT 0,
                           PRIMARY KEY (`IMAGE_ID`),
                           CONSTRAINT `FK_IMAGES_TO_CLASSES` FOREIGN KEY (`CLASS_ID`) REFERENCES `CLASSES` (`CLASS_ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -184,13 +185,16 @@ INSERT INTO `CLASSES` (`TEACHER_ID`, `CATEGORY_ID`, `CLASS_NAME`, `CLASS_DETAIL`
 
 -- 5. IMAGES: 각 클래스에 이미지 추가
 -- '왕초보 파스타 만들기'(ID:1) 클래스에 이미지 2개 (하나는 대표 이미지)
-INSERT INTO `IMAGES` (`CLASS_ID`, `IMAGE_URL`, `IS_REPRESENTATIVE`) VALUES
-                                                                        (1, 'http://example.com/images/pasta_main.jpg', 1),
-                                                                        (1, 'http://example.com/images/pasta_sub.jpg', 0),
+INSERT INTO `IMAGES` (`CLASS_ID`, `IMAGE_URL`, `IS_REPRESENTATIVE`,`IS_MAIN_SLIDE`) VALUES
+                                                                        (1, '/static/img/category-painting-icon.png', 1, 0),
+                                                                        (1, '/static/img/category-pottery-icon.png', 0, 0),
 -- '연필 소묘 기초'(ID:2) 클래스에 대표 이미지 1개
-                                                                        (2, 'http://example.com/images/drawing_main.jpg', 1),
+                                                                        (2, '/static/img/category-pottery-icon.png', 1, 0),
 -- '주말 아침 요가'(ID:3) 클래스에 대표 이미지 1개
-                                                                        (3, 'http://example.com/images/yoga_main.jpg', 1);
+                                                                        (3, 'http://example.com/images/yoga_main.jpg', 1, 0),
+                                                                        (1, '/static/img/logo.png', 0, 1),
+                                                                        (2, '/static/img/logo.png', 0, 1);
+
 
 -- 6. RESERVATIONS: 학생들이 클래스를 예약
 -- 이학생(ID:3)이 파스타(ID:1) 클래스를 '예약 완료' 상태로 예약
