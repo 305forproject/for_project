@@ -279,6 +279,7 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/script-home.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/auth.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/signup.js"></script>
 
 <!-- 로그인 에러 처리를 위한 스크립트 -->
 <% if (request.getAttribute("error") != null) { %>
