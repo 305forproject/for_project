@@ -27,6 +27,7 @@ public class AuthenticationFilter implements Filter {
 			contextPath + "/login",
 			contextPath + "/signup",
 			contextPath + "/main",
+			contextPath + "/class",
 			contextPath + "/static/"
 		);
 
