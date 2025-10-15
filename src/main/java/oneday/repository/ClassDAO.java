@@ -15,6 +15,7 @@ import oneday.dto.ClassListDto;
 import oneday.dto.FullCalendarEventDto;
 import oneday.dto.TeacherCalendarDto;
 import oneday.dto.TeacherClassDetailDto;
+import oneday.model.Category;
 import oneday.model.Classes;
 
 /**
@@ -260,62 +261,84 @@ public class ClassDAO {
 	 * @return 최신순으로 정렬된 강의 목록 (대표 이미지 URL 포함)
 	 * @throws SQLException 데이터베이스 오류 발생 시
 	 */
-	public List<ClassListDto> findAllClasses(String sortOption) throws SQLException {
+	public List<ClassListDto> findAllClasses(String sortOption, Integer categoryId) throws SQLException {
 		List<ClassListDto> classList = new ArrayList<>();
 
 		// 기본 SQL 쿼리문 (ORDER BY 제외)
-		String baseSql = """
-            SELECT c.CLASS_ID, c.CLASS_NAME, u.NAME as TEACHER_NAME, c.PRICE,
-                  DATE_FORMAT(c.START_AT, '%Y-%m-%d %H:%i') as START_AT, c.LOCATION,
-                  i.IMAGE_URL as REPRESENTATIVE_IMAGE_URL,
-                  cat.CATEGORY as CATEGORY_NAME,
-                  (SELECT COUNT(*) FROM RESERVATIONS r WHERE r.CLASS_ID = c.CLASS_ID) as reservation_count
-            FROM CLASSES c
-            JOIN USERS u ON c.TEACHER_ID = u.USER_ID
-            JOIN CATEGORIES cat ON c.CATEGORY_ID = cat.CATEGORY_ID
-            LEFT JOIN IMAGES i ON c.CLASS_ID = i.CLASS_ID AND i.IS_REPRESENTATIVE = 1
-            """;
+		StringBuilder sql = new StringBuilder("""
+			SELECT c.CLASS_ID, c.CLASS_NAME, u.NAME as TEACHER_NAME, c.PRICE,
+			      DATE_FORMAT(c.START_AT, '%Y-%m-%d %H:%i') as START_AT, c.LOCATION,
+			      i.IMAGE_URL as REPRESENTATIVE_IMAGE_URL,
+			      cat.CATEGORY as CATEGORY_NAME
+			FROM CLASSES c
+			JOIN USERS u ON c.TEACHER_ID = u.USER_ID
+			JOIN CATEGORIES cat ON c.CATEGORY_ID = cat.CATEGORY_ID
+			LEFT JOIN IMAGES i ON c.CLASS_ID = i.CLASS_ID AND i.IS_REPRESENTATIVE = 1
+			""");
+
+		// categoryId가 있으면 WHERE 절 추가
+		if (categoryId != null && categoryId > 0) {
+			sql.append(" WHERE c.CATEGORY_ID = ?");
+		}
 
 		// 정렬 옵션에 따라 ORDER BY 절을 동적으로 선택
 		String orderByClause;
 		switch (sortOption) {
 			case "popular":
-				// 인기순: 예약 많은 순 -> 최신순
-				orderByClause = "ORDER BY reservation_count DESC, c.CLASS_ID DESC";
+				orderByClause = " ORDER BY (SELECT COUNT(*) FROM RESERVATIONS r WHERE r.CLASS_ID = c.CLASS_ID) DESC, c.CLASS_ID DESC";
 				break;
 			case "deadline":
-				// 마감임박순: 시작 시간이 현재 시간과 가장 가까운 순
-				orderByClause = "ORDER BY c.START_AT ASC";
+				orderByClause = " ORDER BY c.START_AT ASC";
 				break;
 			case "newest":
 			default:
-				// 최신순 (기본값)
-				orderByClause = "ORDER BY c.CLASS_ID DESC";
+				orderByClause = " ORDER BY c.CLASS_ID DESC";
 				break;
 		}
+		sql.append(orderByClause);
 
-		// 기본 SQL과 ORDER BY 절을 합쳐 최종 쿼리 완성
-		String finalSql = baseSql + orderByClause;
 		try (Connection conn = dbConfig.getConnection();
-			 PreparedStatement pstmt = conn.prepareStatement(finalSql);
+			 PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+			if (categoryId != null && categoryId > 0) {
+				pstmt.setInt(1, categoryId);
+			}
+			try (ResultSet rs = pstmt.executeQuery()) {
+
+				while (rs.next()) {
+					ClassListDto dto = new ClassListDto();
+					dto.setClassId(rs.getInt("CLASS_ID"));
+					dto.setClassName(rs.getString("CLASS_NAME"));
+					dto.setTeacherName(rs.getString("TEACHER_NAME"));
+					dto.setPrice(rs.getInt("PRICE"));
+					dto.setStartAt(rs.getString("START_AT"));
+					dto.setLocation(rs.getString("LOCATION"));
+					dto.setCategoryName(rs.getString("CATEGORY_NAME"));
+
+					String imageUrl = rs.getString("REPRESENTATIVE_IMAGE_URL");
+					dto.setRepresentativeImageUrl(imageUrl != null ? imageUrl : "/images/default-class.jpg");
+
+					classList.add(dto);
+				}
+			}
+			return classList;
+		}
+	}
+
+	// 모든 카테고리 목록을 조회하는 메소드
+	public List<Category> findAllCategories() throws SQLException {
+		List<Category> categories = new ArrayList<>();
+		String sql = "SELECT * FROM CATEGORIES";
+		try (Connection conn = dbConfig.getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(sql);
 			 ResultSet rs = pstmt.executeQuery()) {
-
 			while (rs.next()) {
-				ClassListDto dto = new ClassListDto();
-				dto.setClassId(rs.getInt("CLASS_ID"));
-				dto.setClassName(rs.getString("CLASS_NAME"));
-				dto.setTeacherName(rs.getString("TEACHER_NAME"));
-				dto.setPrice(rs.getInt("PRICE"));
-				dto.setStartAt(rs.getString("START_AT"));
-				dto.setLocation(rs.getString("LOCATION"));
-
-				String imageUrl = rs.getString("REPRESENTATIVE_IMAGE_URL");
-				dto.setRepresentativeImageUrl(imageUrl != null ? imageUrl : "/images/default-class.jpg");
-
-				classList.add(dto);
+				Category category = new Category();
+				category.setCategoryId(rs.getInt("CATEGORY_ID"));
+				category.setCategory(rs.getString("CATEGORY"));
+				categories.add(category);
 			}
 		}
-		return classList;
+		return categories;
 	}
 
 	/**

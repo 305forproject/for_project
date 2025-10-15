@@ -17,6 +17,7 @@ import oneday.dto.CoordinateDto;
 import oneday.dto.FullCalendarEventDto;
 import oneday.dto.TeacherCalendarDto;
 import oneday.dto.TeacherClassDetailDto;
+import oneday.model.Category;
 import oneday.model.Classes;
 import oneday.model.Image;
 import oneday.repository.ClassDAO;
@@ -253,9 +254,19 @@ public class ClassService {
 	 *
 	 * @return sort option으로 정렬된 강의 목록
 	 */
-	public List<ClassListDto> getClassList(String sortOption) {
+	public List<ClassListDto> getClassList(String sortOption, Integer categoryId) {
 		try {
-			return classDAO.findAllClasses(sortOption);
+			return classDAO.findAllClasses(sortOption, categoryId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
+
+	//모든 카테고리 조회
+	public List<Category> getAllCategories() {
+		try {
+			return classDAO.findAllCategories();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return new ArrayList<>();
