@@ -124,62 +124,6 @@
                 </a>
             </article>
         </c:forEach>
-
-        <!-- 카드 템플릿 예시 -->
-        <template id="card-template">
-            <article class="card">
-                <a href="#">
-                    <div class="img-card">
-                        <img src="" alt="">
-                    </div>
-                    <div class="card-body">
-                        <p class="info1"></p>
-                        <h3 class="class-name"></h3>
-                        <p class="info2"></p>
-                    </div>
-                </a>
-            </article>
-        </template>
-
-        <article class="card">
-            <a href="#">
-                <div class="img-card">
-                    <img src="" alt="클래스 이미지">
-                </div>
-                <div class="card-body">
-                    <p class="info1">[고급] 웹디자인</p>
-                    <h3 class="class-name">Figma로 웹페이 만들기</h3>
-                    <p class="info2">실제 디자인을 웹페이지로 구현해보세요</p>
-                </div>
-            </a>
-        </article>
-        <article class="card">
-            <a href="#">
-                <div class="img-card">
-                    <img src="" alt="클래스 이미지">
-                </div>
-                <div class="card-body">
-                    <p class="info1">[중급] 웹디자인</p>
-                    <h3 class="class-name">Figma로 디자인 시작하기</h3>
-                    <p class="info2">프로토타이핑부터 협업까지 한 번에 익히기</p>
-                </div>
-            </a>
-        </article>
-        <article class="card">
-            <a href="#">
-                <div class="img-card">
-                    <img src="" alt="클래스 이미지">
-                </div>
-                <div class="card-body">
-                    <p class="info1">[초급] 그림 기초</p>
-                    <h3 class="class-name">색연필로 배우는 정물화</h3>
-                    <p class="info2">생동감 있게 표현하는 방법을 배워보세요</p>
-                </div>
-            </a>
-        </article>
-    </div>
-
-
 </main>
 
 
