@@ -101,10 +101,26 @@
     <div class="items-menu">
         <h2>추천 강의</h2>
     </div>
-    <div>
-        <a href="${pageContext.request.contextPath}/main?sort=newest">최신순</a> |
-        <a href="${pageContext.request.contextPath}/main?sort=popular">인기순</a> |
-        <a href="${pageContext.request.contextPath}/main?sort=deadline">마감임박순</a>
+    <%-- 카테고리 필터 버튼 영역 --%>
+    <div class="category-filters">
+        <a href="${pageContext.request.contextPath}/main?sort=${currentSort}">전체보기</a>
+
+        <c:forEach items="${categories}" var="category">
+            <a href="${pageContext.request.contextPath}/main?categoryId=${category.categoryId}&sort=${currentSort}">
+                    ${category.category}
+            </a>
+        </c:forEach>
+    </div>
+
+    <%-- 정렬 옵션 영역 --%>
+    <div class="sort-options">
+        <%--
+          '최신순' 링크: 현재 카테고리(currentCategory)는 유지하면서 sort 값만 'newest'로 변경
+        --%>
+        <a href="${pageContext.request.contextPath}/main?sort=newest<c:if test='${not empty currentCategory}'>&categoryId=${currentCategory}</c:if>">최신순</a> |
+        <a href="${pageContext.request.contextPath}/main?sort=popular<c:if test='${not empty currentCategory}'>&categoryId=${currentCategory}</c:if>">인기순</a> |
+        <a href="${pageContext.request.contextPath}/main?sort=deadline<c:if test='${not empty currentCategory}'>&categoryId=${currentCategory}</c:if>">마감임박순</a>
+    </div>
     </div>
     <div class="items">
         <c:forEach items="${classList}" var="classItem">
