@@ -11,6 +11,7 @@ import java.util.List;
 import oneday.config.DatabaseConfig;
 import oneday.model.Role;
 import oneday.model.User;
+import oneday.util.DatabaseTransactionUtil;
 
 /**
  * 사용자 데이터 접근 객체 (Data Access Object)
@@ -357,5 +358,111 @@ public class UserDAO {
 			}
 		}
 		return roles;
+	}
+
+	/**
+	 * 사용자 계좌번호 업데이트 (Connection 사용)
+	 *
+	 * @param conn 데이터베이스 연결
+	 * @param userId 사용자 ID
+	 * @param accountNumber 계좌번호
+	 * @return 성공 시 true, 실패 시 false
+	 * @throws SQLException 데이터베이스 오류 시
+	 */
+	public boolean updateUserAccount(Connection conn, int userId, String accountNumber) throws SQLException {
+		String sql = "UPDATE USERS SET ACCOUNT = ? WHERE USER_ID = ?";
+
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, accountNumber);
+			pstmt.setInt(2, userId);
+
+			int affectedRows = pstmt.executeUpdate();
+			return affectedRows > 0;
+		}
+	}
+
+	/**
+	 * 사용자에게 특정 역할 추가 (Connection 사용)
+	 *
+	 * @param conn 데이터베이스 연결
+	 * @param userId 사용자 ID
+	 * @param roleId 추가할 역할 ID
+	 * @return 성공 시 true, 실패 시 false
+	 * @throws SQLException 데이터베이스 오류 시
+	 */
+	public boolean addUserRole(Connection conn, int userId, int roleId) throws SQLException {
+		// 이미 해당 역할이 있는지 확인
+		if (hasUserRole(conn, userId, roleId)) {
+			return true; // 이미 역할이 있으면 성공으로 처리
+		}
+
+		String sql = "INSERT INTO USER_ROLE (USER_ID, ROLE_ID) VALUES (?, ?)";
+
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, userId);
+			pstmt.setInt(2, roleId);
+
+			int affectedRows = pstmt.executeUpdate();
+			return affectedRows > 0;
+		}
+	}
+
+	/**
+	 * 사용자가 특정 역할을 가지고 있는지 확인 (Connection 사용)
+	 *
+	 * @param conn 데이터베이스 연결
+	 * @param userId 사용자 ID
+	 * @param roleId 확인할 역할 ID
+	 * @return 역할이 있으면 true, 없으면 false
+	 * @throws SQLException 데이터베이스 오류 시
+	 */
+	public boolean hasUserRole(Connection conn, int userId, int roleId) throws SQLException {
+		String sql = "SELECT COUNT(*) FROM USER_ROLE WHERE USER_ID = ? AND ROLE_ID = ?";
+
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, userId);
+			pstmt.setInt(2, roleId);
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt(1) > 0;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 강사 계좌번호 등록 및 강사 역할 부여 (트랜잭션 처리)
+	 *
+	 * @param userId 사용자 ID
+	 * @param accountNumber 계좌번호
+	 * @return 성공 시 true, 실패 시 false
+	 * @throws SQLException 데이터베이스 오류 시
+	 */
+	public boolean registerTeacherAccount(int userId, String accountNumber) throws SQLException {
+		return DatabaseTransactionUtil.executeTransactionForBoolean(conn -> {
+			try {
+				// 1. 계좌번호 업데이트
+				boolean accountUpdated = updateUserAccount(conn, userId, accountNumber);
+				if (!accountUpdated) {
+					throw new RuntimeException("계좌번호 업데이트 실패");
+				}
+
+				// 2. 강사 역할이 있는지 확인하고 없으면 추가
+				final int TEACHER_ROLE_ID = 1;
+				if (!hasUserRole(conn, userId, TEACHER_ROLE_ID)) {
+					boolean roleAdded = addUserRole(conn, userId, TEACHER_ROLE_ID);
+					if (!roleAdded) {
+						throw new RuntimeException("강사 역할 추가 실패");
+					}
+				}
+
+				return true;
+
+			} catch (SQLException e) {
+				throw new RuntimeException("강사 계좌번호 등록 실패: " + e.getMessage(), e);
+			}
+		});
 	}
 }
