@@ -28,7 +28,7 @@ import oneday.util.DatabaseTransactionUtil;
  */
 public class AuthService {
 	/** 사용자 데이터 접근을 위한 DAO 인스턴스 */
-	private UserDAO userDAO = new UserDAO();
+	private final UserDAO userDAO = new UserDAO();
 
 	/** 역할 ID 상수 */
 	private static final int TEACHER_ROLE_ID = 1;
@@ -86,6 +86,18 @@ public class AuthService {
 			// 선생님 롤 생성
 			return insertTeacherRole(conn, userId);
 		});
+	}
+
+	/**
+	 * 강사 계좌번호 등록 및 강사 역할 부여
+	 *
+	 * @param userId 사용자 ID
+	 * @param accountNumber 계좌번호
+	 * @return 성공 시 true, 실패 시 false
+	 * @throws SQLException 데이터베이스 오류 시
+	 */
+	public boolean registerTeacherAccount(int userId, String accountNumber) throws SQLException {
+		return userDAO.registerTeacherAccount(userId, accountNumber);
 	}
 
 	/**

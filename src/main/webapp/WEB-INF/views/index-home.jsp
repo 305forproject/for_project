@@ -113,7 +113,8 @@
                 <a href="${pageContext.request.contextPath}/class/detail?classId=${classItem.classId}">
                     <div class="img-card">
                             <%-- 4. 대표 이미지 URL을 동적으로 설정합니다. --%>
-                        <img src="${pageContext.request.contextPath}${classItem.representativeImageUrl}" alt="${classItem.className} 이미지">
+                        <img src="${pageContext.request.contextPath}${classItem.representativeImageUrl}"
+                             alt="${classItem.className} 이미지">
                     </div>
                     <div class="card-body">
                         <p class="info1">${classItem.categoryName}</p>
@@ -281,12 +282,34 @@
         <button id="messageOkBtn" class="btn btn-check">확인</button>
     </div>
 </div>
+
+<!-- 강사 계좌번호 등록 모달 -->
+<div id="teacherAccountModal" class="modal">
+    <div class="modal-content">
+        <div class="mobile-menu-header">
+            <h2>강사 계좌번호 등록</h2>
+            <span class="close">&times;</span>
+        </div>
+        <form id="teacherAccountForm" method="post" action="${pageContext.request.contextPath}/teacher-page">
+            <input type="text" id="accountNumber" name="accountNumber"
+                   placeholder="계좌번호를 입력해주세요 (예: 국민은행 123-456-789012)" required maxlength="50"><br>
+            <small style="color: #666; font-size: 12px; margin-bottom: 15px; display: block;">
+                은행명과 계좌번호를 정확히 입력해주세요
+            </small>
+            <button type="submit" class="btn btn-login-modal">등록</button>
+            <button type="button" class="btn btn-join-modal" onclick="closeTeacherAccountModal()">취소</button>
+        </form>
+    </div>
+</div>
+
 <%--js 파일 헤더에 위치시 태그 생성 전이라 인식을 하지 못함
 따라서 가능하면 body 태그가 끝나기 전에 호출 할 것--%>
+<script src="${pageContext.request.contextPath}/static/js/utils.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/script-home.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/auth.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/signup.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/teacher-account.js"></script>
 
 <!-- 로그인 에러 처리를 위한 스크립트 -->
 <% if (request.getAttribute("error") != null) { %>
@@ -323,6 +346,31 @@
         if (messageModal && messageTitle && messageText) {
             messageTitle.textContent = '회원가입 완료';
             messageText.textContent = '${signupSuccess}';
+            messageModal.style.display = 'flex';
+
+            // 확인 버튼 클릭 시 모달 닫기
+            const messageOkBtn = document.getElementById('messageOkBtn');
+            if (messageOkBtn) {
+                messageOkBtn.onclick = function () {
+                    messageModal.style.display = 'none';
+                };
+            }
+        }
+    });
+</script>
+<% } %>
+
+<!-- 강사 등록 성공 처리를 위한 스크립트 -->
+<% if (request.getAttribute("successMessage") != null) { %>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const messageModal = document.getElementById('messageModal');
+        const messageTitle = document.getElementById('messageTitle');
+        const messageText = document.getElementById('messageText');
+
+        if (messageModal && messageTitle && messageText) {
+            messageTitle.textContent = '강사 등록 완료';
+            messageText.textContent = '${successMessage}';
             messageModal.style.display = 'flex';
 
             // 확인 버튼 클릭 시 모달 닫기
