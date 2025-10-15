@@ -28,16 +28,16 @@
         </div>
 
         <!-- 마이페이지 아이콘 영역 -->
-        <div class="mypage-icon">
+        <div class="mypage-icons">
             <div class="icons">
                 <!-- 강사 아이콘 -->
-                <button type="button" class="mypage-icon-lecturer-img">
+                <button type="button" class="mypage-icon">
                     <img src="${pageContext.request.contextPath}/static/img/mypage-icon-lecturer.png"
                          alt="icon-lecturer">
                 </button>
 
                 <!-- 학생 아이콘 -->
-                <button type="button" class="mypage-icon-student-img">
+                <button type="button" class="mypage-icon">
                     <img src="${pageContext.request.contextPath}/static/img/mypage-icon-student.png" alt="icon-student">
 
                 </button>
@@ -96,13 +96,63 @@
 </div>
 
 
+<div class="category-container">
+    <!-- 카테고리 슬라이더 -->
+    <div class="category-slider" id="category-slider">
+        <div class="category-slides" id="categorySlides">
+            <div class="category-slide">
+                <button class="category-btn active" data-category="all">
+                    전체
+                </button>
+                <button class="category-btn" data-category="painting">
+                    <img src="${pageContext.request.contextPath}/static/img/category-painting-icon.png" alt="painting">
+                    그림
+                </button>
+                <button class="category-btn" data-category="pottery">
+                    <img src="${pageContext.request.contextPath}/static/img/category-pottery-icon.png" alt="도자기">
+                    도자기
+                </button>
+                <button class="category-btn" data-category="baking">
+                    <img src="${pageContext.request.contextPath}/static/img/category-baking-icon.png" alt="베이킹">
+                    베이킹
+                </button>
+                <button class="category-btn" data-category="cooking">
+                    <img src="${pageContext.request.contextPath}/static/img/category-cooking-icon.png" alt="요리">
+                    요리
+                </button>
+                <button class="category-btn" data-category="flower">
+                    <img src="${pageContext.request.contextPath}/static/img/category-flower-icon.png" alt="플라워">
+                    플라워
+                </button>
+            </div>
+            <div class="category-slide">
+                <button class="category-btn" data-category="metalworking">
+                    <img src="${pageContext.request.contextPath}/static/img/category-metalworking-icon.png" alt="금속공예">
+                    금속공예
+                </button>
+                <button class="category-btn" data-category="bookmaking">
+                    <img src="${pageContext.request.contextPath}/static/img/category-bookmaking-icon.png" alt="책만들기">
+                    책만들기
+                </button>
+            </div>
+        </div>
+
+        <!-- 슬라이드 컨트롤 버튼 -->
+        <div class="category-controls">
+            <button class="category-slide-btn prev" id="categoryPrev">◀</button>
+            <button class="category-slide-btn next" id="categoryNext">▶</button>
+        </div>
+    </div>
+</div>
+
+
 <!--  강의 카드 영역 -->
 <main class="main-container">
     <div class="items-menu">
         <h2>추천 강의</h2>
     </div>
-    <%-- 카테고리 필터 버튼 영역 --%>
-    <div class="category-filters">
+    <%-- 서버 기반 카테고리/정렬 시스템 비활성화 (클라이언트 사이드 필터링 사용) --%>
+    <div class="category-filters" style="display: none;">
         <a href="${pageContext.request.contextPath}/main?sort=${currentSort}">전체보기</a>
 
         <c:forEach items="${categories}" var="category">
@@ -112,8 +162,7 @@
         </c:forEach>
     </div>
 
-    <%-- 정렬 옵션 영역 --%>
-    <div class="sort-options">
+    <div class="sort-options" style="display: none;">
         <%--
           '최신순' 링크: 현재 카테고리(currentCategory)는 유지하면서 sort 값만 'newest'로 변경
         --%>
@@ -121,24 +170,23 @@
         <a href="${pageContext.request.contextPath}/main?sort=popular<c:if test='${not empty currentCategory}'>&categoryId=${currentCategory}</c:if>">인기순</a> |
         <a href="${pageContext.request.contextPath}/main?sort=deadline<c:if test='${not empty currentCategory}'>&categoryId=${currentCategory}</c:if>">마감임박순</a>
     </div>
-    </div>
     <div class="items">
         <c:forEach items="${classList}" var="classItem">
-            <article class="card">
-                    <%-- 각 카드의 링크(href)를 동적으로 생성합니다. --%>
-                <a href="${pageContext.request.contextPath}/class/detail?classId=${classItem.classId}">
-                    <div class="img-card">
-                            <%-- 4. 대표 이미지 URL을 동적으로 설정합니다. --%>
-                        <img src="${pageContext.request.contextPath}${classItem.representativeImageUrl}"
-                             alt="${classItem.className} 이미지">
-                    </div>
-                    <div class="card-body">
-                        <p class="info1">${classItem.categoryName}</p>
-                        <h3 class="class-name">${classItem.className}</h3>
-                        <p class="info2">${classItem.teacherName}</p>
-                    </div>
-                </a>
-            </article>
+        <article class="card" data-category="${classItem.categoryName}">
+                <%-- 각 카드의 링크(href)를 동적으로 생성합니다. --%>
+            <a href="${pageContext.request.contextPath}/class/detail?classId=${classItem.classId}">
+                <div class="img-card">
+                        <%-- 4. 대표 이미지 URL을 동적으로 설정합니다. --%>
+                    <img src="${pageContext.request.contextPath}${classItem.representativeImageUrl}"
+                         alt="${classItem.className} 이미지">
+                </div>
+                <div class="card-body">
+                    <p class="info1">${classItem.categoryName}</p>
+                    <h3 class="class-name">${classItem.className}</h3>
+                    <p class="info2">${classItem.teacherName}</p>
+                </div>
+            </a>
+        </article>
         </c:forEach>
 </main>
 
