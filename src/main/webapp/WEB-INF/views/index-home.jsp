@@ -27,8 +27,21 @@
                 </div>
                 <div class="logo-text">로고</div>
             </div>
-        </a>
-    </div>
+            <div class="logo-text">로고</div>
+        </div>
+
+        <!-- 마이페이지 아이콘 영역 -->
+        <div class="mypage-icons">
+            <div class="icons">
+                <!-- 강사 아이콘 -->
+                <button type="button" class="mypage-icon">
+                    <img src="${pageContext.request.contextPath}/static/img/mypage-icon-lecturer.png"
+                         alt="icon-lecturer">
+                </button>
+
+                <!-- 학생 아이콘 -->
+                <button type="button" class="mypage-icon">
+                    <img src="${pageContext.request.contextPath}/static/img/mypage-icon-student.png" alt="icon-student">
 
     <!-- 마이페이지 아이콘 영역 -->
     <div class="mypage-icon">
