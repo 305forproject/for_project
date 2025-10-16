@@ -232,7 +232,7 @@ public class ImageService {
 	 * 트랜잭션 롤백 시 업로드된 파일들을 삭제
 	 *
 	 * @param images 삭제할 이미지 목록
-	 * @param categoryId 카테고리 이름
+	 * @param categoryId 카테고리 ID
 	 * @param servletContext 서블릿 컨텍스트
 	 */
 	public void rollbackUploadedFiles(List<Image> images, int categoryId,
