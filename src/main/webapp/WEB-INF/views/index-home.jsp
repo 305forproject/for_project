@@ -20,36 +20,41 @@
 <header class="header">
     <div class="header-container">
         <!-- 로고 영역 -->
-        <div class="logo">
-            <div class="logo-img">
-                <img src="${pageContext.request.contextPath}/static/img/mainlogo.png" alt="logoimg">
+        <a href="${pageContext.request.contextPath}/main">
+            <div class="logo">
+                <div class="logo-img">
+                    <img src="${pageContext.request.contextPath}/static/img/mainlogo.png" alt="logoimg">
+                </div>
+                <div class="logo-text">로고</div>
             </div>
-            <div class="logo-text">로고</div>
-        </div>
+        </a>
+    </div>
 
-        <!-- 마이페이지 아이콘 영역 -->
-        <div class="mypage-icon">
-            <div class="icons">
-                <!-- 강사 아이콘 -->
-                <button type="button" class="mypage-icon-lecturer-img">
-                    <img src="${pageContext.request.contextPath}/static/img/mypage-icon-lecturer.png"
-                         alt="icon-lecturer">
-                </button>
+    <!-- 마이페이지 아이콘 영역 -->
+    <div class="mypage-icon">
+        <div class="icons">
+            <!-- 강사 아이콘 -->
+            <button type="button" class="mypage-icon-lecturer-img">
+                <img src="${pageContext.request.contextPath}/static/img/mypage-icon-lecturer.png"
+                     alt="icon-lecturer">
+            </button>
 
-                <!-- 학생 아이콘 -->
+            <!-- 학생 아이콘 -->
+            <a href="${pageContext.request.contextPath}/users/mypage">
                 <button type="button" class="mypage-icon-student-img">
-                    <img src="${pageContext.request.contextPath}/static/img/mypage-icon-student.png" alt="icon-student">
-
+                    <img src="${pageContext.request.contextPath}/static/img/mypage-icon-student.png"
+                         alt="icon-student">
                 </button>
-            </div>
+            </a>
         </div>
+    </div>
 
-        <!-- 모바일 메뉴 (선택사항) -->
-        <button class="mobile-menu-toggle" aria-label="메뉴 열기" type="button">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+    <!-- 모바일 메뉴 (선택사항) -->
+    <button class="mobile-menu-toggle" aria-label="메뉴 열기" type="button">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
     </div>
 </header>
 
@@ -117,28 +122,30 @@
         <%--
           '최신순' 링크: 현재 카테고리(currentCategory)는 유지하면서 sort 값만 'newest'로 변경
         --%>
-        <a href="${pageContext.request.contextPath}/main?sort=newest<c:if test='${not empty currentCategory}'>&categoryId=${currentCategory}</c:if>">최신순</a> |
-        <a href="${pageContext.request.contextPath}/main?sort=popular<c:if test='${not empty currentCategory}'>&categoryId=${currentCategory}</c:if>">인기순</a> |
+        <a href="${pageContext.request.contextPath}/main?sort=newest<c:if test='${not empty currentCategory}'>&categoryId=${currentCategory}</c:if>">최신순</a>
+        |
+        <a href="${pageContext.request.contextPath}/main?sort=popular<c:if test='${not empty currentCategory}'>&categoryId=${currentCategory}</c:if>">인기순</a>
+        |
         <a href="${pageContext.request.contextPath}/main?sort=deadline<c:if test='${not empty currentCategory}'>&categoryId=${currentCategory}</c:if>">마감임박순</a>
     </div>
     </div>
     <div class="items">
         <c:forEach items="${classList}" var="classItem">
-            <article class="card">
-                    <%-- 각 카드의 링크(href)를 동적으로 생성합니다. --%>
-                <a href="${pageContext.request.contextPath}/class/detail?classId=${classItem.classId}">
-                    <div class="img-card">
-                            <%-- 4. 대표 이미지 URL을 동적으로 설정합니다. --%>
-                        <img src="${pageContext.request.contextPath}${classItem.representativeImageUrl}"
-                             alt="${classItem.className} 이미지">
-                    </div>
-                    <div class="card-body">
-                        <p class="info1">${classItem.categoryName}</p>
-                        <h3 class="class-name">${classItem.className}</h3>
-                        <p class="info2">${classItem.teacherName}</p>
-                    </div>
-                </a>
-            </article>
+        <article class="card">
+                <%-- 각 카드의 링크(href)를 동적으로 생성합니다. --%>
+            <a href="${pageContext.request.contextPath}/class/detail?classId=${classItem.classId}">
+                <div class="img-card">
+                        <%-- 4. 대표 이미지 URL을 동적으로 설정합니다. --%>
+                    <img src="${pageContext.request.contextPath}${classItem.representativeImageUrl}"
+                         alt="${classItem.className} 이미지">
+                </div>
+                <div class="card-body">
+                    <p class="info1">${classItem.categoryName}</p>
+                    <h3 class="class-name">${classItem.className}</h3>
+                    <p class="info2">${classItem.teacherName}</p>
+                </div>
+            </a>
+        </article>
         </c:forEach>
 </main>
 
@@ -269,7 +276,11 @@
 <script src="${pageContext.request.contextPath}/static/js/script-home.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/auth.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/signup.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/teacher-account.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/teacher-page.js"></script>
+
+<script>
+    const contextPath = '${pageContext.request.contextPath}';
+</script>
 
 <!-- 로그인 에러 처리를 위한 스크립트 -->
 <% if (request.getAttribute("error") != null) { %>
