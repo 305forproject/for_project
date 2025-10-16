@@ -63,7 +63,7 @@ public class ImageService {
 	 *
 	 * @param parts 업로드된 파일 Part 목록
 	 * @param representativeIndex 대표 이미지 인덱스 (0부터 시작)
-	 * @param categoryId 카테고리 이름 (폴더명으로 사용)
+	 * @param categoryId 카테고리 ID
 	 * @param servletContext 서블릿 컨텍스트 (실제 경로 확인용)
 	 * @return 저장된 이미지 정보 목록
 	 * @throws IOException 파일 처리 중 오류 발생 시
