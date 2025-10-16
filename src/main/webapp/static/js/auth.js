@@ -40,6 +40,18 @@ function setupAuthEventListeners() {
         });
     }
 
+    // 학생 아이콘 이벤트 리스너
+    const studentIconBtn = document.querySelector('.mypage-icon-student-img');
+    if (studentIconBtn) {
+        studentIconBtn.addEventListener('click', function () {
+            if (!isLoggedIn()) {
+                document.getElementById('loginModal').style.display = 'flex';
+                return;
+            }
+            window.location.href = contextPath + '/users/mypage';
+        });
+    }
+
     // 로그아웃 버튼 이벤트 리스너
     const logoutBtn = document.getElementById('logoutBtn');
     const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
