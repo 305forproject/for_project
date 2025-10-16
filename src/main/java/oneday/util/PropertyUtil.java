@@ -35,7 +35,7 @@ public class PropertyUtil {
      * @return Kakao JavaScript Key
      */
     public static String getKakaoJavascriptKey() {
-        return kakaoProperties.getProperty("kakako.javascript.key");
+        return kakaoProperties.getProperty("kakao.javascript.key");
     }
 }
 
