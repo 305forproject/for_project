@@ -63,14 +63,14 @@ public class ImageService {
 	 *
 	 * @param parts 업로드된 파일 Part 목록
 	 * @param representativeIndex 대표 이미지 인덱스 (0부터 시작)
-	 * @param categoryName 카테고리 이름 (폴더명으로 사용)
+	 * @param categoryId 카테고리 ID
 	 * @param servletContext 서블릿 컨텍스트 (실제 경로 확인용)
 	 * @return 저장된 이미지 정보 목록
 	 * @throws IOException 파일 처리 중 오류 발생 시
 	 * @throws IllegalArgumentException 검증 실패 시
 	 */
 	public List<Image> processUploadedImages(List<Part> parts, int representativeIndex,
-		String categoryName, javax.servlet.ServletContext servletContext) throws IOException {
+		int categoryId, javax.servlet.ServletContext servletContext) throws IOException {
 		// 이미지 개수 검증
 		if (parts.size() < 1 || parts.size() > 8) {
 			throw new IllegalArgumentException("이미지는 최소 1개, 최대 8개까지 업로드 가능합니다.");
@@ -78,7 +78,8 @@ public class ImageService {
 
 		// 카테고리별 업로드 디렉토리 생성
 		String realPath = servletContext.getRealPath("/");
-		Path categoryUploadPath = Paths.get(realPath, UPLOAD_BASE_DIR, categoryName);
+		String categoryPath = String.valueOf(categoryId);
+		Path categoryUploadPath = Paths.get(realPath, UPLOAD_BASE_DIR, categoryPath);
 		createDirectoryIfNotExists(categoryUploadPath);
 
 		List<Image> images = new ArrayList<>();
@@ -105,7 +106,7 @@ public class ImageService {
 
 			// Image 객체 생성 (카테고리 경로 포함)
 			Image image = new Image();
-			image.setImageUrl("/" + UPLOAD_BASE_DIR + categoryName + "/" + uniqueFileName);
+			image.setImageUrl("/" + UPLOAD_BASE_DIR + categoryId + "/" + uniqueFileName);
 			image.setRepresentative(i == representativeIndex);
 			images.add(image);
 		}
@@ -231,13 +232,13 @@ public class ImageService {
 	 * 트랜잭션 롤백 시 업로드된 파일들을 삭제
 	 *
 	 * @param images 삭제할 이미지 목록
-	 * @param categoryName 카테고리 이름
+	 * @param categoryId 카테고리 ID
 	 * @param servletContext 서블릿 컨텍스트
 	 */
-	public void rollbackUploadedFiles(List<Image> images, String categoryName,
+	public void rollbackUploadedFiles(List<Image> images, int categoryId,
 		javax.servlet.ServletContext servletContext) {
 		String realPath = servletContext.getRealPath("/");
-		Path categoryUploadPath = Paths.get(realPath, UPLOAD_BASE_DIR, categoryName);
+		Path categoryUploadPath = Paths.get(realPath, UPLOAD_BASE_DIR, String.valueOf(categoryId));
 		cleanupFiles(images, categoryUploadPath);
 	}
 }

@@ -164,13 +164,13 @@ public class ClassService {
 	 * @param teacherId 강사 ID
 	 * @param imageParts 업로드된 이미지 파일들
 	 * @param representativeIndex 대표 이미지 인덱스
-	 * @param categoryName 카테고리 이름 (이미지 저장 폴더명)
+	 * @param categoryId 카테고리 ID (이미지 저장 폴더명)
 	 * @param servletContext 서블릿 컨텍스트
 	 * @return 등록 성공 시 true, 실패 시 false
 	 */
 	public boolean registerClassWithImages(ClassRegisterDto registerDto, int teacherId,
 		List<Part> imageParts, int representativeIndex,
-		String categoryName, javax.servlet.ServletContext servletContext) {
+		int categoryId, javax.servlet.ServletContext servletContext) {
 
 		List<Image> uploadedImages = null;
 
@@ -188,7 +188,7 @@ public class ClassService {
 
 			// 이미지 파일 처리 (카테고리별 폴더에 저장)
 			uploadedImages = imageService.processUploadedImages(imageParts, representativeIndex,
-				categoryName, servletContext);
+				categoryId, servletContext);
 
 			// 데이터베이스 트랜잭션 실행
 			final List<Image> finalUploadedImages = uploadedImages;
@@ -217,7 +217,7 @@ public class ClassService {
 		} catch (Exception e) {
 			// 트랜잭션 실패 시 업로드된 파일들 삭제
 			if (uploadedImages != null) {
-				imageService.rollbackUploadedFiles(uploadedImages, categoryName, servletContext);
+				imageService.rollbackUploadedFiles(uploadedImages, categoryId, servletContext);
 			}
 			return false;
 		}
