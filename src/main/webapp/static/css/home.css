@@ -382,6 +382,19 @@ img {
     flex-wrap: nowrap;
     /* 모바일 터치 스크롤 최적화 */
     -webkit-overflow-scrolling: touch;
+    /* 터치 동작을 가로 방향으로만 제한 */
+    touch-action: pan-x;
+    /* 스크롤 동작 제어 */
+    overscroll-behavior-x: contain;
+    overscroll-behavior-y: none;
+    /* 스크롤바 숨기기 */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* 스크롤바 숨기기 - 웹킷 브라우저 */
+.category-filters::-webkit-scrollbar {
+    display: none;
 }
 
 /* 개별 카테고리 링크 스타일 */
@@ -391,12 +404,12 @@ img {
     width: auto;
     max-width: 160px;
     padding: 12px 16px;
-    border: 1px solid #B37FB1;
+    border: 2px solid #BC8ABA;
     color: #B37FB1;
     border-radius: 20px;
     background: white;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     white-space: nowrap;
@@ -415,7 +428,7 @@ img {
     background: #E0A7DD;
     color: white;
     font-weight: bold;
-    box-shadow: 0 2px 8px rgba(224, 167, 221, 0.3);
+    box-shadow: 0 2px 8px #BC8ABA;
 }
 
 
@@ -531,7 +544,6 @@ img {
 }
 
 
-
 /* footer */
 .footer {
     flex-direction: column;
@@ -637,7 +649,7 @@ img {
     /* 남은 공간을 균등하게 분배 */
 }
 
-.footer-contents>p {
+.footer-contents > p {
     font-size: 16px;
     padding-top: 20px;
 
@@ -1088,7 +1100,7 @@ input[type="password"] {
     }
 
     /* slider 반응형 */
-    @media (max-width:720px) {
+    @media (max-width: 720px) {
         :root {
             --slider-height: 40vh
         }
@@ -1105,7 +1117,7 @@ input[type="password"] {
         height: 70px;
         flex-wrap: nowrap;
     }
-    
+
     .category-filters a {
         width: 140px;
         min-width: 140px;
@@ -1115,62 +1127,60 @@ input[type="password"] {
     }
 
     /* Section - 2개씩 배치 */
+    .items-menu h2 {
+        font-size: 1.3rem;
+    }
 
-        .items-menu h2 {
-            font-size: 1.3rem;
-        }
+    .card-body {
+        padding: 14px 12px 16px;
+    }
 
-        .card-body {
-            padding: 14px 12px 16px;
-        }
+    .mypage-icon {
+        width: 50px;
+        height: 50px;
+    }
 
-        .mypage-icon {
-            width: 50px;
-            height: 50px;
-        }
+    .mypage-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
 
-        .mypage-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: center;
-        }
+    .mypage-icon::before {
+        font-size: 20px;
+    }
 
-        .mypage-icon::before {
-            font-size: 20px;
-        }
+    /* footer 반응형 - 모바일 */
+    .footer-container {
+        width: 100%;
+        padding: 0 14px;
+    }
 
-        /* footer 반응형 - 모바일 */
-        .footer-container {
-            width: 100%;
-            padding: 0 14px;
-        }
+    .footer-top {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
 
-        .footer-top {
-            flex-direction: column;
-            gap: 15px;
-            align-items: flex-start;
-        }
+    .footer-logo-frame {
+        align-self: flex-start;
+        margin-bottom: 0;
+    }
 
-        .footer-logo-frame {
-            align-self: flex-start;
-            margin-bottom: 0;
-        }
+    .footer-contents {
+        width: 100%;
+        min-width: auto;
+        font-size: 14px;
+        padding-top: 5px;
+    }
 
-        .footer-contents {
-            width: 100%;
-            min-width: auto;
-            font-size: 14px;
-            padding-top: 5px;
-        }
+    .footer-info {
+        font-size: 14px;
+        margin-top: 5px;
+    }
 
-        .footer-info {
-            font-size: 14px;
-            margin-top: 5px;
-        }
-    
 }
-
 
 
 /* 소형 모바일 (320px ~ 480px) */
@@ -1239,7 +1249,7 @@ input[type="password"] {
         height: 60px;
         flex-wrap: nowrap;
     }
-    
+
     .category-filters a {
         width: 120px;
         min-width: 120px;
@@ -1249,13 +1259,13 @@ input[type="password"] {
     }
 
     /* Section - 2개 유지, 크기만 축소 */
-        .card-body .class-name {
-            font-size: 1rem;
-        }
+    .card-body .class-name {
+        font-size: 1rem;
+    }
 
-        .card-body .info2 {
-            font-size: 0.85rem;
-        }
+    .card-body .info2 {
+        font-size: 0.85rem;
+    }
 
 
     /* footer 반응형 - 소형 모바일 */
@@ -1282,7 +1292,6 @@ input[type="password"] {
         margin-top: 4px;
     }
 }
-
 
 
 /* 매우 작은 화면 (320px 이하) */
@@ -1351,7 +1360,7 @@ input[type="password"] {
         height: 55px;
         flex-wrap: nowrap;
     }
-    
+
     .category-filters a {
         width: 100px;
         min-width: 100px;
@@ -1409,8 +1418,6 @@ input[type="password"] {
         margin-top: 3px;
     }
 }
-
-
 
 
 /* 모바일에서 메뉴 표시 */

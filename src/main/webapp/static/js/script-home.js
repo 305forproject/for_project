@@ -43,3 +43,19 @@ const swiper = new Swiper(".mySwiper", {
     },
     loop: true, // 무한 반복
 });
+
+// 카테고리 필터 가로 스크롤 기능
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryFilters = document.querySelector('.category-filters');
+    
+    if (!categoryFilters) return;
+    
+    // 마우스 휠을 가로 스크롤로 변환
+    categoryFilters.addEventListener('wheel', function(e) {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+            e.preventDefault();
+            const scrollSpeed = 0.8; // 스크롤 감도 조절
+            this.scrollLeft += e.deltaY * scrollSpeed;
+        }
+    }, { passive: false });
+});
