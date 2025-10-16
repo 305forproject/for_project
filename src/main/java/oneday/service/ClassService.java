@@ -61,19 +61,8 @@ public class ClassService {
 	 * 강사의 월별 클래스 일정을 조회
 	 *
 	 * @param teacherId 강사 ID
-	 * @param year 조회할 년도
-	 * @param month 조회할 월
 	 * @return 해당 년월의 클래스 일정 목록, 조회 실패 시 빈 목록
 	 */
-	public List<TeacherCalendarDto> findMyCalendarEvents(int teacherId, int year, int month) {
-		try {
-			return classDAO.findCalendarEventsByTeacherIdAndMonth(teacherId, year, month);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ArrayList<>();
-		}
-	}
-
 	public List<FullCalendarEventDto> findMyCalendarEventsByDateRange(int teacherId, String startDate, String endDate) {
 		try {
 			return classDAO.findEventsForCalendarByTeacher(teacherId, startDate, endDate);
@@ -118,41 +107,6 @@ public class ClassService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
-		}
-	}
-
-	/**
-	 * 새로운 클래스를 등록
-	 * ClassRegisterDto를 Classes 엔티티로 변환하여 데이터베이스에 저장
-	 *
-	 * @param registerDto 등록할 클래스 정보가 담긴 DTO
-	 * @param teacherId 강사 ID
-	 * @return 등록 성공 시 true, 실패 시 false
-	 */
-	public boolean registerClass(ClassRegisterDto registerDto, int teacherId) {
-		try {
-			// DTO를 Classes 엔티티로 변환
-			Classes classes = new Classes();
-			classes.setTeacherId(teacherId);
-			classes.setClassName(registerDto.getClassName());
-			classes.setClassDetail(registerDto.getDescription());
-			classes.setCategoryId(registerDto.getCategoryId());
-
-			// 날짜와 시간을 LocalDateTime으로 변환
-			String startDateTimeStr = registerDto.getClassDate() + " " + registerDto.getStartTime();
-			String endDateTimeStr = registerDto.getClassDate() + " " + registerDto.getEndTime();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-			classes.setStartAt(LocalDateTime.parse(startDateTimeStr, formatter));
-			classes.setEndAt(LocalDateTime.parse(endDateTimeStr, formatter));
-			classes.setMaxCapacity(registerDto.getMaxStudents());
-			classes.setPrice(registerDto.getPrice());
-			classes.setLocation(registerDto.getLocation());
-
-			return classDAO.insertClass(classes);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
 		}
 	}
 

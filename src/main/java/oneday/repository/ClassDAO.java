@@ -74,45 +74,6 @@ public class ClassDAO {
 	}
 
 	/**
-	 * 강사 ID와 년월로 달력 이벤트 조회
-	 *
-	 * @param teacherId 강사 ID
-	 * @param year 조회할 년도
-	 * @param month 조회할 월
-	 * @return 해당 년월의 강사 클래스 목록
-	 * @throws SQLException 데이터베이스 접근 중 오류 발생 시
-	 */
-	public List<TeacherCalendarDto> findCalendarEventsByTeacherIdAndMonth(int teacherId, int year, int month) throws
-		SQLException {
-		List<TeacherCalendarDto> events = new ArrayList<>();
-		String sql = "SELECT c.CLASS_ID, c.START_AT, c.END_AT, c.MAX_CAPACITY, " +
-			"(SELECT COUNT(*) FROM RESERVATIONS r WHERE r.CLASS_ID = c.CLASS_ID) as current_count " +
-			"FROM CLASSES c " +
-			"WHERE c.TEACHER_ID = ? AND YEAR(c.START_AT) = ? AND MONTH(c.START_AT) = ?";
-
-		try (Connection conn = dbConfig.getConnection();
-			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-			pstmt.setInt(1, teacherId);
-			pstmt.setInt(2, year);
-			pstmt.setInt(3, month);
-
-			try (ResultSet rs = pstmt.executeQuery()) {
-				while (rs.next()) {
-					TeacherCalendarDto dto = new TeacherCalendarDto();
-					dto.setClassId(rs.getInt("CLASS_ID"));
-					dto.setStartAt(rs.getTimestamp("START_AT").toLocalDateTime());
-					dto.setEndAt(rs.getTimestamp("END_AT").toLocalDateTime());
-					dto.setMaxCapacity(rs.getInt("MAX_CAPACITY"));
-					dto.setCurrentReservationCount(rs.getInt("current_count"));
-					events.add(dto);
-				}
-			}
-		}
-		return events;
-	}
-
-	/**
 	 * 클래스 ID와 강사 ID로 클래스 상세 정보 조회
 	 * 강사 본인의 클래스만 조회 가능
 	 *
