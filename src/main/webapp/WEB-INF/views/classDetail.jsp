@@ -22,29 +22,6 @@
 
     <%-- CSS 파일 경로를 올바르게 수정합니다. --%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/detailPage.css">
-
-    <%-- 모달 및 캘린더를 위한 추가 스타일 --%>
-    <style>
-        /* 모달 스타일 */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000;
-        }
-        .modal-content {
-            position: relative; background: white; padding: 40px; border-radius: 10px;
-            width: 90%; max-width: 550px; min-width: 300px;
-        }
-        .close-btn {
-            position: absolute; top: 10px; right: 15px; font-size: 24px;
-            background: none; border: none; cursor: pointer; color: #888;
-        }
-        .close-btn:hover { color: #000; }
-
-        /* Swiper 이미지 스타일 */
-        .swiper-slide img {
-            display: block; width: 100%; height: 100%; object-fit: cover;
-        }
-    </style>
 </head>
 
 <body>
@@ -98,15 +75,15 @@
             <%-- 4. FullCalendar가 표시될 영역 --%>
             <section id="class-hours" class="reservation-calendar">
                 <h2>운영시간</h2>
-                <div id="class-date-calendar" style="max-width: 700px; margin: 20px auto;"></div>
+                <div id="class-date-calendar"></div>
             </section>
 
             <%-- 5. KAKAO MAP 표시될 영역 --%>
             <section class="class-location">
                 <h2>클래스 위치</h2>
-                <div id="map" style="width:55%; height:400px; border-radius: 10px; margin: 20px auto;"></div>
-                <p style="color: #666; font-size: 14px; margin-top: 15px; text-align: center;">
-                    <img src="${pageContext.request.contextPath}/static/img/location-icon.png" alt="주소" style="width: 16px; vertical-align: middle; margin-right: 5px;">
+                <div id="map"></div>
+                <p>
+                    <img src="${pageContext.request.contextPath}/static/img/location-icon.png" alt="주소">
                     ${classDetail.location}
                 </p>
             </section>
@@ -127,7 +104,7 @@
         <h3>결제하기</h3>
         <div id="payment-method"></div>
         <div id="agreement"></div>
-        <button class="button" id="payment-widget-button" style="margin-top: 30px; width: 100%;">결제하기</button>
+        <button class="button" id="payment-widget-button">결제하기</button>
     </div>
 </div>
 
