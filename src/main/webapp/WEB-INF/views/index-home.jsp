@@ -31,16 +31,16 @@
         </div>
 
         <!-- 마이페이지 아이콘 영역 -->
-        <div class="mypage-icons">
+        <div class="mypage-icon">
             <div class="icons">
                 <!-- 강사 아이콘 -->
-                <button type="button" class="mypage-icon">
+                <button type="button" class="mypage-icon-lecturer-img">
                     <img src="${pageContext.request.contextPath}/static/img/mypage-icon-lecturer.png"
                          alt="icon-lecturer">
                 </button>
 
                 <!-- 학생 아이콘 -->
-                <button type="button" class="mypage-icon">
+                <button type="button" class="mypage-icon-student-img">
                     <img src="${pageContext.request.contextPath}/static/img/mypage-icon-student.png" alt="icon-student">
 
     <!-- 마이페이지 아이콘 영역 -->
