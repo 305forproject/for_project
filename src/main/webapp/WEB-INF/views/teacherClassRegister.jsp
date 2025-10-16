@@ -215,14 +215,14 @@
     <div class="form-group">
         <label for="startTime">시작 시간:</label>
         <input type="time" id="startTime" name="startTime" required step="300">
-        <small style="color: #666;">예: 14:30 (24시간 형식)</small>
+<%--        <small style="color: #666;">예: 14:30 (24시간 형식)</small>--%>
         <div id="timeError" class="error"></div>
     </div>
 
     <div class="form-group">
         <label for="endTime">종료 시간:</label>
         <input type="time" id="endTime" name="endTime" required step="300">
-        <small style="color: #666;">예: 16:30 (24시간 형식)</small>
+<%--        <small style="color: #666;">예: 16:30 (24시간 형식)</small>--%>
     </div>
 
     <div class="form-group">
