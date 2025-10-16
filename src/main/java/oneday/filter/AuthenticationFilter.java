@@ -28,7 +28,8 @@ public class AuthenticationFilter implements Filter {
 			contextPath + "/signup",
 			contextPath + "/main",
 			contextPath + "/class",
-			contextPath + "/static/"
+			contextPath + "/static/",
+			contextPath + "/uploads/"
 		);
 
 		// 선생님 전용 경로 설정

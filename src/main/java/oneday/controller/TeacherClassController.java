@@ -53,9 +53,11 @@ public class TeacherClassController extends HttpServlet {
 	 * @throws IOException 입출력 오류 발생 시
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+		ServletException,
+		IOException {
 		String pathInfo = request.getPathInfo();
-		Integer teacherId = (Integer) request.getSession().getAttribute("userId");
+		Integer teacherId = (Integer)request.getSession().getAttribute("userId");
 
 		if (teacherId == null) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
@@ -72,7 +74,8 @@ public class TeacherClassController extends HttpServlet {
 		if ("/events".equals(pathInfo)) {
 			String startParam = request.getParameter("start");
 			String endParam = request.getParameter("end");
-			List<FullCalendarEventDto> events = classService.findMyCalendarEventsByDateRange(teacherId, startParam, endParam);
+			List<FullCalendarEventDto> events = classService.findMyCalendarEventsByDateRange(teacherId, startParam,
+				endParam);
 
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
@@ -109,7 +112,6 @@ public class TeacherClassController extends HttpServlet {
 		// 그 외의 모든 경로 404
 		response.sendError(HttpServletResponse.SC_NOT_FOUND, "요청한 페이지를 찾을 수 없습니다.");
 	}
-
 
 	/**
 	 * POST 요청을 처리하는 메서드
@@ -250,7 +252,7 @@ public class TeacherClassController extends HttpServlet {
 				int month = Integer.parseInt(dateParts[1]);
 
 				// 등록 성공 시 해당 년월의 달력 페이지로 리다이렉트
-				response.sendRedirect(request.getContextPath() + "/teachers/classes?year=" + year + "&month=" + month);
+				response.sendRedirect(request.getContextPath() + "/teachers/classes");
 			} else {
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "클래스 등록에 실패했습니다.");
 			}
@@ -261,38 +263,4 @@ public class TeacherClassController extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "클래스 등록 중 오류가 발생했습니다.");
 		}
 	}
-
-	/**
-	 * 카테고리 ID로 카테고리명을 반환
-	 * 데이터베이스에서 동적으로 조회하여 유연한 처리 제공
-	 *
-	 * @param categoryId 카테고리 ID
-	 * @return 카테고리명
-	 */
-	private String getCategoryNameById(int categoryId) {
-		return categoryDAO.findCategoryNameById(categoryId);
-	}
-
-	/**
-	 * 클래스 상세 정보를 조회하고 표시
-	 *
-	 * @param request HTTP 요청 객체
-	 * @param response HTTP 응답 객체
-	 * @param pathInfo 요청 경로 정보 (클래스 ID 포함)
-	 * @throws ServletException 서블릿 처리 중 오류 발생 시
-	 * @throws IOException 입출력 오류 발생 시
-	 */
-	private void handleDetailView(HttpServletRequest request, HttpServletResponse response,
-		String pathInfo) throws ServletException, IOException {
-		try {
-			int classId = Integer.parseInt(pathInfo.substring(1));
-
-			TeacherClassDetailDto detail = classService.findMyClassDetail(classId);
-			request.setAttribute("classDetail", detail);
-			request.getRequestDispatcher("/WEB-INF/views/teacherClassDetail.jsp").forward(request, response);
-
-		} catch (NumberFormatException e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 강의 ID 형식입니다.");
-		}
-	}
-	}
+}
