@@ -1,17 +1,47 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="oneday.util.PropertyUtil" %>
 <html>
 <head>
     <title>내 예약 현황</title>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= PropertyUtil.getKakaoJavascriptKey() %>"></script>
+    <script src="${pageContext.request.contextPath}/static/js/kakaoMap.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/calendar.js"></script>
     <style>
-        body { font-family: sans-serif; }
-        .container { max-width: 1200px; margin: 40px auto; display: flex; gap: 20px; }
-        #calendar-container { flex: 2; /* 2:1 비율로 왼쪽이 더 넓게 */ }
-        #detail-container { flex: 1; border: 1px solid #ddd; padding: 20px; border-radius: 8px; height: fit-content; }
-        .detail-item { margin-bottom: 10px; }
-        .detail-item span { font-weight: bold; }
-        .placeholder { color: #888; }
+        body {
+            font-family: sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            display: flex;
+            gap: 20px;
+        }
+
+        #calendar-container {
+            flex: 2;
+        }
+
+        #detail-container {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            height: fit-content;
+        }
+
+        .detail-item {
+            margin-bottom: 10px;
+        }
+
+        .detail-item span {
+            font-weight: bold;
+        }
+
+        .placeholder {
+            color: #888;
+        }
     </style>
 </head>
 <body>
@@ -19,15 +49,18 @@
 <div class="container">
     <%-- 1. 왼쪽: FullCalendar가 그려질 영역 --%>
     <div id="calendar-container">
+        <h1>내 예약 현황</h1>
         <div id="my-calendar"></div>
     </div>
 
-    <%-- 2. 오른쪽: 예약 상세 내용이 표시될 영역 --%>
+    <%-- 2. 오른쪽: 예약 상세 정보 + 카카오 맵 --%>
     <div id="detail-container">
         <h3>예약 상세 정보</h3>
         <div id="event-detail-box">
             <p class="placeholder">달력에서 예약을 클릭하세요.</p>
         </div>
+        <!-- 카카오 맵을 표시할 컨테이너 추가 -->
+        <div id="map" style="width:100%; height:300px; margin-top:20px; border-radius:8px;"></div>
     </div>
 </div>
 
