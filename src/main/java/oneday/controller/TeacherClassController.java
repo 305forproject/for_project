@@ -234,12 +234,12 @@ public class TeacherClassController extends HttpServlet {
 			}
 
 			// 카테고리명 가져오기
-			String categoryName = getCategoryNameById(registerDto.getCategoryId());
+			int CategoryId = registerDto.getCategoryId();
 
 			// 클래스 등록 처리 (이미지 포함)
 			boolean success = classService.registerClassWithImages(
 				registerDto, teacherId, imageParts, representativeIndex,
-				categoryName, getServletContext()
+				CategoryId, getServletContext()
 			);
 
 			if (success) {
