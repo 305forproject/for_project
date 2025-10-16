@@ -5,19 +5,43 @@
     <title>내 예약 현황</title>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= PropertyUtil.getKakaoJavascriptKey() %>"></script>
-    <script src="${pageContext.request.contextPath}/static/js/calendar.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/kakaoMap.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/calendar.js"></script>
     <style>
-        body { font-family: sans-serif; }
-        .container { max-width: 1200px; margin: 40px auto; display: flex; gap: 20px; }
-        #calendar-container { flex: 2; }
-        #right-section { flex: 1; display: flex; flex-direction: column; gap: 20px; }
-        #detail-container { border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
-        #map-container { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
-        #map { width: 100%; height: 400px; }
-        .detail-item { margin-bottom: 10px; }
-        .detail-item span { font-weight: bold; }
-        .placeholder { color: #888; }
+        body {
+            font-family: sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            display: flex;
+            gap: 20px;
+        }
+
+        #calendar-container {
+            flex: 2;
+        }
+
+        #detail-container {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            height: fit-content;
+        }
+
+        .detail-item {
+            margin-bottom: 10px;
+        }
+
+        .detail-item span {
+            font-weight: bold;
+        }
+
+        .placeholder {
+            color: #888;
+        }
     </style>
 </head>
 <body>
@@ -25,23 +49,18 @@
 <div class="container">
     <%-- 1. 왼쪽: FullCalendar가 그려질 영역 --%>
     <div id="calendar-container">
+        <h1>내 예약 현황</h1>
         <div id="my-calendar"></div>
     </div>
 
     <%-- 2. 오른쪽: 예약 상세 정보 + 카카오 맵 --%>
-    <div id="right-section">
-        <%-- 2-1. 예약 상세 정보 영역 --%>
-        <div id="detail-container">
-            <h3>예약 상세 정보</h3>
-            <div id="event-detail-box">
-                <p class="placeholder">달력에서 예약을 클릭하세요.</p>
-            </div>
+    <div id="detail-container">
+        <h3>예약 상세 정보</h3>
+        <div id="event-detail-box">
+            <p class="placeholder">달력에서 예약을 클릭하세요.</p>
         </div>
-
-        <%-- 2-2. 카카오 맵 영역 --%>
-        <div id="map-container">
-            <div id="map"></div>
-        </div>
+        <!-- 카카오 맵을 표시할 컨테이너 추가 -->
+        <div id="map" style="width:100%; height:300px; margin-top:20px; border-radius:8px;"></div>
     </div>
 </div>
 

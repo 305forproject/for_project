@@ -1,8 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.Properties" %>
+<%@ page import="java.io.InputStream" %>
+<%
+    Properties kakaoProps = new Properties();
+    InputStream input = application.getResourceAsStream("/WEB-INF/classes/kakao.properties");
+    if (input != null) {
+        kakaoProps.load(input);
+        input.close();
+    }
+    String kakaoJsKey = kakaoProps.getProperty("kakao.javascript.key", "");
+%>
 <html>
 <head>
     <title>내 강의 현황</title>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= kakaoJsKey %>"></script>
+    <script src="${pageContext.request.contextPath}/static/js/kakaoMap.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/calendar.js"></script>
     <style>
         body {
@@ -62,6 +75,8 @@
         <div id="event-detail-box">
             <p class="placeholder">달력에서 강의를 클릭하세요.</p>
         </div>
+        <!-- 카카오 맵을 표시할 컨테이너 추가 -->
+        <div id="map" style="width:100%; height:300px; margin-top:20px; border-radius:8px;"></div>
     </div>
 </div>
 
