@@ -105,10 +105,12 @@
     </div>
     <%-- 카테고리 필터 버튼 영역 --%>
     <div class="category-filters">
-        <a href="${pageContext.request.contextPath}/main?sort=${currentSort}">전체보기</a>
+        <a href="${pageContext.request.contextPath}/main?sort=${currentSort}"
+        class="${currentCategory == category.categoryId ? 'active' : ''}">전체보기</a>
 
         <c:forEach items="${categories}" var="category">
-            <a href="${pageContext.request.contextPath}/main?categoryId=${category.categoryId}&sort=${currentSort}">
+            <a href="${pageContext.request.contextPath}/main?categoryId=${category.categoryId}&sort=${currentSort}"
+            class="${currentCategory == category.categoryId ? 'active' : ''}">
                     ${category.category}
             </a>
         </c:forEach>
