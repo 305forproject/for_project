@@ -364,6 +364,61 @@ img {
 }
 
 
+/* 카테고리 컨테이너 - 가로 스크롤 */
+.category-filters {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto 24px auto;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+    padding: 0 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    flex-wrap: nowrap;
+    /* 모바일 터치 스크롤 최적화 */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 개별 카테고리 링크 스타일 */
+.category-filters a {
+    flex: 0 0 auto;
+    min-width: 140px;
+    width: auto;
+    max-width: 160px;
+    padding: 12px 16px;
+    border: 1px solid #B37FB1;
+    color: #B37FB1;
+    border-radius: 20px;
+    background: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    text-decoration: none;
+    text-align: center;
+}
+
+/* 카테고리 버튼 hover 효과 */
+.category-filters a:hover {
+    background: #F2F2F2;
+    transform: translateY(-2px);
+}
+
+/* 활성 상태 (현재 선택된 카테고리) */
+.category-filters a.active {
+    background: #E0A7DD;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(224, 167, 221, 0.3);
+}
+
+
 /*  메인 컨테이너 */
 .main-container {
     width: 100%;
@@ -384,6 +439,13 @@ img {
     font-size: 1.6rem;
     font-weight: 600;
     color: var(--text-dark);
+}
+
+.sort-options {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 5px 0;
 }
 
 /*  카드 전체 배치 (Grid) */
@@ -960,9 +1022,6 @@ input[type="password"] {
         object-position: center;
     }
 
-
-
-
     /* footer 반응형 - 중간 태블릿 */
     .footer-container {
         width: 100%;
@@ -983,6 +1042,7 @@ input[type="password"] {
         font-size: 13px;
     }
 }
+
 
 /* 모바일 (480px ~ 768px) */
 @media screen and (max-width: 768px) {
@@ -1038,8 +1098,23 @@ input[type="password"] {
         }
     }
 
+    /* 카테고리 필터 반응형 - 모바일 */
+    .category-filters {
+        padding: 0 14px;
+        gap: 12px;
+        height: 70px;
+        flex-wrap: nowrap;
+    }
+    
+    .category-filters a {
+        width: 140px;
+        min-width: 140px;
+        padding: 12px 16px;
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+
     /* Section - 2개씩 배치 */
-    @media (max-width: 768px) {
 
         .items-menu h2 {
             font-size: 1.3rem;
@@ -1093,7 +1168,7 @@ input[type="password"] {
             font-size: 14px;
             margin-top: 5px;
         }
-    }
+    
 }
 
 
@@ -1157,8 +1232,23 @@ input[type="password"] {
         font-size: 16px;
     }
 
+    /* 카테고리 필터 반응형 - 소형 모바일 */
+    .category-filters {
+        padding: 0 12px;
+        gap: 10px;
+        height: 60px;
+        flex-wrap: nowrap;
+    }
+    
+    .category-filters a {
+        width: 120px;
+        min-width: 120px;
+        padding: 10px 14px;
+        font-size: 12px;
+        flex-shrink: 0;
+    }
+
     /* Section - 2개 유지, 크기만 축소 */
-    @media (max-width: 480px) {
         .card-body .class-name {
             font-size: 1rem;
         }
@@ -1166,7 +1256,7 @@ input[type="password"] {
         .card-body .info2 {
             font-size: 0.85rem;
         }
-    }
+
 
     /* footer 반응형 - 소형 모바일 */
     .footer-container {
@@ -1252,6 +1342,22 @@ input[type="password"] {
 
     .mypage-icon::before {
         font-size: 14px;
+    }
+
+    /* 카테고리 필터 반응형 - 매우 작은 화면 */
+    .category-filters {
+        padding: 0 8px;
+        gap: 6px;
+        height: 55px;
+        flex-wrap: nowrap;
+    }
+    
+    .category-filters a {
+        width: 100px;
+        min-width: 100px;
+        padding: 6px 10px;
+        font-size: 10px;
+        flex-shrink: 0;
     }
 
     /*Section- 2개 유지, 더 작게 */
