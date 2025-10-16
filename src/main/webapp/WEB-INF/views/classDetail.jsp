@@ -17,6 +17,8 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
     <%-- Toss Payments (결제) --%>
     <script src="https://js.tosspayments.com/v2/standard"></script>
+    <%-- Kakao Map API --%>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6c815edfbb142b4a36ca1aa9b7b9d2d3"></script>
 
     <%-- CSS 파일 경로를 올바르게 수정합니다. --%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/detailPage.css">
@@ -97,6 +99,16 @@
             <section id="class-hours" class="reservation-calendar">
                 <h2>운영시간</h2>
                 <div id="class-date-calendar" style="max-width: 700px; margin: 20px auto;"></div>
+            </section>
+
+            <%-- 5. KAKAO MAP 표시될 영역 --%>
+            <section class="class-location">
+                <h2>클래스 위치</h2>
+                <div id="map" style="width:55%; height:400px; border-radius: 10px; margin: 20px auto;"></div>
+                <p style="color: #666; font-size: 14px; margin-top: 15px; text-align: center;">
+                    <img src="${pageContext.request.contextPath}/static/img/location-icon.png" alt="주소" style="width: 16px; vertical-align: middle; margin-right: 5px;">
+                    ${classDetail.location}
+                </p>
             </section>
 
         </c:when>
@@ -188,6 +200,13 @@
     document.getElementById('payment-modal').addEventListener('click', function(event) {
         if (event.target === this) closePaymentModal();
     });
+</script>
+
+<%-- 지도 초기화 스크립트 --%>
+<script src="${pageContext.request.contextPath}/static/js/kakaoMap.js"></script>
+<script>
+    // 지도 초기화 함수 호출
+    initKakaoMap('${classDetail.latitude}', '${classDetail.longitude}', '${classDetail.className}');
 </script>
 </body>
 </html>
