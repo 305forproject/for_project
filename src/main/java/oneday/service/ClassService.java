@@ -164,7 +164,7 @@ public class ClassService {
 	 * @param teacherId 강사 ID
 	 * @param imageParts 업로드된 이미지 파일들
 	 * @param representativeIndex 대표 이미지 인덱스
-	 * @param categoryId 카테고리 이름 (이미지 저장 폴더명)
+	 * @param categoryId 카테고리 ID (이미지 저장 폴더명)
 	 * @param servletContext 서블릿 컨텍스트
 	 * @return 등록 성공 시 true, 실패 시 false
 	 */
