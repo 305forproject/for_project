@@ -2,6 +2,7 @@ package oneday.controller;
 
 import oneday.dto.ClassDetailDto;
 import oneday.service.ClassService;
+import oneday.util.PropertyUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +27,7 @@ public class ClassController extends HttpServlet {
 
 				if (detail != null) {
 					request.setAttribute("classDetail", detail);
+					request.setAttribute("kakaoJsKey", PropertyUtil.getKakaoJavascriptKey());
 					request.getRequestDispatcher("/WEB-INF/views/classDetail.jsp").forward(request, response);
 				} else {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "해당 클래스를 찾을 수 없습니다.");
