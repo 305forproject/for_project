@@ -58,7 +58,7 @@ function updateDetailBox(data) {
         const starttimePart = startparts[1];
         const endtimePart = endparts[1];
         const formattedStartTime = starttimePart.substring(0, 5);
-        const formattedEndTime = endtimePart.substring(0, 5)
+        const formattedEndTime = endtimePart.substring(0, 5);
         let detailHtml = '';
 
         // data 객체에 currentReservationCount 필드가 있는지 확인하여 학생/선생님을 구분
@@ -83,7 +83,15 @@ function updateDetailBox(data) {
       `;
         }
         detailBox.innerHTML = detailHtml;
+
+        // 카카오 맵 초기화 (위도, 경도, 클래스명 전달)
+        if (data.latitude && data.longitude) {
+            initKakaoMap(data.latitude, data.longitude, data.className);
+        } else {
+            displayMapError();
+        }
     } else {
         detailBox.innerHTML = '<p class="placeholder">정보를 불러올 수 없습니다.</p>';
+        displayMapError();
     }
 }
