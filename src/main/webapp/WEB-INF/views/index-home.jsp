@@ -352,17 +352,6 @@
             }
         }
     });
-
-    // 학생 아이콘 클릭 이벤트 설정
-    function setupStudentIconClickEvent() {
-        const studentIconBtn = document.querySelector('.mypage-icon-student-img');
-
-        if (studentIconBtn) {
-            studentIconBtn.addEventListener('click', function () {
-                window.location.href = contextPath + '/users/mypage';
-            });
-        }
-    }
 </script>
 <% } %>
 
