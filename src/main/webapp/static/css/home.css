@@ -133,12 +133,16 @@ img {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    background: none;
+    padding: 0;
 }
 
 /* mypage-icon 내부 img 태그 */
 .mypage-icon img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .mypage-icon:hover {
