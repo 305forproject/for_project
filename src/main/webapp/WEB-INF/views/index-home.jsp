@@ -40,12 +40,11 @@
             </button>
 
             <!-- 학생 아이콘 -->
-            <a href="${pageContext.request.contextPath}/users/mypage">
-                <button type="button" class="mypage-icon-student-img">
-                    <img src="${pageContext.request.contextPath}/static/img/mypage-icon-student.png"
-                         alt="icon-student">
-                </button>
-            </a>
+            <button type="button" class="mypage-icon-student-img"
+                    onclick="window.location.href = contextPath + '/users/mypage';">
+                <img src="${pageContext.request.contextPath}/static/img/mypage-icon-student.png"
+                     alt="icon-student">
+            </button>
         </div>
     </div>
 
@@ -353,6 +352,17 @@
             }
         }
     });
+
+    // 학생 아이콘 클릭 이벤트 설정
+    function setupStudentIconClickEvent() {
+        const studentIconBtn = document.querySelector('.mypage-icon-student-img');
+
+        if (studentIconBtn) {
+            studentIconBtn.addEventListener('click', function () {
+                window.location.href = contextPath + '/users/mypage';
+            });
+        }
+    }
 </script>
 <% } %>
 
