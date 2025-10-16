@@ -18,7 +18,7 @@
     <%-- Toss Payments (결제) --%>
     <script src="https://js.tosspayments.com/v2/standard"></script>
     <%-- Kakao Map API --%>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6c815edfbb142b4a36ca1aa9b7b9d2d3"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoJsKey}"></script>
 
     <%-- CSS 파일 경로를 올바르게 수정합니다. --%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/detailPage.css">
