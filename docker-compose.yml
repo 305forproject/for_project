@@ -1,4 +1,12 @@
+version: "3.9"
 services:
+  web:
+    build: .
+    image: khp9800/oneday:latest
+    container_name: oneday
+    ports:
+      - "8080:8080"
+    restart: always
   mysql:
     image: mysql:8.0
     container_name: oneday_mysql
@@ -10,7 +18,7 @@ services:
       MYSQL_COLLATION_SERVER: ${MYSQL_COLLATION_SERVER}
       TZ: ${TZ}
     ports:
-      - "${DB_PORT:-3306}:3306"
+      - "${DB_PORT:-3307}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./tableV3.sql:/docker-entrypoint-initdb.d/init.sql

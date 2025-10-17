@@ -3,6 +3,8 @@ SET CHARACTER_SET_CLIENT = utf8mb4;
 SET CHARACTER_SET_CONNECTION = utf8mb4;
 SET CHARACTER_SET_RESULTS = utf8mb4;
 
+USE oneday_db;
+
 -- =================================================================
 -- 기존 테이블 삭제 (초기화)
 -- =================================================================
