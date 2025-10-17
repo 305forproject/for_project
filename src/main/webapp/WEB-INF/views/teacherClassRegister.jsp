@@ -1,11 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>클래스 등록 - 원데이 클래스</title>
-    
+
     <!-- 카카오 우편번호 서비스 -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
@@ -15,14 +16,14 @@
             margin: 60px auto;
             padding: 0 20px;
         }
-        
+
         .register-card {
             background: var(--bg-white);
             border-radius: var(--border-radius);
             padding: 40px;
             box-shadow: var(--shadow-md);
         }
-        
+
         .register-title {
             font-size: 32px;
             font-weight: 700;
@@ -30,12 +31,12 @@
             margin-bottom: 32px;
             text-align: center;
         }
-        
+
         .form-group {
             margin-bottom: 24px;
             position: relative;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
@@ -43,11 +44,11 @@
             color: var(--text-primary);
             font-size: 15px;
         }
-        
+
         .form-group label span {
             color: var(--primary-color);
         }
-        
+
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -59,7 +60,7 @@
             transition: var(--transition);
             font-family: inherit;
         }
-        
+
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
@@ -67,54 +68,54 @@
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px var(--primary-light);
         }
-        
+
         .form-group textarea {
             min-height: 100px;
             resize: vertical;
         }
-        
+
         .form-group input[type="number"],
         .form-group input[type="time"],
         .form-group input[type="date"] {
             width: auto;
             min-width: 200px;
         }
-        
+
         .form-group small {
             display: block;
             margin-top: 6px;
             font-size: 13px;
             color: var(--text-muted);
         }
-        
+
         .error {
             color: #dc3545;
             font-size: 13px;
             margin-top: 6px;
         }
-        
+
         .address-group {
             display: flex;
             gap: 12px;
             align-items: flex-start;
         }
-        
+
         .address-group input {
             flex: 1;
         }
-        
+
         .address-group .btn {
             flex-shrink: 0;
             margin-top: 0;
         }
-        
+
         .image-preview {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 16px;
             margin-top: 16px;
         }
-        
+
         .image-item {
             position: relative;
             width: 100%;
@@ -125,16 +126,16 @@
             cursor: pointer;
             transition: var(--transition);
         }
-        
+
         .image-item:hover {
             transform: scale(1.02);
         }
-        
+
         .image-item.representative {
             border-color: var(--primary-color);
             border-width: 3px;
         }
-        
+
         .image-item img {
             position: absolute;
             top: 0;
@@ -143,7 +144,7 @@
             height: 100%;
             object-fit: cover;
         }
-        
+
         .representative-label {
             position: absolute;
             top: 8px;
@@ -156,7 +157,7 @@
             border-radius: 4px;
             z-index: 1;
         }
-        
+
         .remove-btn {
             position: absolute;
             top: 8px;
@@ -175,18 +176,18 @@
             z-index: 1;
             transition: var(--transition);
         }
-        
+
         .remove-btn:hover {
             background: #c82333;
         }
-        
+
         .button-group {
             display: flex;
             gap: 16px;
             margin-top: 40px;
             justify-content: center;
         }
-        
+
         .btn {
             padding: 14px 32px;
             border: none;
@@ -198,59 +199,59 @@
             text-decoration: none;
             display: inline-block;
         }
-        
+
         .btn-primary {
             background: var(--primary-color);
             color: var(--text-white);
         }
-        
+
         .btn-primary:hover {
             background: var(--primary-dark);
         }
-        
+
         .btn-secondary {
             background: var(--bg-gray);
             color: var(--text-primary);
         }
-        
+
         .btn-secondary:hover {
             background: var(--primary-light);
         }
-        
+
         /* 반응형 */
         @media screen and (max-width: 768px) {
             .register-container {
                 margin: 40px auto;
             }
-            
+
             .register-card {
                 padding: 24px;
             }
-            
+
             .register-title {
                 font-size: 24px;
             }
-            
+
             .address-group {
                 flex-direction: column;
             }
-            
+
             .address-group input,
             .form-group input[type="number"],
             .form-group input[type="time"],
             .form-group input[type="date"] {
                 width: 100%;
             }
-            
+
             .image-preview {
                 grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
                 gap: 12px;
             }
-            
+
             .button-group {
                 flex-direction: column;
             }
-            
+
             .btn {
                 width: 100%;
             }
@@ -265,16 +266,16 @@
         <div class="register-card">
             <h1 class="register-title">✨ 클래스 등록</h1>
 
-            <form method="post" 
+            <form method="post"
                   action="${pageContext.request.contextPath}/teachers/classes/register"
-                  id="registerForm" 
+                  id="registerForm"
                   enctype="multipart/form-data">
-                  
+
                 <div class="form-group">
                     <label for="className">
                         클래스명 <span>*</span>
                     </label>
-                    <input type="text" id="className" name="className" required 
+                    <input type="text" id="className" name="className" required
                            placeholder="예: 처음 배우는 홈베이킹">
                 </div>
 
@@ -282,23 +283,19 @@
                     <label for="description">
                         클래스 설명 <span>*</span>
                     </label>
-                    <textarea id="description" name="description" required 
+                    <textarea id="description" name="description" required
                               placeholder="클래스에 대한 상세한 설명을 입력해주세요"></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label for="categoryId">
-                        카테고리 <span>*</span>
-                    </label>
-                    <select id="categoryId" name="categoryId" required>
-                        <option value="">카테고리를 선택하세요</option>
-                        <option value="1">🍳 요리</option>
-                        <option value="2">🎨 미술</option>
-                        <option value="3">🏃 운동</option>
-                        <option value="4">🧘 요가</option>
-                        <option value="5">🎭 공예</option>
-                    </select>
-                </div>
+    <div class="form-group">
+        <label for="categoryId">카테고리:</label>
+        <select id="categoryId" name="categoryId" required>
+            <option value="">카테고리 선택</option>
+            <c:forEach var="category" items="${categories}">
+                <option value="${category.categoryId}">${category.category}</option>
+            </c:forEach>
+        </select>
+    </div>
 
                 <div class="form-group">
                     <label for="classDate">
@@ -327,7 +324,7 @@
                     <label for="maxStudents">
                         최대 학생 수 <span>*</span>
                     </label>
-                    <input type="number" id="maxStudents" name="maxStudents" 
+                    <input type="number" id="maxStudents" name="maxStudents"
                            min="1" max="50" required placeholder="1">
                     <small>최소 1명, 최대 50명까지 설정 가능합니다</small>
                 </div>
@@ -336,7 +333,7 @@
                     <label for="price">
                         수업료 <span>*</span>
                     </label>
-                    <input type="number" id="price" name="price" 
+                    <input type="number" id="price" name="price"
                            min="0" required placeholder="50000">
                     <small>원 단위로 입력해주세요 (예: 50000)</small>
                 </div>
@@ -346,7 +343,7 @@
                         우편번호 <span>*</span>
                     </label>
                     <div class="address-group">
-                        <input type="text" id="zipcode" name="zipcode" readonly 
+                        <input type="text" id="zipcode" name="zipcode" readonly
                                placeholder="주소 검색 버튼을 클릭하세요">
                         <button type="button" class="btn btn-primary" onclick="searchAddress()">
                             📍 주소 검색
@@ -358,7 +355,7 @@
                     <label for="location">
                         수업 장소 <span>*</span>
                     </label>
-                    <input type="text" id="location" name="location" required 
+                    <input type="text" id="location" name="location" required
                            placeholder="주소 검색 후 자동 입력됩니다">
                 </div>
 
@@ -369,7 +366,7 @@
                     <label for="images">
                         클래스 이미지 <span>*</span>
                     </label>
-                    <input type="file" id="images" name="images" 
+                    <input type="file" id="images" name="images"
                            multiple accept="image/*" required>
                     <small>최소 1개, 최대 8개까지 업로드 가능 (JPG, PNG, GIF / 최대 5MB)</small>
                     <div id="imageError" class="error"></div>

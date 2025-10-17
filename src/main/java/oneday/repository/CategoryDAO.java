@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import oneday.config.DatabaseConfig;
+import oneday.model.Category;
 
 /**
  * 카테고리 관련 데이터베이스 접근 객체 (DAO)
@@ -20,6 +23,32 @@ public class CategoryDAO {
 	 */
 	public CategoryDAO() {
 		this.dbConfig = DatabaseConfig.getInstance();
+	}
+
+	/**
+	 * 모든 카테고리 목록을 조회
+	 *
+	 * @return 카테고리 목록
+	 */
+	public List<Category> findAll() {
+		List<Category> categories = new ArrayList<>();
+		String sql = "SELECT CATEGORY_ID, CATEGORY FROM CATEGORIES ORDER BY CATEGORY_ID";
+
+		try (Connection conn = dbConfig.getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(sql);
+			 ResultSet rs = pstmt.executeQuery()) {
+
+			while (rs.next()) {
+				Category category = new Category();
+				category.setCategoryId(rs.getInt("CATEGORY_ID"));
+				category.setCategory(rs.getString("CATEGORY"));
+				categories.add(category);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return categories;
 	}
 
 	/**

@@ -183,6 +183,13 @@ public class TeacherClassController extends HttpServlet {
 	private void handleRegisterView(HttpServletRequest request, HttpServletResponse response) throws
 		ServletException,
 		IOException {
+		try {
+			// 카테고리 목록 조회하여 request에 설정
+			request.setAttribute("categories", categoryDAO.findAll());
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("categories", new ArrayList<>());
+		}
 		// 등록 폼 페이지로 이동
 		request.getRequestDispatcher("/WEB-INF/views/teacherClassRegister.jsp").forward(request, response);
 	}
