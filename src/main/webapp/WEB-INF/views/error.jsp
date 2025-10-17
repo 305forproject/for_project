@@ -1,25 +1,130 @@
-<%--
-  에러 페이지
-
-  시스템 오류나 권한 생성 실패 등의 에러가 발생했을 때 표시되는 페이지입니다.
-  에러 메시지를 사용자에게 표시하고 메인페이지로 돌아갈 수 있는 링크를 제공합니다.
-
-  사용되는 속성:
-  - errorMessage: 표시할 에러 메시지
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-    <title>오류</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오류 - 원데이 클래스</title>
+    
+    <style>
+        .error-container {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        
+        .error-icon {
+            font-size: 120px;
+            margin-bottom: 32px;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .error-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .error-message {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .error-actions a {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--text-white);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-gray);
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary-light);
+        }
+        
+        /* 반응형 */
+        @media screen and (max-width: 768px) {
+            .error-container {
+                margin: 60px auto;
+            }
+            
+            .error-icon {
+                font-size: 80px;
+            }
+            
+            .error-title {
+                font-size: 24px;
+            }
+            
+            .error-message {
+                font-size: 16px;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+            }
+            
+            .error-actions a {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>오류가 발생했습니다</h1>
-<p>${errorMessage}</p>
+    <!-- 공통 헤더 포함 -->
+    <jsp:include page="/WEB-INF/views/includes/header.jsp" />
 
-<div>
-    <a href="/">
-        <button type="button">메인페이지로 돌아가기</button>
-    </a>
-</div>
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <h1 class="error-title">오류가 발생했습니다</h1>
+        <p class="error-message">
+            ${not empty errorMessage ? errorMessage : '알 수 없는 오류가 발생했습니다.'}
+        </p>
+        
+        <div class="error-actions">
+            <a href="${pageContext.request.contextPath}/main" class="btn-primary">
+                🏠 메인페이지로
+            </a>
+            <a href="javascript:history.back()" class="btn-secondary">
+                ← 이전 페이지로
+            </a>
+        </div>
+    </div>
+
+    <!-- 공통 푸터 포함 -->
+    <jsp:include page="/WEB-INF/views/includes/footer.jsp" />
 </body>
 </html>
