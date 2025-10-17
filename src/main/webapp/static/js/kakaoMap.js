@@ -10,27 +10,32 @@
  * @param {string} className - 클래스 이름
  */
 function initKakaoMap(latitude, longitude, className) {
-    const lat = parseFloat(latitude);
-    const lng = parseFloat(longitude);
+    // 이 함수가 호출되면, 먼저 kakao.maps.load를 실행합니다.
+    // load가 완료된 후(지도 부품들이 준비된 후) 안쪽의 함수가 실행됩니다.
+    kakao.maps.load(function() {
+        const lat = parseFloat(latitude);
+        const lng = parseFloat(longitude);
 
-    if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) {
-        displayMapError();
-        return;
-    }
+        if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) {
+            displayMapError();
+            return;
+        }
 
-    const mapContainer = document.getElementById('map');
-    if (!mapContainer) {
-        console.error('지도 컨테이너를 찾을 수 없습니다.');
-        return;
-    }
+        const mapContainer = document.getElementById('map');
+        if (!mapContainer) {
+            console.error('지도 컨테이너를 찾을 수 없습니다.');
+            return;
+        }
 
-    const mapOption = {
-        center: new kakao.maps.LatLng(lat, lng),
-        level: 3
-    };
+        const mapOption = {
+            // 이 시점에는 kakao.maps.LatLng이 완벽하게 준비되어 있습니다.
+            center: new kakao.maps.LatLng(lat, lng),
+            level: 3
+        };
 
-    const map = new kakao.maps.Map(mapContainer, mapOption);
-    createMarker(map, lat, lng, className);
+        const map = new kakao.maps.Map(mapContainer, mapOption);
+        createMarker(map, lat, lng, className);
+    });
 }
 
 /**
