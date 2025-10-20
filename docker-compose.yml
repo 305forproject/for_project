@@ -2,7 +2,7 @@ version: "3.9"
 services:
   web:
     build: .
-    image: khp9800/oneday:latest
+    image: ${ONEDAY_IMAGE}
     container_name: oneday
     ports:
       - "8080:8080"
